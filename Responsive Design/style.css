@@ -8,6 +8,7 @@ body {
 .container {
   padding-left: 179px;
   padding-top: 96px;
+  max-width: 1040px;
 }
 /* Sets display to be a flexible box */
 /* flow helps to define the arrangement(row col) and wrap the elements to help them drop down */
@@ -16,24 +17,23 @@ body {
   display: flex;
   flex-flow: row wrap;
   justify-content: flex-start;
+  gap: 96px;
 }
 
 /* Providing Basic Properties to the elements */
 .top-content .img-content{
-  width: 543px;
-  height: 354px;
-  margin-right: 96px;
+  /* width: 543px;
+  height: 354px; */
 }
 .top-content .content
 {
-  margin-right: 100px;
+flex-basis: 20%;
   color: white;
 }
 .content h1{
   font-family: 'Libre Baskerville';
   font-size: 35px;
-  height: 100px;
-  width: 417px;
+  flex-basis: 20%;
 }
 .content p{
   height: 120px;
@@ -41,9 +41,7 @@ body {
   font-size: 20px;
 }
 .bottom-content {
-  width: 1040px;
-  height: 409px;
-  margin-top: 80px;
+  width : 100%;
   margin-right: 0px;
 }
 .top-content .content .btn-learn
@@ -65,11 +63,14 @@ body {
     padding-left: 106px;
     padding-right: 105px;
     padding-top: 96px;
+
+  }
+  .top-content{
+    gap: 40px;
   }
   /* Order helps to define the order in which the elements are placed top to bottom */
   .top-content .img-content {
-    height: auto;
-    width: auto;
+    flex-basis: 100%;
     margin-right: 0px;
     order: 1;
   }
@@ -82,7 +83,7 @@ body {
     margin-right: 0px;
   }
   .bottom-content {
-    margin-top: 40px;
+    margin: 0px;
     order: 2;
     height: auto;
     width: auto;
@@ -98,6 +99,11 @@ body {
     padding-right: 25px;
     padding-top: 35px;
   }
+
+  .top-content
+  {
+    gap: 10px;
+  }
   .top-content .img-content {
     height: auto;
     width: auto;
@@ -110,14 +116,14 @@ body {
 
   .top-content .content {
     order: 3;
-    margin-right: 0px;
+    flex-basis: 100%;
   }
 
   .bottom-content {
-    margin-top: 16px;
     order: 2;
     height: auto;
     width: auto;
+    margin: 0px;
   }
   .content h1{
     font-size: 34px;
