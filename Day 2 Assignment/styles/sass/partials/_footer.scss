@@ -1,0 +1,67 @@
+.footer {
+  display: flex;
+  flex-direction: column;
+  padding-top: 100px;
+  flex-basis: 100%;
+  &__head {
+    display: flex;
+    justify-content: flex-start;
+    gap: 250px;
+    padding-bottom: 40px;
+  }
+
+  &__foot {
+    display: flex;
+    border-top: 1px solid $white-shadow-color;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &__extras {
+    display: flex;
+    justify-content: flex-start;
+    gap: 50px;
+    padding-top: 30px;
+    &--title{
+      color: $black;
+      font-weight: $heading-font-weight;
+      font-size: $card-title-font-size;
+    }
+  }
+  &__subscription {
+    max-width: 500px;
+    border-radius: 8px;
+    padding: 32px;
+    background-color: $black;
+    color: $white;
+    &--title {
+      font-size: $card-title-font-size;
+      font-weight: $heading-font-weight;
+    }
+    &--desc {
+      font-size: 14px;
+      color: $white-shadow-color;
+      margin-bottom: 40px;
+    }
+    &--form {
+      display: flex;
+      justify-content: flex-start;
+      gap: 33px;
+      &-input {
+        background: transparent;
+        border: none;
+        border-bottom: 1px solid $white;
+        color: $white;
+        text-align: center;
+        flex-basis: 65%;
+        font-weight: $heading-font-weight;
+      }
+    }
+  }
+  &__logos
+  {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+  }
+}

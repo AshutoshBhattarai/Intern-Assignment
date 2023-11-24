@@ -1,0 +1,42 @@
+.header {
+  //@extend .container;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: transparent;
+
+.mobile-menu-btn
+{
+  display: none;
+  @media (max-width:$mobile-size)
+  {
+    display: block;
+  }
+}
+
+
+  
+  &__logo {
+    margin: 0;
+  }
+  &__nav {
+    @media (max-width:$mobile-size)
+  {
+    display: none;
+  }
+    display: flex;
+    list-style-type: none;
+    //background: transparent;
+    align-items: center;
+    gap: 32px;
+    &--item
+    {
+      color: $fade-color;
+      &-active
+      {
+        color: $white;
+      }
+    }
+   
+  }
+}

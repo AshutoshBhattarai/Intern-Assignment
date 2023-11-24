@@ -1,0 +1,48 @@
+.benefit {
+  flex-wrap: wrap;
+  &__title {
+    width: 100%;
+    font-weight: $heading-font-weight;
+    font-size: $heading-font-size;
+    color: $black;
+  }
+  &__card {
+    display: flex;
+    margin-bottom: 40px;
+    gap: 20px;
+
+    &--readmore {
+      color: $black;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      &-active{
+        color: $primary-color;
+        display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      }
+    }
+    &--content {
+      display: flex;
+      flex-direction: column;
+      flex-wrap: wrap;
+    }
+    &--title {
+      @include flexSpaceBetn;
+      justify-content: center;
+      font-size: $card-title-font-size;
+      font-weight: $heading-font-weight;
+      color:$black;
+    }
+    &--desc {
+      @include flexSpaceBetn;
+    }
+  }
+  &__item {
+    border-radius: 8px;
+    border: 1px solid $white-border-color;
+    background: #fff;
+    padding: 32px 24px;
+  }
+}

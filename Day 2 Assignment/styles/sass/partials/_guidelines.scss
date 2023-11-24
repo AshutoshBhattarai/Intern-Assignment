@@ -1,0 +1,21 @@
+.guidelines
+{
+    padding-top: 32px;
+    display: flex;
+    justify-content: space-between;
+    gap: 600px;
+    margin-bottom: 100px;
+    &__title
+    {
+        font-size: $heading-font-size;
+        font-weight: $heading-font-weight;
+        color: $white;
+    }
+    &__content
+    {
+        display: flex;
+        justify-content: space-between;
+        gap: 32px;
+        color: $fade-color;
+    }
+}

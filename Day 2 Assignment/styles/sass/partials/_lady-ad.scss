@@ -1,0 +1,37 @@
+.app_ad
+{
+   display: block;
+   position: relative;
+   
+}
+.lady
+{
+//position: relative;
+
+}
+.appcard {
+  background: white;
+  width: 584px;
+  position: relative;
+  right: -600px;
+  top: -465px;
+  padding: 52px;
+  border: 1px solid $white-border-color;
+  border-radius: 8px;
+  &__title{
+    font-size: $heading-font-size;
+    color: $black;
+    font-weight: $heading-font-weight; 
+  }
+
+  &__description{
+    margin-top: 0px;
+    font-size: $base-font-size;
+    color: rgba(29, 28, 49, 0.60);
+  }
+  &__buttons
+  {
+    display: flex;
+    gap: 20px;
+  }
+}

@@ -1,0 +1,33 @@
+.container {
+  padding: 0 36px;
+ display: flex;
+ justify-content: space-between;
+  // max-width: 1024px;
+  @media (max-width: 992px) {
+    padding: 0 36px;
+  }
+  @media (max-width: 575px) {
+    padding: 0;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+}
+
+@mixin flexSpaceBetn{
+  display: flex;
+  justify-content: space-between;
+}
+
+.bg-primary
+{
+  background: linear-gradient(45deg, #1b13a6 49.59%, #443cdf 88.57%), #fff;
+
+}
+.bg-secondary
+{
+  background-color: $primary-color;
+}
+.bg-footer
+{
+  background-color: #efeeff;
+}

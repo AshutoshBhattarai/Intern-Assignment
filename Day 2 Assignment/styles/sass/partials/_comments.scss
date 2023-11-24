@@ -1,0 +1,45 @@
+@mixin bottomBorder($color) {
+  padding-bottom: 32px;
+  border-bottom: 1px solid $color;
+}
+@mixin cardProps {
+  border-radius: 8px;
+  padding: 32px 32px 0px 32px;
+}
+
+.comments {
+  margin-top: -450px;
+  margin-bottom: 40px;
+  &__section {
+    display: flex;
+    gap: 32px;
+  }
+  &__title {
+    width: 100%;
+    font-size: $heading-font-size;
+    font-weight: $heading-font-weight;
+    color: $black;
+  }
+  &__card {
+    @include cardProps();
+    border: 1px solid $white-border-color;
+    color: $black;
+    &--active {
+      @include cardProps();
+      border: 1px solid;
+      background-color: $primary-color;
+      color: $white;
+    }
+  }
+  &__profile {
+    display: flex;
+    flex-direction: row;
+    gap: 32px;
+  }
+  &__desc {
+    @include bottomBorder($white-shadow-color);
+    &--active {
+      @include bottomBorder($fade-color);
+    }
+  }
+}

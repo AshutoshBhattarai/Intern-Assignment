@@ -1,0 +1,49 @@
+.banner {
+  display: flex;
+  align-items: center;
+  padding-bottom: 100px;
+  &__title {
+    font-size: 56px;
+    font-weight: $heading-font-weight;
+    line-height: 70px;
+    letter-spacing: -1.12px;
+  }
+  &__description {
+    margin-bottom: 32px;
+    font-size: $medium-font-size;
+    color: $fade-color;
+  }
+  &__buttons {
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 32px;
+    gap: 32px;
+  }
+  &__contents {
+    color: $white;
+    max-width: 585px;
+  }
+  &__stats {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    gap: 20px;
+    // &-item
+    // {
+    //   flex-basis: 33%;
+    // }
+    &--info {
+      padding: 0;
+      margin-bottom: 0;
+      font-size: 32px;
+      font-weight: 600;
+    }
+    &--desc {
+      font-size: $base-font-size;
+      color: $fade-color;
+    }
+  }
+  &__images {
+    max-width: 585px;
+  }
+}
