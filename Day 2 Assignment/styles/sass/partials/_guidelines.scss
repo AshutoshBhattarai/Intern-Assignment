@@ -17,6 +17,8 @@
         @media screen and (max-width:$mobile-size) {
             display:flex;
             justify-content: center;
+            align-items: center;
+            font-size: $card-title-font-size;
             
         }
     }

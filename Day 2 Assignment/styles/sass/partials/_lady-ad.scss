@@ -7,6 +7,16 @@
     
   }
 }
+.lady
+{
+  margin-right: 0px;
+  @media screen and (max-width:$tablet-size) {
+    margin-right: 100px;
+  }
+  @media screen and (max-width:$mobile-size) {
+    margin-right: 0px;
+  }
+}
 
 .appcard {
   background: white;
@@ -21,6 +31,8 @@
   @media screen and (max-width:$tablet-size) {
     top: 100px;
     width: 456px;
+    padding: 16px;
+    right: -30px;
   }
   @media screen and (max-width:$mobile-size) {
     width: auto;
@@ -36,6 +48,11 @@
     color: $black;
     font-weight: $heading-font-weight;
     padding-bottom: 20px;
+    
+    @media screen and (max-width:$tablet-size) {
+      //max-width: 205px;
+      font-size: 32px;
+    }
     @media screen and (max-width:$mobile-size) {
       max-width: 205px;
       font-size: $card-title-font-size;
@@ -51,11 +68,17 @@
       font-size: $small-font-size;
       padding-bottom: 20px;
     }
+    @media screen and (max-width:$tablet-size) {
+      max-width: 451px;
+      font-size: $small-font-size;
+      padding-bottom: 20px;
+    }
 
   }
   &__buttons
   {
     display: flex;
     gap: 20px;
+    max-width: 315px;
   }
 }

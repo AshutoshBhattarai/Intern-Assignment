@@ -374,7 +374,7 @@ button {
 @media screen and (max-width: 575px) {
   .banner__title {
     font-size: 32px;
-    align-self: center;
+    text-align: center;
   }
 }
 @media screen and (max-width: 992px) {
@@ -391,6 +391,7 @@ button {
   .banner__description {
     margin-bottom: 16px;
     font-size: 14px;
+    text-align: center;
   }
 }
 @media screen and (max-width: 992px) {
@@ -661,6 +662,20 @@ button {
   }
 }
 
+.lady {
+  margin-right: 0px;
+}
+@media screen and (max-width: 992px) {
+  .lady {
+    margin-right: 100px;
+  }
+}
+@media screen and (max-width: 575px) {
+  .lady {
+    margin-right: 0px;
+  }
+}
+
 .appcard {
   background: white;
   width: 584px;
@@ -675,6 +690,8 @@ button {
   .appcard {
     top: 100px;
     width: 456px;
+    padding: 16px;
+    right: -30px;
   }
 }
 @media screen and (max-width: 575px) {
@@ -693,6 +710,11 @@ button {
   font-weight: 700;
   padding-bottom: 20px;
 }
+@media screen and (max-width: 992px) {
+  .appcard__title {
+    font-size: 32px;
+  }
+}
 @media screen and (max-width: 575px) {
   .appcard__title {
     max-width: 205px;
@@ -710,9 +732,17 @@ button {
     padding-bottom: 20px;
   }
 }
+@media screen and (max-width: 992px) {
+  .appcard__desc {
+    max-width: 451px;
+    font-size: 14px;
+    padding-bottom: 20px;
+  }
+}
 .appcard__buttons {
   display: flex;
   gap: 20px;
+  max-width: 315px;
 }
 
 .comments {
@@ -792,6 +822,8 @@ button {
   .guidelines__title {
     display: flex;
     justify-content: center;
+    align-items: center;
+    font-size: 20px;
   }
 }
 .guidelines__content {

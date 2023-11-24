@@ -14,7 +14,7 @@
     letter-spacing: -1.12px;
     @media screen and (max-width:$mobile-size) {
      font-size: 32px;
-     align-self: center; 
+     text-align: center; 
     }
     @media screen and (max-width:$tablet-size) {
       font-size: 32px;
@@ -29,6 +29,7 @@
     @media screen and (max-width:$mobile-size){
       margin-bottom: 16px;
       font-size: $small-font-size;
+      text-align: center;
     }
     @media screen and (max-width:$tablet-size){
         font-size: $small-font-size;      
