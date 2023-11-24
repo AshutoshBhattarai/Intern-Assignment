@@ -3,11 +3,25 @@
   flex-direction: column;
   padding-top: 100px;
   flex-basis: 100%;
+
+  @media screen and (max-width:$mobile-size) {
+    padding-top: 50px;
+    padding-left: 20px;
+    font-size: $small-font-size;
+  }
   &__head {
     display: flex;
     justify-content: flex-start;
     gap: 250px;
     padding-bottom: 40px;
+    @media screen and (max-width:$tablet-size) {
+      gap: 50px;
+      
+    }
+    @media screen and (max-width:$mobile-size) {
+      flex-direction: column;
+    
+    }
   }
 
   &__foot {
@@ -15,6 +29,11 @@
     border-top: 1px solid $white-shadow-color;
     justify-content: space-between;
     align-items: center;
+    @media screen and (max-width:$mobile-size) {
+      font-size: $small-font-size;
+      flex-wrap: wrap;
+    }
+
   }
 
   &__extras {
@@ -22,11 +41,21 @@
     justify-content: flex-start;
     gap: 50px;
     padding-top: 30px;
-    &--title{
+    &--title {
       color: $black;
       font-weight: $heading-font-weight;
       font-size: $card-title-font-size;
+      @media screen and (max-width:$mobile-size) {
+        font-size: $medium-font-size;
+      }
+    
+    
     }
+
+
+
+
+
   }
   &__subscription {
     max-width: 500px;
@@ -34,34 +63,66 @@
     padding: 32px;
     background-color: $black;
     color: $white;
+    @media screen and (max-width:$tablet-size) {
+      max-width: 481px;
+      padding: 16px;
+    }
+    @media screen and (max-width:$mobile-size) {
+      background: transparent;
+      
+    }
     &--title {
       font-size: $card-title-font-size;
       font-weight: $heading-font-weight;
+      @media screen and (max-width:$mobile-size) {
+        font-size: $medium-font-size;
+        color: $black;
+      }
+   
     }
     &--desc {
       font-size: 14px;
       color: $white-shadow-color;
       margin-bottom: 40px;
+      @media screen and (max-width:$tablet-size) {
+        margin: 0px;
+      }
+      @media screen and (max-width:$mobile-size) {
+        font-size: $small-font-size;
+        color: $black;
+      }
     }
     &--form {
       display: flex;
       justify-content: flex-start;
       gap: 33px;
+      @media screen and (max-width:$mobile-size) {
+       flex-flow: row wrap;
+      }
       &-input {
         background: transparent;
         border: none;
         border-bottom: 1px solid $white;
         color: $white;
-        text-align: center;
-        flex-basis: 65%;
+        //flex-basis: 65%;
         font-weight: $heading-font-weight;
+        @media screen and (max-width:$mobile-size) {
+          font-size: $small-font-size;
+          border-bottom: 1px solid $black;
+          color: $black;
+        }
       }
     }
   }
-  &__logos
-  {
+  &__logos {
     display: flex;
     justify-content: space-between;
     gap: 20px;
+    @media screen and (max-width:$mobile-size) {
+      order:-1;
+      flex-basis: 100%;
+      justify-content: flex-start;
+      margin-top: 20px;
+    }
   }
 }

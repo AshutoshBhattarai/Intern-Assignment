@@ -1,0 +1,59 @@
+.timeline
+{
+    //display: flex;
+    padding-bottom: 100px;
+
+    @media screen and (max-width:$mobile-size) {
+        display: none;
+    }
+    @mixin contentProps{
+        display: flex;
+        gap: 200px;
+        justify-content: flex-start;
+        @media screen and (max-width:$tablet-size) {
+            gap: 50px;
+        }
+    }
+&__top{
+    @include contentProps();
+    margin-bottom: 20px;
+}
+&__bottom
+{
+    @include contentProps();
+}
+
+&__card
+{
+    background: transparent;
+    border: $fade-color;
+    color: $white;
+    font-size: $base-font-size;
+    font-weight: 400;
+    max-width: 328px;
+    border-radius: 8px;
+    border: 1px solid $fade-color;
+    padding: 32px;
+    @media screen and (max-width:$tablet-size) {
+        padding: 10px;
+    }
+    &--item
+    {
+        display:flex;
+        gap: 10px;
+
+    }
+    
+
+}
+&__button
+    {
+        &--top
+        {
+
+        }
+       
+    }
+
+
+}

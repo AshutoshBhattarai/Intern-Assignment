@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="styles/style.css" />
   </head>
   <body>
-    <!-- Header Section -->
+    <!-- Header div -->
     <div class="bg-primary">
       <header>
         <div class="container header">
@@ -17,6 +17,9 @@
               ><img src="./assets/img/logo.svg" alt="Legacy Line Logo"
             /></a>
           </h1>
+          <div class="header__menu">
+            <img src="./assets/img/ic_round-menu.svg" alt="menu icon">
+          </div>
           <!-- Nav Links -->
           <nav>
             <ul class="header__nav">
@@ -35,22 +38,14 @@
               <li>
                 <button class="btn small reverse nav">Sign Up</button>
               </li>
-              <li>
-                <img
-                  src="./assets/img/ic_round-menu.svg"
-                  alt="Menu Icon"
-                  class="mobile-menu-btn"
-                />
-              </li>
             </ul>
           </nav>
         </div>
       </header>
-      <!-- Banner Section -->
-      <section class="bg-primary">
+      <!-- Banner div -->
         <div class="container banner">
           <!-- Banner Contents -->
-          <section class="banner__contents">
+          <div class="banner__contents">
             <div class="banner__title">
               <p>Discover Financial Freedom with LegacyLine</p>
             </div>
@@ -58,11 +53,11 @@
               Welcome to our bank's website, where we provide secure financial
               solutions tailored to meet your unique needs.
             </p>
-            <section class="banner__buttons">
+            <div class="banner__buttons">
               <button class="btn large">Open Account</button>
               <button class="btn transparent large reverse">Learn More</button>
-            </section>
-            <section class="banner__stats">
+            </div>
+            <div class="banner__stats">
               <div>
                 <p class="banner__stats--info">&lt0.1</p>
                 <p class="banner__stats--desc">Transaction Fees</p>
@@ -75,10 +70,10 @@
                 <p class="banner__stats--info">+2.9M</p>
                 <p class="banner__stats--desc">Business Owners</p>
               </div>
-            </section>
-          </section>
+            </div>
+          </div>
           <!-- Banner Images -->
-          <section>
+          <div>
             <div class="banner__images">
               <img
                 src="./assets/img/Group 33.png"
@@ -86,17 +81,16 @@
                 width="100%"
               />
             </div>
-          </section>
+          </div>
         </div>
-      </section>
     </div>
-    <!-- End of the Banner Section -->
+    <!-- End of the Banner div -->
 
     <!-- Main Contents Start Here -->
     <main>
       <div class="container bg-secondary">
-        <!-- Section to include sponsor banners -->
-        <section class="sponsors">
+        <!-- div to include sponsor banners -->
+        <div class="sponsors">
           <div>
             <img
               class="sponsors-item"
@@ -144,19 +138,19 @@
             src="assets/img/stripe.svg"
             alt="Stripe logo"
           /> -->
-        </section>
+        </div>
       </div>
-      <!-- End of the sponsor section -->
+      <!-- End of the sponsor div -->
       <!-- Benefits Title -->
       <div class="container">
         <div class="benefit">
           <div class="benefit__title"><p>Our Key Benefits</p></div>
 
           <!-- Benefits Card goes here -->
-          <section class="benefit__card">
+          <div class="benefit__card">
             <!-- Dividing each card into individual items -->
             <!-- Benefits Card Item 1 -->
-            <section class="benefit__item">
+            <div class="benefit__item">
               <!-- Image for Benefits Card -->
               <div class="benefit__card--content">
                 <img
@@ -178,18 +172,18 @@
               </div>
 
               <!-- Read More in Card -->
-              <section class="benefit__card--readmore-active">
+              <div class="benefit__card--readmore-active">
                 <span>Read more</span>
                 <!-- Reddmore button -->
                 <img
                   src="./assets/img/arrow_forward_p.svg"
                   alt="Read More Button"
                 />
-              </section>
-            </section>
+              </div>
+            </div>
 
             <!-- Benefit Card Item 2 -->
-            <section class="benefit__item">
+            <div class="benefit__item">
               <!-- Image for Benefits Card -->
               <div class="benefit__card--content">
                 <img
@@ -210,7 +204,7 @@
               </div>
 
               <!-- Read More in Card -->
-              <section class="benefit__card--readmore">
+              <div class="benefit__card--readmore">
                 <span>Read more</span>
                 <!-- Reddmore button -->
                 <img
@@ -218,10 +212,10 @@
                   alt="Read More Button"
                   class="benefit__card-btn-readmore"
                 />
-              </section>
-            </section>
+              </div>
+            </div>
             <!-- Benefit Card Item 3 -->
-            <section class="benefit__item">
+            <div class="benefit__item">
               <!-- Image for Benefits Card -->
               <div class="benefit__card--content">
                 <img
@@ -242,7 +236,7 @@
               </div>
 
               <!-- Read More in Card -->
-              <section class="benefit__card--readmore">
+              <div class="benefit__card--readmore">
                 <span>Read more</span>
                 <!-- Reddmore button -->
                 <img
@@ -250,25 +244,31 @@
                   alt="Read More Button"
                   class="benefit__card-btn-readmore"
                 />
-              </section>
-            </section>
-          </section>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-      <!-- Show the main image and the app info section -->
+      <!-- Show the main image and the app info div -->
       <div class="container">
-        <section class="app_ad">
-          <img src="./assets/img/Lady.png" alt="Image of a lady" class="lady" />
-          <section class="appcard">
+        <div class="app_ad">
+          <div class="lady">
+            <img
+              src="./assets/img/Lady.png"
+              alt="Image of a lady"
+              width="100%"
+            />
+          </div>
+          <div class="appcard">
             <div class="appcard__title">
-              <p>Ready for the future? Download The App!</p>
+              <span>Ready for the future? Download The App!</span>
             </div>
             <div class="appcard__desc">
-              <p>
+              <span>
                 Download the banking app to easily manage your finances, check
                 account balances, transfer money, pay bills, and access a range
                 of banking services from your mobile device.
-              </p>
+              </span>
             </div>
             <div class="appcard__buttons">
               <img
@@ -280,17 +280,17 @@
                 alt="Play Store Badge"
               />
             </div>
-          </section>
-        </section>
+          </div>
+        </div>
       </div>
-      <!-- Comments Section Title -->
+      <!-- Comments div Title -->
       <div class="container">
-        <section class="comments">
+        <div class="comments">
           <div class="comments__title">
             <p>What Our Clients Say About Us</p>
           </div>
           <!-- Main Commnet container box (Insert the background image here) -->
-          <section class="comments__section">
+          <div class="comments__section">
             <div class="comments__card--active">
               <!-- Commnet from the clients -->
               <p class="comments__desc">
@@ -299,20 +299,20 @@
                 provide is an absolute game-changer. It's incredibly
                 user-friendly and has made managing my finances a breeze.
               </p>
-              <!-- Section to show the client profile -->
-              <section class="comments__profile">
+              <!-- div to show the client profile -->
+              <div class="comments__profile">
                 <div class="comments__image">
-                  <img src="./assets/img/Jerry Helfer.png" alt="Jerry Helfer" />
+                  <img src="./assets/img/Jerry Helfer.png" alt="Jerry Helfer" width="100%"/>
                 </div>
                 <div class="comments__person">
                   <p>Jerry Helfer</p>
                   <p>24 October, 2023</p>
-                  <img src="./assets/img/stars.png" alt="Review 4 stars" />
+                  <img src="./assets/img/stars.png" alt="Review 4 stars" width="100%"/>
                 </div>
-              </section>
+              </div>
               <!-- Comment profile ends here -->
             </div>
-            <section class="comments__card">
+            <div class="comments__card">
               <!-- Commnet from the clients -->
               <p class="comments__desc">
                 I've been using LegacyLine for several years now, and I couldn't
@@ -320,8 +320,8 @@
                 provide is an absolute game-changer. It's incredibly
                 user-friendly and has made managing my finances a breeze.
               </p>
-              <!-- Section to show the client profile -->
-              <section class="comments__profile">
+              <!-- div to show the client profile -->
+              <div class="comments__profile">
                 <div class="comments__image">
                   <img src="./assets/img/Mary Freund.png" alt="Jerry Helfer" />
                 </div>
@@ -330,10 +330,10 @@
                   <p>24 October, 2023</p>
                   <img src="./assets/img/stars.png" alt="Review 4 stars" />
                 </div>
-              </section>
+              </div>
               <!-- Comment profile ends here -->
-            </section>
-            <section class="comments__card">
+            </div>
+            <div class="comments__card">
               <!-- Commnet from the clients -->
               <p class="comments__desc">
                 I've been using LegacyLine for several years now, and I couldn't
@@ -341,8 +341,8 @@
                 provide is an absolute game-changer. It's incredibly
                 user-friendly and has made managing my finances a breeze.
               </p>
-              <!-- Section to show the client profile -->
-              <section class="comments__profile">
+              <!-- div to show the client profile -->
+              <div class="comments__profile">
                 <div class="comments__image">
                   <img
                     src="./assets/img/Stephanie Nicol.png"
@@ -354,20 +354,20 @@
                   <p>24 October, 2023</p>
                   <img src="./assets/img/stars.png" alt="Review 4 stars" />
                 </div>
-              </section>
+              </div>
               <!-- Comment profile ends here -->
-            </section>
-          </section>
-          <!-- Comment Card section ends here  -->
-        </section>
+            </div>
+          </div>
+          <!-- Comment Card div ends here  -->
+        </div>
       </div>
-      <!-- Comments section ends here  -->
+      <!-- Comments div ends here  -->
 
       <div class="container">
-        <section class="rectangles"></section>
+        <div class="rectangles"></div>
       </div>
       <div class="container bg-secondary">
-        <section class="guidelines">
+        <div class="guidelines">
           <div class="guidelines__title">Guidelines</div>
           <div class="guidelines__content">
             <p>
@@ -379,12 +379,106 @@
               wealth, and achieve their financial goals.
             </p>
           </div>
-        </section>
+        </div>
+      </div>
+      <div class="container bg-secondary">
+        <div class="timeline">
+          <div class="timeline__top">
+            <div class="timeline__card">
+              <div class="timeline__card--item">
+                <img
+                  src="./assets/img/arcticons_budgetwatch.svg"
+                  alt="Budget icon"
+                />
+                <p>Budgeting Tools</p>
+              </div>
+              <div class="timeline__card--item">
+                <img src="./assets/img/carbon_time.svg" alt="Updates icon" />
+                <p>Real Time Updates</p>
+              </div>
+              <div class="timeline__card--item">
+                <img src="./assets/img/deposit.svg" alt="Mobile Deposit icon" />
+                <p>Mobile Deposits</p>
+              </div>
+            </div>
+            <div class="timeline__button--top">
+              <button type="button" class="btn small">Completed</button>
+            </div>
+            <div class="timeline__card">
+              <div class="timeline__card--item">
+                <img
+                  src="./assets/img/Saving Goals.svg"
+                  alt="Saving Tools icon"
+                />
+                <p>Saving Goals</p>
+              </div>
+              <div class="timeline__card--item">
+                <img src="./assets/img/Investment.svg" alt="Investment icon" />
+                <p>Investment</p>
+              </div>
+              <div class="timeline__card--item">
+                <img src="./assets/img/deposit.svg" alt="Budget icon" />
+                <p>Mobile Deposits</p>
+              </div>
+            </div>
+            <div class="timeline__button--top">
+              <button type="button" class="btn small">Completed</button>
+            </div>
+          </div>
+          <div class="timeline__bottom">
+            <div class="timeline__button">
+              <button type="button" class="btn small">Completed</button>
+            </div>
+            <div class="timeline__card">
+              <div class="timeline__card--item">
+                <img src="./assets/img/247 Support.svg" alt="Support icon" />
+                <p>24/7 Support</p>
+              </div>
+              <div class="timeline__card--item">
+                <img src="./assets/img/loan application.svg" alt="Loan icon" />
+                <p>Loan Application</p>
+              </div>
+              <div class="timeline__card--item">
+                <img
+                  src="./assets/img/seamless transfer.svg"
+                  alt="Mobile Deposit icon"
+                />
+                <p>Seamless Transfer</p>
+              </div>
+            </div>
+            <div class="timeline__button">
+              <button type="button" class="btn small">Completed</button>
+            </div>
+            <div class="timeline__card">
+              <div class="timeline__card--item">
+                <img
+                  src="./assets/img/Enhance Security.svg"
+                  alt="Security icon"
+                />
+                <p>Enhance Security</p>
+              </div>
+              <div class="timeline__card--item">
+                <img
+                  src="./assets/img/Reduced Paper.svg"
+                  alt="Paperwork icon"
+                />
+                <p>Reduced Paperwork</p>
+              </div>
+              <div class="timeline__card--item">
+                <img
+                  src="./assets/img/Transfer Fund.svg"
+                  alt="fund transfer icon"
+                />
+                <p>Transfer Funds</p>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </main>
     <div class="container bg-footer">
-      <footer class="footer">
-        <section class="footer__head">
+      <div class="footer">
+        <div class="footer__head">
           <div class="footer__subscription">
             <!-- <div class="footer__subscription--head"> -->
             <div class="footer__subscription--title">
@@ -405,7 +499,7 @@
                 placeholder="Enter Your Email...."
                 class="footer__subscription--form-input"
               />
-              <button type="button" class="btn small">Subscribe</button>
+              <button type="button" class="btn small subs">Subscribe</button>
             </form>
           </div>
           <div class="footer__extras">
@@ -422,8 +516,8 @@
               <p>Support</p>
             </div>
           </div>
-        </section>
-        <section class="footer__foot">
+        </div>
+        <div class="footer__foot">
           <p>2023. All Rights Reserved</p>
           <p>Privacy&Policy</p>
           <div class="footer__logos">
@@ -432,8 +526,8 @@
             <img src="./assets/img/instagram.svg" alt="instagram logo" />
             <img src="./assets/img/twitter.png" alt="twitter logo" />
           </div>
-        </section>
-      </footer>
+        </div>
+      </div>
     </div>
   </body>
 </html>

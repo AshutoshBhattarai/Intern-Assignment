@@ -5,22 +5,41 @@
     font-weight: $heading-font-weight;
     font-size: $heading-font-size;
     color: $black;
+    @media screen and (max-width:$mobile-size) {
+      font-size: $card-title-font-size;
+      display: flex;
+      justify-content: center;
+      
+    }
   }
   &__card {
     display: flex;
     margin-bottom: 40px;
     gap: 20px;
+    @media screen and (max-width:$mobile-size) {
+      flex-direction: column;
+      
+    }
 
     &--readmore {
       color: $black;
       display: flex;
       align-items: center;
       justify-content: flex-end;
+      @media screen and (max-width:$mobile-size) {
+        justify-content: center;
+        font-size: $small-font-size;
+        
+      }
       &-active{
         color: $primary-color;
         display: flex;
       align-items: center;
       justify-content: flex-end;
+      @media screen and (max-width:$mobile-size) {
+        justify-content: center;
+        
+      }
       }
     }
     &--content {
@@ -34,9 +53,16 @@
       font-size: $card-title-font-size;
       font-weight: $heading-font-weight;
       color:$black;
+      @media screen and (max-width:$mobile-size) {
+        font-size: $base-font-size;
+      }
     }
     &--desc {
       @include flexSpaceBetn;
+      @media screen and (max-width:$mobile-size) {
+        font-size: $small-font-size;
+        
+      }
     }
   }
   &__item {

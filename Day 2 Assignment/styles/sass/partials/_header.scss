@@ -4,39 +4,31 @@
   justify-content: space-between;
   align-items: center;
   background: transparent;
-
-.mobile-menu-btn
-{
-  display: none;
-  @media (max-width:$mobile-size)
-  {
-    display: block;
+  &__menu {
+    display: none;
+    @media (max-width: $mobile-size) {
+      display: block;
+      margin-left: auto;
+    }
   }
-}
 
-
-  
   &__logo {
     margin: 0;
   }
   &__nav {
-    @media (max-width:$mobile-size)
-  {
-    display: none;
-  }
+    @media (max-width: $mobile-size) {
+      display: none;
+    }
     display: flex;
     list-style-type: none;
     //background: transparent;
     align-items: center;
     gap: 32px;
-    &--item
-    {
+    &--item {
       color: $fade-color;
-      &-active
-      {
+      &-active {
         color: $white;
       }
     }
-   
   }
 }

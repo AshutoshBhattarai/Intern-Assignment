@@ -4,5 +4,9 @@
     width: 100%;
     background-color: $primary-color;
     padding: 20px 0px;
+    @media (max-width:$mobile-size)
+    {
+        display: none;
+    }
     
 }

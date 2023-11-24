@@ -1,33 +1,57 @@
 .app_ad
 {
-   display: block;
-   position: relative;
-   
+   display: flex;
+   position: relative;   
+   @media screen and (max-width:$mobile-size) {
+    display: block;
+    
+  }
 }
-.lady
-{
-//position: relative;
 
-}
 .appcard {
   background: white;
   width: 584px;
-  position: relative;
-  right: -600px;
-  top: -465px;
+  position: absolute;
   padding: 52px;
   border: 1px solid $white-border-color;
   border-radius: 8px;
+  top: 60px;
+  right: -200px;
+
+  @media screen and (max-width:$tablet-size) {
+    top: 100px;
+    width: 456px;
+  }
+  @media screen and (max-width:$mobile-size) {
+    width: auto;
+    position: relative;
+    top: 0px;
+    right: 0px;
+    padding: 10px;
+    border: none;
+  }
+
   &__title{
     font-size: $heading-font-size;
     color: $black;
-    font-weight: $heading-font-weight; 
+    font-weight: $heading-font-weight;
+    padding-bottom: 20px;
+    @media screen and (max-width:$mobile-size) {
+      max-width: 205px;
+      font-size: $card-title-font-size;
+    }
   }
 
-  &__description{
-    margin-top: 0px;
+  &__desc{
+   padding-bottom: 40px;
     font-size: $base-font-size;
     color: rgba(29, 28, 49, 0.60);
+    @media screen and (max-width:$mobile-size) {
+      //max-width: 205px;
+      font-size: $small-font-size;
+      padding-bottom: 20px;
+    }
+
   }
   &__buttons
   {
