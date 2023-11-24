@@ -10,6 +10,7 @@
 .comments {
   //margin-top: -450px;
   margin-bottom: 40px;
+  margin-top: 100px;
   @media screen and (max-width:$mobile-size) {
     display: none;
   }
@@ -17,6 +18,12 @@
     display: flex;
     gap: 32px;
     width: 100%;
+
+    @media screen and (max-width:$tablet-size) {
+      gap:16px;
+      font-size: $small-font-size;
+
+    }
     
   }
   &__title {

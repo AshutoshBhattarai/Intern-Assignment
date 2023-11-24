@@ -41,6 +41,9 @@
   }
   &.subs
   {
+    @media screen and (max-width:$tablet-size) {
+      padding: 16px 24px;
+    }
     @media screen and (max-width:$mobile-size){
       background-color: $primary-color;
       color: $white;

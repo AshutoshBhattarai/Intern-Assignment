@@ -1,26 +1,68 @@
 .timeline
 {
-    //display: flex;
+    display: flex;
     padding-bottom: 100px;
-
+    gap: 200px;
+    @media screen and (max-width:$tablet-size) {
+        gap: 50px;
+    }
     @media screen and (max-width:$mobile-size) {
+
+        margin-top: -100px;
+    }
+    // @media screen and (max-width:$mobile-size) {
+    //     display: none;
+    // }
+@mixin hideTimeline{
+    @media screen and (max-width:$mobile-size) {
+        
         display: none;
     }
+}
+
     @mixin contentProps{
         display: flex;
-        gap: 200px;
-        justify-content: flex-start;
+        flex-direction: column;
+        gap: 50px;
+        align-items: center;
         @media screen and (max-width:$tablet-size) {
+            font-size: $small-font-size;
             gap: 50px;
         }
+        @media screen and (max-width:$mobile-size) 
+        {
+
+            font-size: $small-font-size;
+            flex-direction: row;
+            flex-wrap: wrap;
+            
+        }
     }
-&__top{
-    @include contentProps();
-    margin-bottom: 20px;
-}
-&__bottom
+&__one
 {
     @include contentProps();
+}
+&__two
+{
+    @include contentProps();
+    padding-top: 290px;
+    @media screen and (max-width:$tablet-size) {
+        padding-top: 240px;
+    }
+}
+&__three
+{
+    @include contentProps();
+    @include hideTimeline();
+}
+&__four
+{
+    @include contentProps();
+    @include hideTimeline();
+    padding-top: 290px;
+    @media screen and (max-width:$tablet-size) {
+        padding-top: 240px;
+    }
 }
 
 &__card
@@ -48,9 +90,13 @@
 }
 &__button
     {
-        &--top
+        &--item
         {
-
+            background-color: $white;
+            color:$black;
+            padding: 10px 30px;
+            border: 1px solid $white-shadow-color;
+            border-radius: 8px;
         }
        
     }
