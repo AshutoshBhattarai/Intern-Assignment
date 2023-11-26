@@ -14,31 +14,41 @@
     &--desc {
       color: rgba(0, 0, 0, 0.5);
       font-size: $font-size-medium;
-      @media (max-width: $mobile-view) {
-        font-size: $font-mobile-small;
-       }
+      font-weight: $font-medium;
+      
        @media (max-width:$tablet-view)
        {
         font-size: $font-size-medium;
+       }
+       @media (max-width: $mobile-view) {
+        font-size: $font-mobile-small;
        }
     }
     &--title {
       font-size: $font-size-primary;
       @media (max-width: $mobile-view) {
-        font-size: $font-mobile-small;
-       }
+      
        @media (max-width:$tablet-view)
        {
         font-size: $font-size-medium;
        }
+       font-size: $font-mobile-small;
+      }
     }
   }
   &__phone {
     display: flex;
     justify-content: space-between;
-    flex-wrap: wrap;
+    //flex-wrap: wrap;
     gap: 20px;
-
+    @media (max-width:$tablet-view)
+    {
+      gap: 10px;
+    }
+    @media (max-width:$mobile-view)
+    {
+      flex-direction: column;
+    }
     &--img
     {
       @media (max-width: $mobile-view) {
@@ -118,13 +128,14 @@
       top: 75%;
       right: 20%;
       cursor: pointer;
-      @media (max-width: $mobile-view) {
-        right: 30%;
-        font-size: $font-mobile-small;
-       }
+      
        @media (max-width:$tablet-view)
        {
         font-size: $font-size-medium;
+       }
+       @media (max-width: $mobile-view) {
+        right: 30%;
+        font-size: $font-mobile-small;
        }
     }
     &--title {
@@ -135,13 +146,14 @@
       font-size: 24px;
       font-weight: 700;
       text-align: center;
-      @media (max-width: $mobile-view) {
-        left: 40%;
-        font-size: $font-mobile-small;
-       }
+      
        @media (max-width:$tablet-view)
        {
         font-size: $font-size-medium;
+       }
+       @media (max-width: $mobile-view) {
+        left: 40%;
+        font-size: $font-mobile-small;
        }
     }
   }
@@ -153,12 +165,13 @@
   }
   &__bottom {
     text-align: center;
-    @media (max-width: $mobile-view) {
-      font-size: $font-mobile-small;
-     }
+    
      @media (max-width:$tablet-view)
        {
         font-size: $font-size-medium;
+       }
+       @media (max-width: $mobile-view) {
+        font-size: $font-mobile-small;
        }
   }
 }

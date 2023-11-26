@@ -37,6 +37,11 @@
       padding: 20px 50px;
     }
 
+    &--img
+    {
+      max-width: 300px;
+    }
+
     &--right {
       @include overlapimg();
       right: -50px;
@@ -62,6 +67,7 @@
       left: -50px;
       bottom: 60px;
       display: flex;
+      align-items: center;
       @media (max-width: $mobile-view) {
         padding: 10px 20px;
         //padding-left: 40px;
@@ -74,6 +80,10 @@
       font-weight: $font-medium;
       padding-left: 26px;
       padding-top: 10px;
+      @media (max-width: $tablet-view) {
+        font-size: $font-size-medium;
+        padding-left: 10px;
+      }
       @media (max-width: $mobile-view) {
         font-size: $font-mobile-small;
         padding-left: 10px;
@@ -93,31 +103,33 @@
     color: $color-primary;
     font-weight: $font-medium;
     font-size: $font-size-primary;
-    @media(max-width:$mobile-view) {
+    @media (max-width: $mobile-view) {
       font-size: 12px;
     }
-    @media(max-width:$tablet-view) {
+    @media (max-width: $tablet-view) {
       font-size: $font-size-small;
     }
   }
   &__title {
     font-size: $font-size-heading;
     font-weight: $font-heavy;
-    @media(max-width:$mobile-view) {
-      font-size: $font-size-primary;
-    }
-    @media(max-width:$tablet-view) {
+
+    @media (max-width: $tablet-view) {
       font-size: $font-tab-heading;
+    }
+    @media (max-width: $mobile-view) {
+      font-size: $font-size-primary;
     }
   }
   &__desc {
     font-size: $font-size-medium;
     color: $color-fade-white;
-    @media(max-width:$mobile-view) {
-      font-size: $font-mobile-small;
-    }
-    @media(max-width:$tablet-view) {
+
+    @media (max-width: $tablet-view) {
       font-size: $font-size-small;
+    }
+    @media (max-width: $mobile-view) {
+      font-size: $font-mobile-small;
     }
   }
   &__button {
@@ -125,7 +137,7 @@
     justify-content: flex-start;
     gap: 60px;
     @media (max-width: $mobile-view) {
-       gap: 30px;
-      }
+      gap: 30px;
+    }
   }
 }

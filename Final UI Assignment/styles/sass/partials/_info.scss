@@ -16,17 +16,19 @@
     @include iconBg;
   }
   &__bottom {
-    padding: 46px 36px;
+    padding: 46px 20px;
     display: flex;
     background: $color-fade-background;
     border-top-left-radius: 20px;
     border-top-right-radius: 20px;
     justify-content: flex-start;
-    gap: 70px;
-    font-size: $font-size-primary;
+    gap: 20px;
+    font-size: $font-size-medium;
+    align-items: center;
     @media (max-width:$tablet-view) {
       flex-wrap: wrap;
       font-size: $font-size-medium;
+      padding-left: 5%;
     
     }
     @media (max-width: $mobile-view) {
@@ -44,6 +46,7 @@
     justify-content: flex-start;
     //flex-wrap: wrap;
     flex-basis: 25%;
+    align-items: center;
     @media(max-width:$tablet-view) {
       align-items: center;
     }

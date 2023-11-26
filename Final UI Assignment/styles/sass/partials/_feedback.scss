@@ -131,11 +131,11 @@
     &--comment {
       text-align: center;
       max-width: 300px;
-      @media (max-width: $mobile-view) {
-        font-size: $font-mobile-small;
-      }
       @media (max-width: $tablet-view) {
         font-size: $font-size-small;
+      }
+      @media (max-width: $mobile-view) {
+        font-size: $font-mobile-small;
       }
     }
   }
