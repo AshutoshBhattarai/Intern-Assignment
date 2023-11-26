@@ -1,0 +1,132 @@
+.symptoms {
+  @mixin flexDis($padding) {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px $padding;
+    @media (max-width: $tablet-view) {
+      padding: 10px $padding;
+    }
+  }
+  &__head {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 20px;
+    padding-top: 60px;
+  }
+  &__title1 {
+    font-size: $font-size-primary;
+    @media (max-width: $mobile-view) {
+      font-size: $font-mobile-small;
+    }
+    @media (max-width:$tablet-view)
+       {
+        font-size: $font-size-medium;
+       }
+  }
+  &__title2 {
+    font-size: $font-size-heading;
+    @media (max-width: $mobile-view) {
+      font-size: $font-size-primary;
+    }
+    @media (max-width:$tablet-view)
+       {
+        font-size: $font-tab-heading;
+       }
+  }
+  &__desc {
+    text-align: center;
+    //max-width: 900px;
+    @media (max-width:$tablet-view)
+       {
+        font-size: $font-size-small;
+       }
+    @media (max-width: $mobile-view) {
+      font-size: $font-mobile-small;
+    }
+  }
+  &__body {
+    margin-top: 100px;
+    display: flex;
+    flex-direction: column;
+    background-image: url(../../../assets/img/sick-guy.svg);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    color: $color-primary;
+  
+  }
+  &__lvl1 {
+    @include flexDis(200px);
+  }
+  &__lvl2 {
+    @include flexDis(100px);
+  }
+  &__lvl3 {
+    @include flexDis(20px);
+    padding-bottom: 70px;
+  }
+
+  @media (max-width: $tablet-view) {
+    &__lvl1 {
+      @include flexDis(60px);
+    }
+    &__lvl2 {
+      @include flexDis(30px);
+    }
+    &__lvl3 {
+      @include flexDis(10px);
+      margin-bottom: 70px;
+    }
+  }
+  @media (max-width: $mobile-view) {
+    &__lvl1 {
+      @include flexDis(20px);
+    }
+    &__lvl2 {
+      @include flexDis(10px);
+    }
+    &__lvl3 {
+      @include flexDis(5px);
+      margin-bottom: 40px;
+    }
+  }
+
+  &__card {
+    padding: 20px;
+    border-radius: 10px;
+    background: $color-fade-background;
+    position: relative;
+    width: auto;
+    backdrop-filter: blur(10px);
+    @media (max-width: $tablet-view) {
+      padding: 10px;
+    }
+    &--img {
+      max-width: 90px;
+      position: absolute;
+      top: -10px;
+      left: -50px;
+      @media (max-width: $tablet-view) {
+        max-width: 60px;
+        left: -30px;
+        top: -10px;
+      }
+      @media (max-width:$mobile-view) {
+        max-width: 40px;
+        left: -10px;
+        top: -5px;
+    }
+    }
+    &--text {
+      margin-left: 30px;
+      @media (max-width: $tablet-view) {
+        font-size: $font-mobile-small;
+      }
+      @media (max-width:$mobile-view) {
+        font-size: $font-mobile-exs;
+        margin-left: 20px;
+    }
+    }
+  }
+}

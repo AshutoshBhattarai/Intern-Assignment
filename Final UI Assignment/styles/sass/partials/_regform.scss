@@ -1,0 +1,164 @@
+.regform {
+  display: flex;
+  flex-direction: column;
+  padding: 50px;
+
+  &__left {
+    display: flex;
+    flex-direction: column;
+    max-width: 500px;
+    font-weight: 800;
+    color: $color-black;
+    gap: 20px;
+    padding-top: 30px;
+    &--desc {
+      color: rgba(0, 0, 0, 0.5);
+      font-size: $font-size-medium;
+      @media (max-width: $mobile-view) {
+        font-size: $font-mobile-small;
+       }
+       @media (max-width:$tablet-view)
+       {
+        font-size: $font-size-medium;
+       }
+    }
+    &--title {
+      font-size: $font-size-primary;
+      @media (max-width: $mobile-view) {
+        font-size: $font-mobile-small;
+       }
+       @media (max-width:$tablet-view)
+       {
+        font-size: $font-size-medium;
+       }
+    }
+  }
+  &__phone {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 20px;
+
+    &--img
+    {
+      @media (max-width: $mobile-view) {
+        max-width: 50px;
+       }
+    }
+    &--input {
+      display: flex;
+      background-color: $color-fade-white;
+      border-radius: 20px;
+      padding: 10px;
+      gap: 10px;
+      @media (max-width:$tablet-view)
+       {
+        font-size: $font-size-medium;
+       }
+      @media (max-width: $mobile-view) {
+        flex-basis: 100%;
+       }
+    }
+  }
+  &__contents {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 20px;
+    @media (max-width:$tablet-view)
+    {
+      flex-direction: column;
+    }
+  }
+  &__title {
+    font-size: $font-size-heading;
+    max-width: 500px;
+    color: $color-black;
+    @media (max-width:$tablet-view)
+    {
+      font-size: $font-tab-heading;
+      max-width: 600px;
+      padding-bottom: 20px;
+    }
+    @media (max-width: $mobile-view) {
+      font-size: $font-size-primary;
+      margin-bottom: 20px;
+      text-align: center;
+
+     }
+  }
+  &__right {
+    flex-basis: 50%;
+    background-color: $color-secondary;
+    background-image: url(../../../assets/img/vaccine_extract.svg);
+    background-size: contain;
+    background-repeat: no-repeat;
+    //background-size: auto;
+    background-position: left bottom;
+    border-radius: 10px;
+    position: relative;
+    max-width: 300px;
+    height: 500px;
+
+    @media (max-width:$tablet-view)
+    {
+      flex-basis: auto;
+     // height: 400px;
+      order: -1;
+    }
+    @media (max-width: $mobile-view) {
+      //margin-left: 50px;
+      font-size: $font-mobile-small;
+     }
+    &--status {
+      font-size: $font-size-primary;
+      position: absolute;
+      background: $color-fade-background;
+      border-radius: 20px;
+      padding: 10px;
+      top: 75%;
+      right: 20%;
+      cursor: pointer;
+      @media (max-width: $mobile-view) {
+        right: 30%;
+        font-size: $font-mobile-small;
+       }
+       @media (max-width:$tablet-view)
+       {
+        font-size: $font-size-medium;
+       }
+    }
+    &--title {
+      position: absolute;
+      top: 10%;
+      left: 30%;
+      color: $color-white;
+      font-size: 24px;
+      font-weight: 700;
+      text-align: center;
+      @media (max-width: $mobile-view) {
+        left: 40%;
+        font-size: $font-mobile-small;
+       }
+       @media (max-width:$tablet-view)
+       {
+        font-size: $font-size-medium;
+       }
+    }
+  }
+  &__covid {
+    max-width: 100px;
+    position: absolute;
+    left: -50px;
+    top: -30px;
+  }
+  &__bottom {
+    text-align: center;
+    @media (max-width: $mobile-view) {
+      font-size: $font-mobile-small;
+     }
+     @media (max-width:$tablet-view)
+       {
+        font-size: $font-size-medium;
+       }
+  }
+}

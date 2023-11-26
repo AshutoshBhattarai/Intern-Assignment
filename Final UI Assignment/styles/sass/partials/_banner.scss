@@ -1,0 +1,131 @@
+.banner {
+  font-weight: 700;
+  margin-top: 100px;
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  @media screen and (max-width: $tablet-view) {
+    flex-direction: column;
+    margin-top: 70px;
+  }
+  @mixin overlapimg {
+    background: $color-white;
+    max-width: 100px;
+    padding: 10px;
+    position: absolute;
+    border-radius: 20px;
+    top: 35%;
+    @media (max-width: $mobile-view) {
+      max-width: 50px;
+    }
+  }
+  &__content {
+    display: flex;
+    flex-basis: 50%;
+    flex-direction: column;
+    gap: 30px;
+    max-width: 585px;
+  }
+  &__img {
+    max-width: 532px;
+    // display: flex;
+    padding-bottom: 100px;
+    flex-basis: 50%;
+    position: relative;
+    //flex-direction: column;
+    @media (max-width: $mobile-view) {
+      padding: 20px 50px;
+    }
+
+    &--right {
+      @include overlapimg();
+      right: -50px;
+      @media (max-width: $mobile-view) {
+        right: 20px;
+      }
+    }
+    &--left {
+      @include overlapimg();
+      left: -50px;
+      @media (max-width: $mobile-view) {
+        left: 20px;
+      }
+    }
+    &--bottom {
+      background: $color-fade-background;
+      backdrop-filter: blur(10px);
+      position: absolute;
+      border-radius: 20px;
+      padding: 20px;
+      width: fit-content;
+      bottom: 200px;
+      left: -50px;
+      bottom: 60px;
+      display: flex;
+      @media (max-width: $mobile-view) {
+        padding: 10px 20px;
+        //padding-left: 40px;
+        left: 20px;
+        bottom: 10px;
+      }
+    }
+    &--text {
+      font-size: $font-size-primary;
+      font-weight: $font-medium;
+      padding-left: 26px;
+      padding-top: 10px;
+      @media (max-width: $mobile-view) {
+        font-size: $font-mobile-small;
+        padding-left: 10px;
+      }
+      &-blue {
+        color: $color-primary;
+        font-weight: $font-medium;
+      }
+    }
+
+    @media (max-width: $tablet-view) {
+      padding-top: 10px;
+      align-self: center;
+    }
+  }
+  &__head {
+    color: $color-primary;
+    font-weight: $font-medium;
+    font-size: $font-size-primary;
+    @media(max-width:$mobile-view) {
+      font-size: 12px;
+    }
+    @media(max-width:$tablet-view) {
+      font-size: $font-size-small;
+    }
+  }
+  &__title {
+    font-size: $font-size-heading;
+    font-weight: $font-heavy;
+    @media(max-width:$mobile-view) {
+      font-size: $font-size-primary;
+    }
+    @media(max-width:$tablet-view) {
+      font-size: $font-tab-heading;
+    }
+  }
+  &__desc {
+    font-size: $font-size-medium;
+    color: $color-fade-white;
+    @media(max-width:$mobile-view) {
+      font-size: $font-mobile-small;
+    }
+    @media(max-width:$tablet-view) {
+      font-size: $font-size-small;
+    }
+  }
+  &__button {
+    display: flex;
+    justify-content: flex-start;
+    gap: 60px;
+    @media (max-width: $mobile-view) {
+       gap: 30px;
+      }
+  }
+}

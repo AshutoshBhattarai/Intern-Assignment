@@ -1,0 +1,42 @@
+.container {
+  padding: 0px 70px;
+  @media (max-width: $tablet-view) {
+    padding: 0px 50px;
+  }
+  @media (max-width: $mobile-view) {
+    padding: 0px 20px;
+  }
+}
+
+.bg-primary {
+  background: url(../../../assets/img/bg_primary.png);
+}
+.bg-secondary {
+  background: url(../../../assets/img/bg_vaccine.png);
+}
+.col-blue {
+  color: $color-primary;
+}
+.col-fade {
+  color: $color-fade-white;
+}
+.bg-white {
+  background: $color-white;
+}
+.col-white {
+  color: $color-white;
+}
+
+@mixin iconBg {
+  border-radius: 10px;
+  background-color: $color-fade-background;
+  padding: 10px;
+  max-width: 50px;
+  padding-bottom: 0px;
+  @media (max-width: $mobile-view) {
+    max-width: 20px;
+    align-items: center;
+    padding-bottom: 0px;
+    margin-top: 10px
+   }
+}

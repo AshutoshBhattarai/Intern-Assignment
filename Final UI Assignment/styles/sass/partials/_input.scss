@@ -1,0 +1,41 @@
+.input {
+  border-radius: 20px;
+  font-size: $font-size-primary;
+  background-color: $color-fade-background;
+  color: $color-fade-white;
+  border: none;
+  padding: 10px;
+  padding-left: 20px;
+  outline: none;
+
+  @media (max-width: $tablet-view) {
+    font-size: $font-size-medium;
+  }
+  @media (max-width: $mobile-view) {
+    font-size: $font-mobile-small;
+  }
+
+  &.border-blue {
+    border: 1px solid $color-primary;
+    color: $color-white;
+  }
+  &.disabled {
+    background-color: $color-fade-white;
+    color: $color-black;
+  }
+  &.quote {
+    background: $color-white;
+    color: $color-black;
+    font-size: $font-size-small;
+    @media (max-width: $mobile-view) {
+      font-size: 10px;
+    }
+  }
+  &.border-left {
+    border-left: 3px solid rgba(0, 0, 0, 0.1);
+    border-radius: 0px;
+  }
+  &.transparent {
+    background: none;
+  }
+}

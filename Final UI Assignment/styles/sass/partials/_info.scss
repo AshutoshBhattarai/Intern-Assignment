@@ -1,0 +1,80 @@
+.info {
+  
+  &__top {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    font-size: $font-size-primary;
+    font-weight: 700;
+    padding-bottom: 20px;
+    @media (max-width: $mobile-view) {
+      margin-top: 30px;
+      font-size: $font-mobile-small;
+    }
+  }
+  &__schedule {
+    @include iconBg;
+  }
+  &__bottom {
+    padding: 46px 36px;
+    display: flex;
+    background: $color-fade-background;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    justify-content: flex-start;
+    gap: 70px;
+    font-size: $font-size-primary;
+    @media (max-width:$tablet-view) {
+      flex-wrap: wrap;
+      font-size: $font-size-medium;
+    
+    }
+    @media (max-width: $mobile-view) {
+      gap:20px;
+      font-size: $font-mobile-small;
+      padding: 10px;
+      align-items: center;
+     }
+  }
+  &__item {
+    width: fit-content;
+    //font-size: $font-size-primary;
+    font-weight: $font-medium;
+    display: flex;
+    justify-content: flex-start;
+    //flex-wrap: wrap;
+    flex-basis: 25%;
+    @media(max-width:$tablet-view) {
+      align-items: center;
+    }
+    &--img {
+      @include iconBg;
+      flex-basis: 25%;
+    }
+    &--text {
+    
+      flex-basis: 75%;
+      padding-left: 20px;
+      padding-top: 10px;
+      line-height: 1.6;
+      &-title
+      {
+        color: $color-fade-white;
+      }
+      &-desc
+      {
+        font-weight: $font-heavy;
+      }
+    }
+
+
+    @media (max-width:$tablet-view) {
+      flex-basis: 50%;
+      max-width: 250px;
+    }
+    @media (max-width: $mobile-view) {
+      flex-basis: 100%;
+      max-width: none;
+     }
+  }
+}

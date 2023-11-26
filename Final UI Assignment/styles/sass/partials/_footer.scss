@@ -1,0 +1,119 @@
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 0px;
+  font-size: 20px;
+  flex-direction: column;
+  &__logos {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    @media (max-width:$mobile-view)
+    {
+      max-width: 100px;
+      align-items: flex-start;
+    }
+    @media (max-width:$tablet-view)
+    {
+      max-width: 150px;
+      align-items: flex-start;
+    }
+  }
+  &__bottom {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    align-items: center;
+    padding: 50px 0px;
+    @media (max-width:$mobile-view)
+    {
+      flex-direction: column;
+      gap: 20px;
+      align-items: flex-start;
+    }
+    @media (max-width:$tablet-view)
+    {
+      flex-direction: column;
+      gap: 20px;
+      align-items: flex-start;
+    }
+  }
+  &__quote {
+    &--out {
+      margin-top: -150px;
+      flex-basis: 100%;
+      background-color: $color-grey;
+      border-radius: 50px;
+      padding: 10px;
+    }
+    &--in {
+      background-color: $color-primary;
+      border-radius: 50px;
+      color: $color-white;
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+      gap: 20px;
+      padding: 70px 200px;
+      @media(max-width:$tablet-view) {
+        padding: 70px;
+      }
+      @media (max-width:$mobile-view)
+      {
+        font-size: 10px;
+        padding: 20px;
+        align-items: center;
+      }
+    }
+    &--title {
+      font-size: $font-size-primary;
+      text-align: center;
+      @media (max-width:$mobile-view)
+      {
+        font-size: $font-mobile-small;
+      }
+    }
+
+    &--form {
+      display: flex;
+      justify-content: flex-start;
+      background: $color-white;
+      border-radius: 20px;
+      align-items: center;
+
+      &-input {
+        flex-basis: 90%;
+        margin: 5px;
+        background: transparent;
+        border: 1px solid $color-white;
+        color: $color-fade-white;
+        font-size: $font-size-small;
+      }
+      &-button {
+        max-width: 100px;
+        padding: 20px 20px 10px 10px;
+        background-color: $color-secondary;
+        border-top-right-radius: 20px;
+        border-bottom-right-radius: 20px;
+        cursor: pointer;
+        img {
+          align-items: center;
+        }
+        @media (max-width:$mobile-view)
+        {
+          max-width: 20px;
+        }
+        @media (max-width:$tablet-view)
+        {
+          max-width: 30px;
+        }
+      }
+    }
+  }
+}
+.quote__bg {
+  background-color: $color-fade-white;
+  height: 150px;
+}
