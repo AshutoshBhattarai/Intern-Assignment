@@ -35,11 +35,11 @@ button {
 }
 
 .bg-primary {
-  background: url("Intern Assignment/Final-UI-Assignment/assets/img/bg_primary.png");
+  background: "/Final-UI-Assignment/assets/img/bg_primary.png";
 }
 
 .bg-secondary {
-  background: url("Intern Assignment/Final-UI-Assignment/assets/img/bg_vaccine.png");
+  background: "/Final-UI-Assignment/assets/img/bg_vaccine.png";
 }
 
 .col-blue {
