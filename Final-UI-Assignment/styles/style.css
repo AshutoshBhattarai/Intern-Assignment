@@ -35,11 +35,11 @@ button {
 }
 
 .bg-primary {
-  background: url("/Intern-Assignment/Final-UI-Assignment/assets/img/bg_primary.png");
+  background: url("../assets/img/bg_primary.png");
 }
 
 .bg-secondary {
-  background: url("/Intern-Assignment/Final-UI-Assignment/assets/img/bg_vaccine.png");
+  background: url("../assets/img/bg_vaccine.png");
 }
 
 .col-blue {
@@ -900,7 +900,7 @@ button {
 .regform__right {
   flex-basis: 50%;
   background-color: #0b153c;
-  background-image: url(../../../assets/img/vaccine_extract.svg);
+  background-image: url(../assets/img/vaccine_extract.svg);
   background-size: contain;
   background-repeat: no-repeat;
   background-position: left bottom;
@@ -1035,7 +1035,7 @@ button {
   margin-top: 100px;
   display: flex;
   flex-direction: column;
-  background-image: url(../../../assets/img/sick-guy.svg);
+  background-image: url(../assets/img/sick-guy.svg);
   background-position: center;
   background-repeat: no-repeat;
   background-size: contain;
@@ -1259,7 +1259,7 @@ button {
   }
 }
 .feedback__bg {
-  background-image: url(../../../assets/img/vacc-bottle.svg);
+  background-image: url(../assets/img/vacc-bottle.svg);
   background-repeat: no-repeat;
   background-size: contain;
   background-position: center;
