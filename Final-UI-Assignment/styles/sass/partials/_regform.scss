@@ -47,6 +47,8 @@
     }
     &--img {
       max-width: 200px;
+      display: flex;
+      align-items: center;
       @media (max-width: $mobile-view) {
         max-width: 50px;
       }

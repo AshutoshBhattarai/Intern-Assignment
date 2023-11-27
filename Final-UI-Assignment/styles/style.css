@@ -132,6 +132,7 @@ button {
 .input.border-left {
   border-left: 3px solid rgba(0, 0, 0, 0.1);
   border-radius: 0px;
+  min-width: 10px;
 }
 .input.transparent {
   background: none;
@@ -845,6 +846,8 @@ button {
 }
 .regform__phone--img {
   max-width: 200px;
+  display: flex;
+  align-items: center;
 }
 @media (max-width: 575px) {
   .regform__phone--img {
