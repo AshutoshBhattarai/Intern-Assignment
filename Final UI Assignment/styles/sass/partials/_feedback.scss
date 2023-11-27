@@ -9,33 +9,36 @@
   &__title1 {
     color: $color-primary;
     font-size: $font-size-primary;
-    //font-weight: 700;
-    @media (max-width: $mobile-view) {
-      font-size: $font-mobile-small;
-    }
+    font-weight:$font-medium;
+    
     @media (max-width: $tablet-view) {
       font-size: $font-size-medium;
+    }
+    @media (max-width: $mobile-view) {
+      font-size: $font-mobile-small;
     }
   }
   &__title2 {
     color: $color-black;
     font-size: $font-size-heading;
-    @media (max-width: $mobile-view) {
-      font-size: $font-size-primary;
-    }
+    font-weight: $font-heavy;
     @media (max-width: $tablet-view) {
       font-size: $font-size-medium;
+    }
+    @media (max-width: $mobile-view) {
+      font-size: $font-size-primary;
     }
   }
   &__desc {
     color: rgba(0, 0, 0, 0.5);
     max-width: 900px;
     text-align: center;
-    @media (max-width: $mobile-view) {
-      font-size: 12px;
-    }
+
     @media (max-width: $tablet-view) {
       font-size: $font-size-small;
+    }
+    @media (max-width: $mobile-view) {
+      font-size: 12px;
     }
   }
   &__bottom {
@@ -89,43 +92,43 @@
       padding-top: 5px;
     }
     &--name {
-      @media (max-width: $mobile-view) {
-        font-size: $font-mobile-small;
-      }
+      color: $color-black;
+      font-size: $font-size-primary;
       @media (max-width: $tablet-view) {
         font-size: $font-size-medium;
       }
-      color: $color-black;
-      font-size: $font-size-primary;
+      @media (max-width: $mobile-view) {
+        font-size: $font-mobile-small;
+      }
       &-active {
-        @media (max-width: $mobile-view) {
-          font-size: $font-mobile-small;
-        }
+        font-size: $font-size-primary;
+        color: $color-white;
         @media (max-width: $tablet-view) {
           font-size: $font-size-medium;
         }
-        font-size: $font-size-primary;
-        color: $color-white;
+        @media (max-width: $mobile-view) {
+          font-size: $font-mobile-small;
+        }
       }
     }
     &--address {
       color: rgba(0, 0, 0, 0.5);
       font-size: $font-mobile-small;
-      @media (max-width: $mobile-view) {
-        font-size: 10px;
-      }
       @media (max-width: $tablet-view) {
         font-size: $font-mobile-small;
       }
+      @media (max-width: $mobile-view) {
+        font-size: 10px;
+      }
       &-active {
-        @media (max-width: $mobile-view) {
-          font-size: $font-mobile-small;
-        }
+        font-size: $font-mobile-small;
+        color: $color-white;
         @media (max-width: $tablet-view) {
           font-size: $font-mobile-small;
         }
-        font-size: $font-mobile-small;
-        color: $color-white;
+        @media (max-width: $mobile-view) {
+          font-size: $font-mobile-small;
+        }
       }
     }
     &--comment {

@@ -59,6 +59,7 @@ button {
 }
 
 .btn {
+  font-weight: 700;
   font-size: 24px;
   border-radius: 20px;
   border: none;
@@ -146,6 +147,7 @@ button {
   font-size: 32px;
   display: flex;
   flex-direction: column;
+  font-weight: 700;
 }
 @media (max-width: 992px) {
   .header__logo {
@@ -487,9 +489,10 @@ button {
 }
 .info__item--text-title {
   color: rgba(255, 255, 255, 0.5);
+  font-weight: 500;
 }
 .info__item--text-desc {
-  font-weight: 800;
+  font-weight: 700;
 }
 @media (max-width: 992px) {
   .info__item {
@@ -521,6 +524,7 @@ button {
   border: 1px solid rgba(196, 196, 196, 0.05);
   border-radius: 20px;
   font-size: 24px;
+  font-weight: 700;
 }
 @media (max-width: 992px) {
   .dbform {
@@ -620,6 +624,7 @@ button {
 .reasons__top--desc {
   color: rgba(255, 255, 255, 0.5);
   max-width: 500px;
+  font-weight: 400;
 }
 @media (max-width: 575px) {
   .reasons__top--desc {
@@ -664,14 +669,14 @@ button {
 .reasons__img {
   max-width: 100px;
 }
-@media (max-width: 575px) {
-  .reasons__img {
-    max-width: 50px;
-  }
-}
 @media (max-width: 992px) {
   .reasons__img {
     max-width: 70px;
+  }
+}
+@media (max-width: 575px) {
+  .reasons__img {
+    max-width: 50px;
   }
 }
 .reasons__title {
@@ -689,14 +694,14 @@ button {
   padding: 20px 0px;
   max-width: 350px;
 }
-@media (max-width: 575px) {
-  .reasons__desc {
-    font-size: 12px;
-  }
-}
 @media (max-width: 992px) {
   .reasons__desc {
     font-size: 18px;
+  }
+}
+@media (max-width: 575px) {
+  .reasons__desc {
+    font-size: 12px;
   }
 }
 .reasons__readmore {
@@ -715,6 +720,7 @@ button {
   display: flex;
   align-items: center;
   color: #17c2ec;
+  padding-top: 50px;
 }
 @media (max-width: 992px) {
   .reasons__readmore--active {
@@ -783,6 +789,7 @@ button {
   display: flex;
   flex-direction: column;
   padding: 50px;
+  font-weight: 700;
 }
 .regform__left {
   display: flex;
@@ -796,7 +803,7 @@ button {
 .regform__left--desc {
   color: rgba(0, 0, 0, 0.5);
   font-size: 20px;
-  font-weight: 700;
+  font-weight: 500;
 }
 @media (max-width: 992px) {
   .regform__left--desc {
@@ -811,14 +818,14 @@ button {
 .regform__left--title {
   font-size: 24px;
 }
+@media (max-width: 992px) {
+  .regform__left--title {
+    font-size: 20px;
+  }
+}
 @media (max-width: 575px) {
   .regform__left--title {
     font-size: 14px;
-  }
-}
-@media (max-width: 575px) and (max-width: 992px) {
-  .regform__left--title {
-    font-size: 20px;
   }
 }
 .regform__phone {
@@ -835,6 +842,9 @@ button {
   .regform__phone {
     flex-direction: column;
   }
+}
+.regform__phone--img {
+  max-width: 200px;
 }
 @media (max-width: 575px) {
   .regform__phone--img {
@@ -959,6 +969,7 @@ button {
 }
 .regform__bottom {
   text-align: center;
+  font-weight: 600;
 }
 @media (max-width: 992px) {
   .regform__bottom {
@@ -981,18 +992,19 @@ button {
 .symptoms__title1 {
   font-size: 24px;
 }
-@media (max-width: 575px) {
-  .symptoms__title1 {
-    font-size: 14px;
-  }
-}
 @media (max-width: 992px) {
   .symptoms__title1 {
     font-size: 20px;
   }
 }
+@media (max-width: 575px) {
+  .symptoms__title1 {
+    font-size: 14px;
+  }
+}
 .symptoms__title2 {
   font-size: 48px;
+  font-weight: 800;
 }
 @media (max-width: 992px) {
   .symptoms__title2 {
@@ -1006,10 +1018,12 @@ button {
 }
 .symptoms__desc {
   text-align: center;
+  max-width: 800px;
 }
 @media (max-width: 992px) {
   .symptoms__desc {
     font-size: 18px;
+    max-width: none;
   }
 }
 @media (max-width: 575px) {
@@ -1190,29 +1204,31 @@ button {
 .feedback__title1 {
   color: #17c2ec;
   font-size: 24px;
+  font-weight: 700;
+}
+@media (max-width: 992px) {
+  .feedback__title1 {
+    font-size: 20px;
+  }
 }
 @media (max-width: 575px) {
   .feedback__title1 {
     font-size: 14px;
   }
 }
-@media (max-width: 992px) {
-  .feedback__title1 {
-    font-size: 20px;
-  }
-}
 .feedback__title2 {
   color: #000;
   font-size: 48px;
+  font-weight: 800;
+}
+@media (max-width: 992px) {
+  .feedback__title2 {
+    font-size: 20px;
+  }
 }
 @media (max-width: 575px) {
   .feedback__title2 {
     font-size: 24px;
-  }
-}
-@media (max-width: 992px) {
-  .feedback__title2 {
-    font-size: 20px;
   }
 }
 .feedback__desc {
@@ -1220,14 +1236,14 @@ button {
   max-width: 900px;
   text-align: center;
 }
-@media (max-width: 575px) {
-  .feedback__desc {
-    font-size: 12px;
-  }
-}
 @media (max-width: 992px) {
   .feedback__desc {
     font-size: 18px;
+  }
+}
+@media (max-width: 575px) {
+  .feedback__desc {
+    font-size: 12px;
   }
 }
 .feedback__bottom {
@@ -1289,54 +1305,54 @@ button {
   color: #000;
   font-size: 24px;
 }
-@media (max-width: 575px) {
-  .feedback__card--name {
-    font-size: 14px;
-  }
-}
 @media (max-width: 992px) {
   .feedback__card--name {
     font-size: 20px;
+  }
+}
+@media (max-width: 575px) {
+  .feedback__card--name {
+    font-size: 14px;
   }
 }
 .feedback__card--name-active {
   font-size: 24px;
   color: #fff;
 }
-@media (max-width: 575px) {
-  .feedback__card--name-active {
-    font-size: 14px;
-  }
-}
 @media (max-width: 992px) {
   .feedback__card--name-active {
     font-size: 20px;
+  }
+}
+@media (max-width: 575px) {
+  .feedback__card--name-active {
+    font-size: 14px;
   }
 }
 .feedback__card--address {
   color: rgba(0, 0, 0, 0.5);
   font-size: 14px;
 }
-@media (max-width: 575px) {
-  .feedback__card--address {
-    font-size: 10px;
-  }
-}
 @media (max-width: 992px) {
   .feedback__card--address {
     font-size: 14px;
+  }
+}
+@media (max-width: 575px) {
+  .feedback__card--address {
+    font-size: 10px;
   }
 }
 .feedback__card--address-active {
   font-size: 14px;
   color: #fff;
 }
-@media (max-width: 575px) {
+@media (max-width: 992px) {
   .feedback__card--address-active {
     font-size: 14px;
   }
 }
-@media (max-width: 992px) {
+@media (max-width: 575px) {
   .feedback__card--address-active {
     font-size: 14px;
   }

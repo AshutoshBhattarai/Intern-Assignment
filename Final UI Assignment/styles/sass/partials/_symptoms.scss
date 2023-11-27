@@ -16,16 +16,17 @@
   }
   &__title1 {
     font-size: $font-size-primary;
-    @media (max-width: $mobile-view) {
-      font-size: $font-mobile-small;
-    }
+
     @media (max-width: $tablet-view) {
       font-size: $font-size-medium;
+    }
+    @media (max-width: $mobile-view) {
+      font-size: $font-mobile-small;
     }
   }
   &__title2 {
     font-size: $font-size-heading;
-
+    font-weight: $font-heavy;
     @media (max-width: $tablet-view) {
       font-size: $font-tab-heading;
     }
@@ -35,9 +36,10 @@
   }
   &__desc {
     text-align: center;
-    //max-width: 900px;
+    max-width: 800px;
     @media (max-width: $tablet-view) {
       font-size: $font-size-small;
+      max-width: none;
     }
     @media (max-width: $mobile-view) {
       font-size: $font-mobile-small;

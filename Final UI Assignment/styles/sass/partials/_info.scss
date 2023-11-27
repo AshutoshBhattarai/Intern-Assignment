@@ -63,10 +63,11 @@
       &-title
       {
         color: $color-fade-white;
+        font-weight: $font-light;
       }
       &-desc
       {
-        font-weight: $font-heavy;
+        font-weight: $font-medium;
       }
     }
 

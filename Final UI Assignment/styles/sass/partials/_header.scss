@@ -9,6 +9,7 @@
     display: flex;
     //flex-basis: 33%;
     flex-direction: column;
+    font-weight: $font-medium;
     //margin-right: auto;
 
     @media (max-width: $tablet-view) {

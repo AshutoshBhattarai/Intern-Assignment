@@ -6,8 +6,7 @@
     gap: 255px;
     align-items: center;
 
-    @media (max-width:$tablet-view)
-    {
+    @media (max-width: $tablet-view) {
       flex-direction: column;
       gap: 20px;
       align-items: start;
@@ -15,26 +14,26 @@
 
     @media (max-width: $mobile-view) {
       font-size: $font-mobile-small;
-     }
+    }
     &--title {
       max-width: 500px;
       font-size: $font-size-heading;
-      font-weight: 700;
-      @media (max-width:$tablet-view)
-    {
-      font-size: $font-tab-heading;
-    }
-    @media (max-width: $mobile-view) {
-      font-size: $font-size-primary;
-      padding: 0px 20px;
-     }
+      font-weight: $font-medium;
+      @media (max-width: $tablet-view) {
+        font-size: $font-tab-heading;
+      }
+      @media (max-width: $mobile-view) {
+        font-size: $font-size-primary;
+        padding: 0px 20px;
+      }
     }
     &--desc {
       color: $color-fade-white;
       max-width: 500px;
+      font-weight: 400;
       @media (max-width: $mobile-view) {
         padding: 0px 20px;
-       }
+      }
     }
   }
   &__bottom {
@@ -43,38 +42,36 @@
     justify-content: space-evenly;
     align-items: end;
     gap: 80px;
-    @media (max-width:$tablet-view)
-    {
+    @media (max-width: $tablet-view) {
       flex-wrap: wrap;
     }
     @media (max-width: $mobile-view) {
       justify-content: flex-start;
-     }
+    }
   }
   &__card {
     background: $color-fade-background;
     border-radius: 50px;
     border-top-right-radius: 150px;
     padding: 39px;
-    @media (max-width:$tablet-view)
-    {
+    @media (max-width: $tablet-view) {
       flex-basis: 100%;
       //margin-left: 50px;
       margin-right: 250px;
-      
     }
     @media (max-width: $mobile-view) {
       font-size: 12px;
       margin-right: 100px;
-     }
+    }
   }
   &__img {
     max-width: 100px;
+
+    @media (max-width: $tablet-view) {
+      max-width: 70px;
+    }
     @media (max-width: $mobile-view) {
       max-width: 50px;
-     }
-     @media(max-width:$tablet-view) {
-      max-width: 70px;
     }
   }
   &__title {
@@ -84,16 +81,17 @@
     color: $color-primary;
     @media (max-width: $mobile-view) {
       font-size: $font-mobile-small;
-     }
+    }
   }
   &__desc {
     padding: 20px 0px;
     max-width: 350px;
+
+    @media (max-width: $tablet-view) {
+      font-size: $font-size-small;
+    }
     @media (max-width: $mobile-view) {
       font-size: 12px;
-     }
-     @media(max-width:$tablet-view) {
-      font-size: $font-size-small;
     }
   }
   &__readmore {
@@ -102,16 +100,16 @@
     margin-top: 100px;
     color: $color-fade-white;
 
-    @media(max-width:$tablet-view) {
+    @media (max-width: $tablet-view) {
       margin-top: 50px;
       font-size: $font-size-small;
-      
     }
     &--active {
       display: flex;
       align-items: center;
       color: $color-primary;
-      @media(max-width:$tablet-view) {
+      padding-top: 50px;
+      @media (max-width: $tablet-view) {
         font-size: $font-size-small;
         margin-top: 50px;
       }
@@ -124,8 +122,7 @@
     height: 350px;
     width: 350px;
 
-    @media (max-width:$tablet-view)
-    {
+    @media (max-width: $tablet-view) {
       width: auto;
       height: 300px;
     }
@@ -133,28 +130,25 @@
       font-size: 12px;
       height: 200px;
       width: 200px;
-     }
-
+    }
 
     &--img {
       @include iconBg;
       margin-bottom: 20px;
       @media (max-width: $mobile-view) {
         max-width: 50px;
-       }
+      }
     }
     &--text {
       font-size: $font-size-primary;
       font-weight: $font-medium;
       width: auto;
-      @media (max-width:$tablet-view)
-      {
+      @media (max-width: $tablet-view) {
         max-width: 200px;
       }
       @media (max-width: $mobile-view) {
         font-size: $font-mobile-small;
-       }
-
+      }
     }
   }
 }
