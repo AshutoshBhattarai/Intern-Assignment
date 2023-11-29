@@ -1,0 +1,45 @@
+* {
+  box-sizing: border-box;
+}
+
+.image {
+  width: 900px;
+  height: 600px;
+  border: 2px solid #000;
+  position: relative;
+  border-radius: 30px;
+  overflow: hidden;
+}
+
+.carousel-container {
+  width: 900px;
+  height: 600px;
+  overflow: hidden;
+  position: relative;
+}
+
+#carousel-image-wrapper {
+  display: flex;
+  position: absolute;
+  /* width: 1500px; */
+  height: 600px;
+}
+
+#left-scroll {
+  position: absolute;
+  top: 50%;
+  z-index: 1;
+}
+#right-scroll {
+  position: absolute;
+  top: 50%;
+  right: 0px;
+  z-index: 1;
+}
+
+#btn-div {
+  display: flex;
+  justify-content: space-around;
+  padding: 20px 30px;
+  max-width: 900px;
+}
