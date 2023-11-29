@@ -1,0 +1,108 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+$main-green: #4caf50;
+$light-green: #e7f4e8;
+$background-white: white;
+$shadow-color: rgba(0, 0, 0, 0.1);
+
+.container {
+  max-width: 64em;
+  margin: 0 auto;
+  font-size: 15px;
+  font-weight: 300;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.task--item {
+  display: flex;
+  justify-content: space-between;
+  border: 1px solid $main-green;
+  border-radius: 10px;
+  box-shadow: #4caf50;
+  padding: 10px 20px;
+  margin: 10px 0px;
+  p {
+    color: $main-green;
+  }
+}
+// Variables for colors
+
+.header {
+  background-color: $background-white;
+  display: flex;
+  justify-content: space-between;
+  box-shadow: 0 2px 4px $light-green;
+  padding: 20px 0px;
+  &__logo {
+    float: left;
+    display: flex;
+    align-items: center;
+    padding: 15px;
+
+    span {
+      color: $main-green;
+    }
+  }
+  &__nav {
+    float: right;
+
+    a {
+      display: inline-block;
+      color: $main-green;
+      text-align: center;
+      padding: 14px 16px;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+      &:active {
+        background-color: $light-green;
+      }
+      &:hover {
+        //background-color: $light-green;
+        border-bottom: 1px solid $main-green;
+      }
+    }
+  }
+}
+
+.search {
+  //width: 100%;
+  position: relative;
+  display: flex;
+  padding: 10px 20px;
+  &__input {
+    padding: 20px 10px;
+    width: 100%;
+    border: 3px solid $main-green;
+    border-radius: 5px 0 0 5px;
+    outline: none;
+    color: #9dbfaf;
+    &:focus {
+      color: $main-green;
+    }
+  }
+}
+.add-task {
+  display: flex;
+  padding: 10px 20px;
+  gap: 30px;
+  &__btn {
+    background: $main-green;
+    border-radius: 20px;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    &:hover{
+      background-color: #62df67;
+    }
+  }
+}
+#tasks {
+  background: $background-white;
+  padding: 10px 20px;
+  border: 2px solid $main-green;
+  border-radius: 20px;
+  height: 60vh;
+}

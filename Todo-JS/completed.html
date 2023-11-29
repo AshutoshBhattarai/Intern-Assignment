@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tasks-Completed</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="container header">
+      <div class="header__logo">
+        <span>Tasks</span>
+      </div>
+      <nav>
+        <div class="header__nav">
+          <a href="index.html">Home</a>
+          <a href="completed.html">Completed</a>
+          <a href="remaining.html">Remaining</a>
+        </div>
+      </nav>
+    </header>
+    <main>
+      <section class="container body">
+        <div class="search">
+          <input
+            type="text"
+            id="search-todo"
+            class="search__input"
+            placeholder="Search Task..."
+          />
+        </div>
+        <div class="add-task">
+          <input
+            type="text"
+            class="search__input"
+            placeholder="Add Task"
+            id="task-input"
+          />
+          <button class="add-task__btn" id="add-task">
+       Add&nbspTask
+          </button>
+        </div>
+        <div id="tasks"></div>
+      </section>
+
+      <!-- <input type="radio" id="completedTask"> -->
+      <script src="./completed.js"></script>
+    </main>
+  </body>
+</html>
