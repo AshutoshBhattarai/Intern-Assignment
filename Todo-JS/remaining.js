@@ -4,14 +4,16 @@ const taskMain = document.getElementById('tasks');
 const search = document.getElementById('search-todo');
 
 
+function updateTask(task) {
+    return task.filter((element) => element.completed == false)
+}
+
 let getTasks = JSON.parse(localStorage.getItem('taskList'))
 let tasks = getTasks == null ? [] : getTasks
 let id = tasks.length == 0 ? 0 : tasks[tasks.length - 1].id + 1;
-let remainingTasks = tasks.filter((task) => {
-    return task.completed == false;
-});
+let remainingTasks = updateTask(tasks);
 
-search.addEventListener('change',(e)=>{
+search.addEventListener('change', (e) => {
     let searchValue = e.target.value;
     let filteredTasks = remainingTasks.filter((task) => {
         return task.task.toLowerCase().includes(searchValue.toLowerCase());
@@ -50,7 +52,8 @@ if (tasks.length != 0) {
             let statusId = checkbox.id;
             tasks[statusId].completed = !tasks[statusId].completed;
             localStorage.setItem('taskList', JSON.stringify(tasks));
-            createTask(remainingTasks);
+            const updatedTask = updateTask(JSON.parse(localStorage.getItem('taskList')))
+            createTask(updatedTask);
         })
     })
 }

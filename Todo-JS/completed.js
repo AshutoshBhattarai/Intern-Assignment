@@ -10,9 +10,12 @@ let tasks = getTasks == null ? [] : getTasks
 
 let id = tasks.length == 0 ? 0 : tasks[tasks.length - 1].id + 1;
 //Filtering out remaining tasks
-let completedTask = tasks.filter((task) => {
-    return task.completed == true;
-})
+
+function updateTask(task) {
+    return task.filter((element) => element.completed == true)
+}
+let completedTask = updateTask(tasks);
+
 
 //Event Listener for searching certain tasks
 search.addEventListener('change', (e) => {
@@ -57,7 +60,8 @@ if (tasks.length != 0) {
             let statusId = checkbox.id;
             tasks[statusId].completed = !tasks[statusId].completed;
             localStorage.setItem('taskList', JSON.stringify(tasks));
-            createTask(completedTask);
+            const updatedTask = updateTask(JSON.parse(localStorage.getItem('taskList')));
+            createTask(updatedTask);
         })
     })
 }
