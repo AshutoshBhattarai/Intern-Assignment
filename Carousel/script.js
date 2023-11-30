@@ -8,10 +8,10 @@ const container = document.getElementById('btn-div');
 /* ------------------------ Initializing image array ------------------------ */
 
 let images = [
-    { url: "https://picsum.photos/400", },
-    { url: "https://picsum.photos/300", },
-    { url: "https://picsum.photos/200", },
-    { url: "https://picsum.photos/100", },
+    { url: "https://fastly.picsum.photos/id/28/4928/3264.jpg?hmac=GnYF-RnBUg44PFfU5pcw_Qs0ReOyStdnZ8MtQWJqTfA", },
+    { url: "https://fastly.picsum.photos/id/29/4000/2670.jpg?hmac=rCbRAl24FzrSzwlR5tL-Aqzyu5tX_PA95VJtnUXegGU", },
+    { url: "https://fastly.picsum.photos/id/16/2500/1667.jpg?hmac=uAkZwYc5phCRNFTrV_prJ_0rP0EdwJaZ4ctje2bY7aE", },
+    { url: "https://fastly.picsum.photos/id/13/2500/1667.jpg?hmac=SoX9UoHhN8HyklRA4A3vcCWJMVtiBXUg0W4ljWTor7s", },
     // { url: "https://picsum.photos/600", },
     // { url: "https://picsum.photos/700", },
     // { url: "https://picsum.photos/800", },
@@ -32,9 +32,9 @@ startAnim();
 /* -------- Restarting animation when user presses one of the buttons ------- */
 function restartAnim() {
     clearInterval(imgAnimation);
-    setTimeout(() => {
-        startAnim()
-    }, 4500);
+    // setTimeout(() => {
+    //     startAnim()
+    // }, 4500);
 }
 
 // Initializing initial width of the container based on the array size
@@ -45,7 +45,6 @@ images.forEach((el, i) => {
     //creating a index button to jump to certain image
     const indexBtn = document.createElement('button');
     indexBtn.className = 'index-btn';
-    indexBtn.textContent = i + 1;
 
     //Adding event listener to the index button
     indexBtn.addEventListener('click', () => {

@@ -1,11 +1,16 @@
 * {
   box-sizing: border-box;
 }
+main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
 .image {
   width: 900px;
   height: 600px;
-  border: 2px solid #000;
+  border: 2px solid #bcb8b8;
   position: relative;
   border-radius: 30px;
   overflow: hidden;
@@ -24,22 +29,44 @@
   /* width: 1500px; */
   height: 600px;
 }
-
-#left-scroll {
+.btn-scroll {
   position: absolute;
-  top: 50%;
+  top: 45%;
   z-index: 1;
+  /* background: transparent; */
+  border: none;
+  color: white;
+  padding: 10px;
+  font-size: 50px;
+  cursor: pointer;
+  background: rgba(0,0,0,0.1);
+}
+.btn-scroll:hover{
+  background: rgba(0,0,0,0.3);
 }
 #right-scroll {
-  position: absolute;
-  top: 50%;
   right: 0px;
-  z-index: 1;
 }
 
 #btn-div {
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
   padding: 20px 30px;
   max-width: 900px;
+  gap: 10px;
+}
+
+.index-btn {
+  padding: 10px;
+  border: 1px solid #777777;
+  background: #777777;
+  border-radius: 50%;
+  cursor: pointer;
+}
+.index-btn:hover {
+  background: #000;
+}
+
+.index-btn .selected {
+  background: #000;
 }
