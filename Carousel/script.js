@@ -37,6 +37,10 @@ function restartAnim() {
     // }, 4500);
 }
 
+//function to calculate position based on index value
+function getPos(index) {
+    return index * (-imageWidth);
+}
 // Initializing initial width of the container based on the array size
 imageContainer.style.width = (images.length) * imageWidth + 'px';
 
@@ -45,24 +49,25 @@ images.forEach((el, i) => {
     //creating a index button to jump to certain image
     const indexBtn = document.createElement('button');
     indexBtn.className = 'index-btn';
-
     //Adding event listener to the index button
     indexBtn.addEventListener('click', () => {
+
+        btnRemoveSelected();
         //Restarts Animation on button click
         restartAnim();
-
+        indexBtn.classList.add('selected');
         // if current index is greater than the index of the image animate to the left
         if (currentIndex > i) {
-            let currentPos = currentIndex * (-imageWidth);
+            let currentPos = getPos(currentIndex);
             currentIndex = i;
-            let nextPos = currentIndex * (-imageWidth);
+            let nextPos = getPos(currentIndex);
             animateLeft(currentPos, nextPos)
         }
         //else if current index is smaller than the index of the image animate to the right
         else {
-            let currentPos = currentIndex * (-imageWidth);
+            let currentPos = getPos(currentIndex);
             currentIndex = i;
-            let nextPos = currentIndex * (-imageWidth);
+            let nextPos = getPos(currentIndex);
             animateRight(currentPos, nextPos)
         }
 
@@ -70,6 +75,8 @@ images.forEach((el, i) => {
     //Creating div to store the image 
     const imgDiv = document.createElement('div');
     imgDiv.className = 'image';
+
+    //creating image tag to display the image
     const displayImg = document.createElement('img');
     displayImg.src = el.url;
     displayImg.style.width = '100%';
@@ -77,6 +84,7 @@ images.forEach((el, i) => {
     // adding elements to the parent container
     imgDiv.appendChild(displayImg);
     imageContainer.appendChild(imgDiv);
+    //Adding button to the main container
     container.appendChild(indexBtn);
 })
 
@@ -84,18 +92,17 @@ images.forEach((el, i) => {
 //Moves image from right to left into the viewport
 rightScroll.addEventListener('click', () => {
     restartAnim();
-
     //When the last image reached and the next button is clicked move to the first image
     if (currentIndex >= images.length - 1) {
-        let currentPos = currentIndex * (-imageWidth);
+        let currentPos = getPos(currentIndex);
         currentIndex = 0;
         animateLeft(currentPos, 0)
     }
     // Else move according to the position
     else {
-        let currentPos = currentIndex * (-imageWidth);
+        let currentPos = getPos(currentIndex);
         currentIndex++;
-        let nextPos = currentIndex * (-imageWidth);
+        let nextPos = getPos(currentIndex);
         animateRight(currentPos, nextPos);
     }
 })
@@ -104,15 +111,15 @@ rightScroll.addEventListener('click', () => {
 leftScroll.addEventListener('click', () => {
     restartAnim();
     if (currentIndex != 0) {
-        let currentPos = currentIndex * (-imageWidth);
+        let currentPos = getPos(currentIndex);
         currentIndex--;
-        let nextPos = currentIndex * (-imageWidth);
+        let nextPos = getPos(currentIndex);
         animateLeft(currentPos, nextPos);
     }
     else {
-        let currentPos = currentIndex * (-imageWidth);
+        let currentPos = getPos(currentIndex);
         currentIndex = images.length - 1;
-        let nextPos = currentIndex * (-imageWidth);
+        let nextPos = getPos(currentIndex);
         animateRight(currentPos, nextPos);
     }
 })
@@ -156,15 +163,30 @@ function animateRight(currentPos, nextPos) {
 // Function to auto animate the images
 //Image goes to the start when it reaches the end
 function autoAnimate() {
-    let currentPos = currentIndex * (-imageWidth);
+    // btnAddSelected();
+    let currentPos = getPos(currentIndex);
     currentIndex++;
-    let nextPos = currentIndex * (-imageWidth);
+    let nextPos = getPos(currentIndex);
     animateRight(currentPos, nextPos);
     if (currentIndex >= images.length) {
-        let currentPos = currentIndex * (-imageWidth);
+        let currentPos = getPos(currentIndex);
         currentIndex = 0;
         animateLeft(currentPos, 0);
     }
 }
 
 
+function btnRemoveSelected() {
+    let buttons = document.querySelectorAll('.index-btn');
+    buttons.forEach((btn) => {
+        btn.classList.remove('selected');
+    })
+}
+function btnAddSelected() {
+    btnRemoveSelected();
+    let buttons = document.querySelectorAll('.index-btn');
+    //buttons[0].classList.add('selected');
+    buttons.forEach((btn, i) => {
+        buttons[currentIndex + 1].classList.add('selected');
+    })
+}
