@@ -92,6 +92,7 @@ images.forEach((el, i) => {
 //Moves image from right to left into the viewport
 rightScroll.addEventListener('click', () => {
     restartAnim();
+    btnRemoveSelected();
     //When the last image reached and the next button is clicked move to the first image
     if (currentIndex >= images.length - 1) {
         let currentPos = getPos(currentIndex);
@@ -110,6 +111,7 @@ rightScroll.addEventListener('click', () => {
 // Same as above
 leftScroll.addEventListener('click', () => {
     restartAnim();
+    btnRemoveSelected();
     if (currentIndex != 0) {
         let currentPos = getPos(currentIndex);
         currentIndex--;
