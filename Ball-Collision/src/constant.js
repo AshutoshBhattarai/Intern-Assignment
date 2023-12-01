@@ -1,4 +1,5 @@
-const VIEW_WIDTH = 900;
+ //* ------------------ Initialization of constant variables ------------------ */
+const VIEW_WIDTH = document.body.getBoundingClientRect().width;
 const VIEW_HEIGHT = 700;
-const SPEED = 5;
-const BALL_COUNT = 100;
+const SPEED = 10;
+const BALL_COUNT =50;
