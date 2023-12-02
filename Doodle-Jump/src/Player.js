@@ -16,12 +16,12 @@ class Player {
     draw(ctx) {
         if (this.facing.left) {
             let player = new Image();
-            player.src = '../assets/images/doodle-left.png'
+            player.src = './assets/images/doodle-left.png'
             ctx.drawImage(player, this.xAxis, this.yAxis, this.width, this.height);
         }
         else {
             let player = new Image();
-            player.src = '../assets/images/doodle-right.png'
+            player.src = './assets/images/doodle-right.png'
             ctx.drawImage(player, this.xAxis, this.yAxis, this.width, this.height);
         }
     }

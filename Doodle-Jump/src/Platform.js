@@ -8,7 +8,7 @@ class Platform {
 
     draw(ctx) {
         let platform = new Image();
-        platform.src = '../assets/images/platform.png';
+        platform.src = './assets/images/platform.png';
         ctx.drawImage(platform, this.xAxis, this.yAxis, this.width, this.height);
     }
 }
