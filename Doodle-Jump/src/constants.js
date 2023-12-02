@@ -1,0 +1,5 @@
+const SPEED = 4.5;
+const GRAVITY = 0.2;
+const INITIAL_VELOCITY_Y = -5.5 ;
+const PLATFORM_HEIGHT = 20;
+const PLATFORM_WIDTH = 60;
