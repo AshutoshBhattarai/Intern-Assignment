@@ -3,11 +3,34 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Canvas Demo</title>
+    <title>Doodle Jump</title>
     <link rel="stylesheet" href="./style/style.css" />
   </head>
+
+
   <body>
     <canvas id="canvas" width="350" height="600"></canvas>
+    <!-- Start Screen Section -->
+    <section class="title-screen" id="start-screen">
+      <button type="button" class="play-btn" id="play-game">
+        <img src="./assets/images/play.png" alt="Play" />
+      </button>
+    </section>
+    <!-- Game Over Section -->
+    <section class="title-screen" id="over-screen">
+      <div>
+        <div class="game-over-text">Game Over!</div>
+        <br>
+        <div id="user-score" class="game-over-text">
+          <!-- Score -->
+        </div>
+      </div>
+      <button type="button" class="play-btn" id="play-again">
+        <img src="./assets/images/play-again.png" alt="Play Again" />
+      </button>
+    </section>
+
+    <!-- Using all the game scripts -->
     <script src="./src/constants.js"></script>
     <script src="./src/input.js"></script>
     <script src="./src/utils.js"></script>

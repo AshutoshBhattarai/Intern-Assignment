@@ -1,8 +1,14 @@
+/* -------------------------------------------------------------------------- */
+/*                                Input Mapping                               */
+/* -------------------------------------------------------------------------- */
+
 const inputs = {
     left: false,
     right: false
 }
 
+
+//Detects if the key is pressed
 window.onkeydown = (e) => {
     switch (e.key) {
         case 'ArrowLeft':
@@ -18,8 +24,9 @@ window.onkeydown = (e) => {
             inputs.right = true;
             break;
     }
-    // console.log(inputs.left, inputs.right, inputs.up, inputs.down);
 }
+
+//Detects if the key is released
 window.onkeyup = (e) => {
     switch (e.key) {
         case 'ArrowLeft':
@@ -35,5 +42,4 @@ window.onkeyup = (e) => {
             inputs.right = false;
             break;
     }
-    // console.log(inputs.left, inputs.right, inputs.up, inputs.down);
 }

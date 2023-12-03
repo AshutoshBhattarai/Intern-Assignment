@@ -1,7 +1,42 @@
 body{
     text-align: center;
 }
-
-#canvas{
+.title-screen{
     border: 1px solid black;
+    background : url("../assets/images/bg.png");
+    width: 350px;
+    height: 600px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    flex-direction: column;
+    gap: 20%;
+}
+
+#start-screen
+{
+    background : url(../assets/images/Start-Screen.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+#canvas
+{
+    margin: 0 auto;
+}
+
+.play-btn{
+    background: transparent;
+    border: none;
+}
+.play-btn:hover
+{
+    transform: scale(1.5);
+}
+
+.game-over-text
+{
+    font-family: Verdana;
+    font-size: 20px;
+    color: rgb(156, 21, 21);
 }
