@@ -218,30 +218,32 @@ class Player {
         this.yAxis = Math.min(CANVAS_HEIGHT - PLAYER_HEIGHT, this.yAxis);
     }
     checkVerticalCollisions() {
-        this.collisionBlocks.forEach((block) => {
+        for (const block of this.collisionBlocks) {
             if (detectCollision(this, block)) {
-                if (this.velY > 0 && (!this.inGround || this.inWater) && block.type === COLLISION_PLATFORM) {
-                    this.velY = 0;
-                    this.yAxis = block.yAxis - this.height - 1;
-                    this.resetPlayerSize();
-                    this.inWater = false;
-                    this.inGround = true;
-                } else if (this.velY > 0 && block.type === COLLISION_WATER) {
-                    this.velY = 0;
-                    this.yAxis = block.yAxis - 1;
-                    this.inGround = false;
-                    this.inWater = true;
-                    this.height = PLAYER_HEIGHT / 2;
-                    let firstSwimmingAnim = setInterval(() => {
-                        this.actions = swimming[2];
-                    }, 100);
-                    setTimeout(() => {
-                        clearInterval(firstSwimmingAnim);
-                        this.actions = swimming[4];
-                    }, 300);
+                if (this.velY > 0) {
+                    if ((!this.inGround || this.inWater) && block.type === COLLISION_PLATFORM) {
+                        this.velY = 0;
+                        this.yAxis = block.yAxis - this.height - 1;
+                        this.resetPlayerSize();
+                        this.inWater = false;
+                        this.inGround = true;
+                    } else if (block.type === COLLISION_WATER) {
+                        this.velY = 0;
+                        this.yAxis = block.yAxis - 1;
+                        this.inGround = false;
+                        this.inWater = true;
+                        this.height = PLAYER_HEIGHT / 2;
+                        let firstSwimmingAnim = setInterval(() => {
+                            this.actions = swimming[2];
+                        }, 100);
+                        setTimeout(() => {
+                            clearInterval(firstSwimmingAnim);
+                            this.actions = swimming[4];
+                        }, 300);
+                    }
                 }
             }
-        });
+        }
     }
 
 
