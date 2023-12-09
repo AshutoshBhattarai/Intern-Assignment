@@ -25,26 +25,22 @@ class Bullet {
         if (this.direction === DIRECTION_LEFT) {
             this.xAxis -= BULLET_SPEED;
         }
-        if(this.direction === DIRECTION_UP){
+        if (this.direction === DIRECTION_UP) {
             this.yAxis -= BULLET_SPEED;
         }
-        if(this.direction === DIRECTION_DOWN_LEFT)
-        {
+        if (this.direction === DIRECTION_DOWN_LEFT) {
             this.yAxis += BULLET_SPEED;
             this.xAxis -= BULLET_SPEED;
         }
-        if(this.direction === DIRECTION_DOWN_RIGHT)
-        {
+        if (this.direction === DIRECTION_DOWN_RIGHT) {
             this.yAxis += BULLET_SPEED;
             this.xAxis += BULLET_SPEED;
         }
-        if(this.direction === DIRECTION_UP_LEFT)
-        {
+        if (this.direction === DIRECTION_UP_LEFT) {
             this.yAxis -= BULLET_SPEED;
             this.xAxis -= BULLET_SPEED;
         }
-        if(this.direction === DIRECTION_UP_RIGHT)
-        {
+        if (this.direction === DIRECTION_UP_RIGHT) {
             this.yAxis -= BULLET_SPEED;
             this.xAxis += BULLET_SPEED;
         }
@@ -56,7 +52,7 @@ class Bullet {
     isOutOfBounds() {
         const { xAxis, yAxis } = this;
         const { width, height } = canvas;
-        return xAxis > width || xAxis < 0 || yAxis > height || yAxis < 0;
+        return xAxis > width || xAxis < 0 || yAxis > height - 40 || yAxis < 0;
     }
     removeBullet() {
         const bulletIndex = bullets.indexOf(this);
