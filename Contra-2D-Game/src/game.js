@@ -5,31 +5,25 @@ const ctx = canvas.getContext('2d');
 let mapIndex = 3;
 let bullets = [];
 let lastBullet = 0;
-let level = new Level(0, 0, ctx, mapIndex);
-level.getCollisionBlocks();
-// console.log(level.collisionBlocks);
-const player = new Player(level.getPlayerSpawnPosition().x,
-    level.getPlayerSpawnPosition().y - PLAYER_HEIGHT,
-    ctx,
-    level.collisionBlocks);
-// const enemy = new Enemy(level.getRunningEnemySpawnPostion().x,
-//     level.getRunningEnemySpawnPostion().y - PLAYER_HEIGHT, RUNNING_ENEMY, level.collisionBlocks);
+let gameMap = new GameMap(0, 0, ctx, mapIndex);
+gameMap.createBlocksArray();
+const player = new Player(PLAYER_INITIAL_SPAWN_X, PLAYER_INITIAL_SPAWN_Y, ctx, gameMap.collisionBlocks);
 function render() {
-    if (player.xAxis > level.width) {
+    if (player.xAxis > gameMap.width) {
         if (mapIndex >= MAP_SECTION_ARRAY.length - 1) {
             mapIndex = 0;
         }
         mapIndex++;
-        level = new Level(0, 0, ctx, mapIndex);
-        level.getCollisionBlocks();
+        gameMap = new GameMap(0, 0, ctx, mapIndex);
+        gameMap.createBlocksArray();
 
         let playerLastPosY = player.yAxis;
         player.xAxis = 0;
         player.yAxis = playerLastPosY;
-        player.collisionBlocks = level.collisionBlocks;
+        player.collisionBlocks = gameMap.collisionBlocks;
     }
 
-    level.draw();
+    gameMap.draw();
     playerRender();
     updateBullets();
     detectMovement();
