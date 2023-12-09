@@ -1,8 +1,10 @@
+const CANVAS_WIDTH = 1000;
+const CANVAS_HEIGHT = 600;
 /* ------------------------- Game Player Properties ------------------------- */
 const PLAYER_WIDTH = 30;
 const PLAYER_HEIGHT = 72;
-const CANVAS_WIDTH = 1000;
-const CANVAS_HEIGHT = 600;
+const PLAYER_INITIAL_SPAWN_X = 170;
+const PLAYER_INITIAL_SPAWN_Y = 10;
 const SPEED = 0.1;
 const SPEED_LIMIT = 3;
 const GRAVITY = 1.5;
@@ -48,6 +50,7 @@ const COLLISION_PLATFORM = 'platform';
 const COLLISION_WATER = 'water';
 
 
-/* ------------------------------- Enemy Types ------------------------------ */
-const RUNNING_ENEMY = 3;
-const GUN_ENEMY = 4;
+/* ------------------------------- Enemy Types with ID's ------------------------------ */
+const ENEMY_RUNNING = 3;
+const ENEMY_SOLDIER = 4;
+const ENEMY_TANK = 5;
