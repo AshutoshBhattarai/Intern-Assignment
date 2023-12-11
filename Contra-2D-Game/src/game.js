@@ -13,8 +13,7 @@ gameMap.createBlocksArray();
 let enemiesArray = gameMap.enemies;
 const player = new Player(PLAYER_INITIAL_SPAWN_X, PLAYER_INITIAL_SPAWN_Y, ctx, gameMap.collisionBlocks);
 function render() {
-    if(enemyBullets.length == 0 && enemyBulletCount == 3)
-    {
+    if (enemyBullets.length == 0 && enemyBulletCount == 3) {
         enemyBulletCount = 0;
     }
     if (player.xAxis > gameMap.width) {
@@ -31,8 +30,10 @@ function render() {
     updateBullets(enemyBullets);
     detectMovement();
     if (!player.isSpawning) {
-        checkCollisions();
+        checkPlayerCollisions();
     }
+    checkEnemyBulletCollision();
+    displayPlayerHealthState(player.lives);
     requestAnimationFrame(render);
 }
 
@@ -62,10 +63,9 @@ function updateEnemies() {
     });
 }
 
-function checkCollisions() {
+function checkPlayerCollisions() {
     checkEnemyPlayerCollision();
     checkPlayerBulletCollision();
-    checkEnemyBulletCollision();
 }
 
 function getPlayerLastPosY() {
@@ -247,6 +247,21 @@ function enemyShoot(direction, enemy) {
             enemyLastBullet = currentTime;
         }
 
+    }
+}
+
+function displayPlayerHealthState(number) {
+    // Function to display the player's health state on the screen
+    // Create a new Image object
+    let image = new Image();
+    // Destructure the properties x, y, height, and width from the healthDisplaySprite object
+    let { x, y, height, width } = healthDisplaySprite;
+    // Set the source of the image to the specified URL
+    image.src = '../assets/images/Contra-Extras.gif';
+    // Loop from 1 to the player's current health state
+    for (let i = 1; i <= number; i++) {
+        // Draw the image onto the canvas
+        ctx.drawImage(image, x, y, width, height, i * 20, 50, 50, 50);
     }
 }
 
