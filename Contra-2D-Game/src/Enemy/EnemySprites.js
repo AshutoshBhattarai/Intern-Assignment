@@ -102,104 +102,116 @@ const runningEnemy = {
 }
 
 const gunEnemy = {
-    left : {
-        x : 52,
-        y : 255,
-        height : 52,
-        width : 42,
+    left: {
+        x: 52,
+        y: 255,
+        height: 52,
+        width: 42,
     },
-    up : {
-        x : 263,
-        y : 248,
-        height : 60,
-        width : 33,
+    up: {
+        x: 263,
+        y: 248,
+        height: 60,
+        width: 33,
     },
-    down : {
-        x : 130,
-        y : 306,
-        height : 51,
-        width : 33,
+    down: {
+        x: 130,
+        y: 306,
+        height: 51,
+        width: 33,
     },
-    right : {
-        x : 543,
-        y : 257,
-        height : 50,
-        width : 43,
+    right: {
+        x: 543,
+        y: 257,
+        height: 50,
+        width: 43,
     },
-    upLeft : {
-        x : 133,
-        y : 244,
-        height : 60,
-        width : 35,
+    upLeft: {
+        x: 133,
+        y: 244,
+        height: 60,
+        width: 35,
     },
-    upRight : {
-        x : 405,
-        y : 244,
-        height : 62,
-        width : 33,
+    upRight: {
+        x: 405,
+        y: 244,
+        height: 62,
+        width: 33,
     },
-    downLeft : {
-        x : 214,
-        y : 306,
-        height : 52,
-        width : 35,
+    downLeft: {
+        x: 214,
+        y: 306,
+        height: 52,
+        width: 35,
     },
-    downRight : {
-        x : 357,
-        y : 305,
-        height : 52,
-        width : 33,
+    downRight: {
+        x: 357,
+        y: 305,
+        height: 52,
+        width: 33,
     }
 
 }
 
 const tank = {
-    left : {
-        x : 45,
-        y : 257,
-        height : 51,
-        width : 33,
+    closed : {
+        x: 37,
+        y: 106,
+        height: 32,
+        width: 32,
     },
-    up : {
-        x : 255,
-        y : 257,
-        height : 51,
-        width : 33,
+    opening: {
+        x: 36,
+        y: 70,
+        height: 32,
+        width: 32,
     },
-    down : {
-        x : 132,
-        y : 308,
-        height : 51,
-        width : 33,
+    left: {
+        x: 5,
+        y: 106,
+        height: 32,
+        width: 32,
     },
-    right : {
-        x : 533,
-        y : 257,
-        height : 51,
-        width : 33,
+    right: {
+        x: 67,
+        y: 106,
+        height: 32,
+        width: 32,
     },
-    upLeft : {
-        x : 131,
-        y : 257,
-        height : 51,
-        width : 33,
+    up: {
+        x: 140,
+        y: 33,
+        height: 32,
+        width: 32,
     },
-    upRight : {
-        x : 391,
-        y : 257,
-        height : 51,
-        width : 33,
+    down: {
+        x: 154,
+        y: 208,
+        height: 32,
+        width: 32,
     },
-    downLeft : {
-        x : 215,
-        y : 308,
-        height : 51,
-        width : 33,
+    upLeft: {
+        x: 4,
+        y: 33,
+        height: 32,
+        width: 32,
     },
-    downRight : {
-        x : 351,
-        y : 308,
-        height : 51,
-        width : 33,
+    upRight: {
+        x: 72,
+        y: 33,
+        height: 32,
+        width: 32,
+    },
+    downLeft: {
+        x: 5,
+        y: 140,
+        height: 32,
+        width: 32,
+    },
+    downRight: {
+        x: 67,
+        y: 140,
+        height: 32,
+        width: 32,
     }
 }
