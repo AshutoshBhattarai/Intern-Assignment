@@ -8,6 +8,10 @@ class GameMap {
         this.enemies = [];
         this.ctx = ctx;
         this.sectionIndex = sectionIndex;
+        this.playerReSpawnPosition = {
+            x:0,
+            y:0,    
+        }
         this.section = MAP_SECTION_ARRAY[this.sectionIndex];
 
     }
@@ -21,7 +25,7 @@ class GameMap {
         // Once the background image is loaded, draw it on the canvas
         background.onload = () => {
             // Draw the background image on the canvas with the specified coordinates and dimensions
-            this.ctx.drawImage(background, x, y, width, height, this.xAxis, this.yAxis, CANVAS_WIDTH, CANVAS_HEIGHT);
+            this.ctx.drawImage(background, x, y, width, height, this.xAxis, this.yAxis, 1000, 600);
         }
     }
     createBlocksArray() {
@@ -39,12 +43,15 @@ class GameMap {
                         this.createCollisionBlock(positionX, positionY, COLLISION_PLATFORM);
                         break;
                     // If the element is '7', set the player spawn position
-                    case '7':
-                        this.setPlayerSpawnPosition(positionX, positionY);
+                    case PLAYER_RESPAWN_COORDS_ID:
+                        this.setPlayerReSpawnPosition(positionX, positionY);
                         break;
                     // If the element is water, create a collision block for water
                     case WATER_ID:
                         this.createCollisionBlock(positionX, positionY, COLLISION_WATER);
+                        break;
+                    case DEATH_DROP_ID:
+                        this.createCollisionBlock(positionX, positionY, DEATH_DROP_ID);
                         break;
                     // If the element is a running enemy, spawn a running enemy
                     case ENEMY_RUNNING:
@@ -63,11 +70,28 @@ class GameMap {
         this.collisionBlocks.push(new CollisionBlock(xAxis, yAxis, type));
     }
 
+    // This function spawns a specified number of running enemies at a given position
     spawnRunningEnemy(x, y) {
-        console.log("Spawn Running enemy at X" + x + " and Y " + y);
+        const spawnLimit = 3; // The maximum number of enemies to spawn
+        const spawnInterval = 2000; // The time interval between each enemy spawn
+        // Loop through the spawn limit
+        for (let i = 0; i < spawnLimit; i++) {
+            setTimeout(() => {
+                const enemy = new RunningEnemy(x, y, this.collisionBlocks); // Create a new running enemy object
+                this.enemies.push(enemy); // Add the enemy to the enemies array
+            }, i * spawnInterval); // Set a timeout to spawn the enemy at the specified interval
+        }
     }
-    spawnSoldierEnemy(x,y)
+    spawnSoldierEnemy(x, y) {
+        const enemy = new SoldierEnemy(x, y, this.collisionBlocks); // Create a new soldier enemy object
+        this.enemies.push(enemy); // Add the enemy to the enemies array
+    }
+    setPlayerReSpawnPosition(x, y){
+        this.playerReSpawnPosition.x = x;
+        this.playerReSpawnPosition.y = y;
+    }
+    getPlayerReSpawnPosition()
     {
-        console.log("Spawn soldier enemy");
+        return this.playerReSpawnPosition;
     }
 }
