@@ -19,7 +19,8 @@ const DIRECTION_UP_RIGHT = 'up-right';
 const DIRECTION_DOWN_RIGHT = 'down-right';
 const DIRECTION_DOWN_LEFT = 'down-left';
 const BULLET_COOLDOWN = 400;
-const BULLET_SPEED = 7;
+const BULLET_SPEED = 5;
+const ENEMY_BULLET_SPEED = 3;
 /* ---------------------------- Level Properties ---------------------------- */
 const TILE_SIZE = 40;
 /* -------------------------------- Tile ID's ------------------------------- */
@@ -27,7 +28,7 @@ const PLATFORM_ID = 1;
 const WATER_ID = 20;
 const DESTROYABLE_BLOCK_ID = 8;
 const WALL_BLOCK_ID = 99;
-const DEATH_DROP_ID = 90;
+const DEATH_DROP_ID = 50;
 const PLAYER_RESPAWN_COORDS_ID = 7;
 /* ------------------------------ Map Sections ------------------------------ */
 const MAP_SECTION_1_ID = 'section1';
@@ -59,3 +60,4 @@ const COLLISION_DEATH_PIT = 'death-pit';
 const ENEMY_RUNNING = 3;
 const ENEMY_SOLDIER = 4;
 const ENEMY_TANK = 5;
+const ENEMY_ID = 33;
