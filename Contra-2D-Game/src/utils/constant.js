@@ -1,13 +1,15 @@
 const CANVAS_WIDTH = 1000;
 const CANVAS_HEIGHT = 600;
 /* ------------------------- Game Player Properties ------------------------- */
+const PLAYER_ID = 87;
 const PLAYER_WIDTH = 30;
 const PLAYER_HEIGHT = 72;
-const PLAYER_INITIAL_SPAWN_X = 170;
+const PLAYER_INITIAL_SPAWN_X = 80;
 const PLAYER_INITIAL_SPAWN_Y = 10;
 const SPEED = 0.1;
 const SPEED_LIMIT = 3;
 const GRAVITY = 1.5;
+const JUMP_HEIGHT = -20;
 const DIRECTION_LEFT = 'left';
 const DIRECTION_RIGHT = 'right';
 const DIRECTION_UP = 'up';
@@ -16,15 +18,17 @@ const DIRECTION_UP_LEFT = 'up-left';
 const DIRECTION_UP_RIGHT = 'up-right';
 const DIRECTION_DOWN_RIGHT = 'down-right';
 const DIRECTION_DOWN_LEFT = 'down-left';
-const BULLET_COOLDOWN = 300;
-const BULLET_SPEED = 5;
+const BULLET_COOLDOWN = 400;
+const BULLET_SPEED = 7;
 /* ---------------------------- Level Properties ---------------------------- */
 const TILE_SIZE = 40;
 /* -------------------------------- Tile ID's ------------------------------- */
 const PLATFORM_ID = 1;
 const WATER_ID = 20;
-const DESTROYABLE_BLOCK = 8;
+const DESTROYABLE_BLOCK_ID = 8;
 const WALL_BLOCK_ID = 99;
+const DEATH_DROP_ID = 90;
+const PLAYER_RESPAWN_COORDS_ID = 7;
 /* ------------------------------ Map Sections ------------------------------ */
 const MAP_SECTION_1_ID = 'section1';
 const MAP_SECTION_2_ID = 'section2';
@@ -48,6 +52,7 @@ const MAP_SECTION_ARRAY = [
 /* ------------------------ Collision PLatform types ------------------------ */
 const COLLISION_PLATFORM = 'platform';
 const COLLISION_WATER = 'water';
+const COLLISION_DEATH_PIT = 'death-pit';
 
 
 /* ------------------------------- Enemy Types with ID's ------------------------------ */
