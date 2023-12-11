@@ -2,7 +2,7 @@ class SoldierEnemy extends Enemy {
     constructor(xAxis, yAxis, collisionBlocks) {
         super(xAxis, yAxis, collisionBlocks);
         this.health = 3;
-        this.actions = gunEnemy.downRight;
+        this.actions = gunEnemy.left;
     }
 
     draw(ctx) {
