@@ -7,12 +7,14 @@ class Bullet {
         this.width = 5;
         this.bulletSpeed = this.from === ENEMY_SOLDIER ? ENEMY_BULLET_SPEED : BULLET_SPEED;
         this.height = 5;
+        this.bulletImage = new Image();
+        this.bulletImage.src = '../../assets/images/Contra-Extras.gif'
 
     }
 
     draw(ctx) {
-        ctx.fillStyle = this.from === PLAYER_ID ? "red" : "yellow";
-        ctx.fillRect(this.xAxis, this.yAxis, this.width, this.height);
+        const { x, y, height, width } = this.from === ENEMY_SOLDIER ? enemyBulletSprite : playerBulletSprite;
+        ctx.drawImage(this.bulletImage, x, y, height, width, this.xAxis, this.yAxis, this.width, this.height);
     }
 
     update() {
