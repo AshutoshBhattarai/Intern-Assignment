@@ -26,8 +26,8 @@ class Player {
     draw() {
         //? ------------------------ Done for testing purposes ----------------------- */
         // Set the color of the stroke to red.⏬
-         this.ctx.strokeStyle = 'red';
-         this.ctx.strokeRect(this.xAxis, this.yAxis, this.width, this.height);
+        //  this.ctx.strokeStyle = 'red';
+        //  this.ctx.strokeRect(this.xAxis, this.yAxis, this.width, this.height);
         // Draw a rectangle around the player.☝️
         //? ----------------------------------- -- ----------------------------------- */
 
@@ -76,7 +76,6 @@ class Player {
         if (inputs.left && !(inputs.down || inputs.up)) {
             this.moveLeft();
         }
-
         // Handles right movement
         if (inputs.right && !(inputs.down || inputs.up)) {
             this.moveRight();
@@ -240,11 +239,13 @@ class Player {
     }
 
     jumpDown() {
-
-        console.log("Drop Down");
+        this.yAxis =  this.yAxis + 40;
+        this.inGround = false;
+        return;
     }
     goProne() {
         let { left, right } = playerPronePosition;
+        this.yAxis += 40;
         this.height = PLAYER_WIDTH;
         this.width = PLAYER_HEIGHT;
         this.actions = this.facing == DIRECTION_LEFT ? left : right;
@@ -257,7 +258,7 @@ class Player {
         this.isSpawning = true;
         setTimeout(() => {
             this.isSpawning = false;
-        },5000)
+        }, 3000)
     }
 
     playerReSpawn(x, y) {
@@ -316,7 +317,7 @@ class Player {
                     else if (block.type === DEATH_DROP_ID) {
                         console.log("Player Dead");
                         this.playerHit();
-                        this.playerReSpawn(0,0)
+                        this.playerReSpawn(0, 0)
                     }
                 }
             }
