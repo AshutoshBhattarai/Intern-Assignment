@@ -4,6 +4,7 @@ class RunningEnemy extends Enemy {
         super(xAxis, yAxis, collisionBlocks);
         // Initializing the health of the enemy to 2
         this.health = 2;
+        this.speedLimit = generateRandomNumber(3,6);
         // Initializing the actions property (is set later)
         this.actions;
         // Setting the initial direction of the enemy to left
@@ -43,57 +44,58 @@ class RunningEnemy extends Enemy {
             this.height // Height of the image on the canvas
         );
     }
-update() {
-    // Check if the player is colliding with a block
-    if (this.checkInCollisionBlock()) {
-        // this.inGround = false;
-        // this.directionLeft = !this.directionLeft;
-    }
-    // Update the enemy's position on the x-axis and y-axis
-    this.xAxis += this.velX;
-    this.yAxis += this.velY;
-    // Check if the enemy is out of bounds
-    this.checkBoundary();
-    // Update the enemy's animation
-    this.updateAnimation();
-    // Check for vertical collisions with other objects
-    this.checkVerticalCollisions();
-    // Move the enemy left if the direction is left
-    if (this.directionLeft) {
-        this.moveLeft();
-    }
-    // Move the enemy right if the direction is right
-    if (!this.directionLeft) {
-        this.moveRight();
-    }
-    // Apply gravity if the enemy is not on the ground
-    if (!this.inGround) {
-        this.useGravity();
-    }
-}
-// Updat the animation
-updateAnimation() {
-    // Incrementing the tick count
-    this.tickCount += 1;
-    // Checking if the tick count exceeds the number of ticks per frame
-    if (this.tickCount > this.ticksPerFrame) {
-        // Reset the tick count
-        this.tickCount = 0;
-        // Check if the current frame index is not the last frame
-        if (this.frameIndex < this.numberOfFrames - 1) {
-            // Increment the frame index
-            this.frameIndex += 1;
-        } else {
-            // Reset the frame index to the first frame
-            this.frameIndex = 0;
+    update() {
+        // Check if the player is colliding with a block
+        if (!this.checkInCollisionBlock()) {
+            // this.inGround = false;
+            // this.moveRight()
+            // this.directionLeft = !this.directionLeft;
+        }
+        // Update the enemy's position on the x-axis and y-axis
+        this.xAxis += this.velX;
+        this.yAxis += this.velY;
+        // Check if the enemy is out of bounds
+        this.checkBoundary();
+        // Update the enemy's animation
+        this.updateAnimation();
+        // Check for vertical collisions with other objects
+        this.checkVerticalCollisions();
+        // Move the enemy left if the direction is left
+        if (this.directionLeft) {
+            this.moveLeft();
+        }
+        // Move the enemy right if the direction is right
+        if (!this.directionLeft) {
+            this.moveRight();
+        }
+        // Apply gravity if the enemy is not on the ground
+        if (!this.inGround) {
+            this.useGravity();
         }
     }
-}
+    // Updat the animation
+    updateAnimation() {
+        // Incrementing the tick count
+        this.tickCount += 1;
+        // Checking if the tick count exceeds the number of ticks per frame
+        if (this.tickCount > this.ticksPerFrame) {
+            // Reset the tick count
+            this.tickCount = 0;
+            // Check if the current frame index is not the last frame
+            if (this.frameIndex < this.numberOfFrames - 1) {
+                // Increment the frame index
+                this.frameIndex += 1;
+            } else {
+                // Reset the frame index to the first frame
+                this.frameIndex = 0;
+            }
+        }
+    }
     moveLeft() {
         // Decrease the horizontal velocity of the object by the specified speed
         this.velX -= SPEED;
         // Ensure that the horizontal velocity does not exceed the negative speed limit
-        this.velX = Math.max(this.velX, -SPEED_LIMIT);
+        this.velX = Math.max(this.velX, -this.speedLimit);
         // Set the direction of movement to left
         this.directionLeft = true;
     }
@@ -101,7 +103,7 @@ updateAnimation() {
         // Increase the horizontal velocity of the enemy by the predefined speed
         this.velX += SPEED;
         // Limit the horizontal velocity to the predefined speed limit
-        this.velX = this.velX > SPEED_LIMIT ? SPEED_LIMIT : this.velX;
+        this.velX = this.velX > this.speedLimit ? this.speedLimit : this.velX;
         // Set the current action of the enemy to the first frame of the running right animation
         this.actions = runningEnemy.runningRight[0];
         // Set the direction of the enemy to right
@@ -109,9 +111,9 @@ updateAnimation() {
     }
     checkBoundary() {
         // Checking if the enemy's x-axis position is less than 0
-        if (this.xAxis < 0) {
+        if (this.xAxis < this.collisionBlocks[0].xAxis) {
             // If so, set the x-axis position to 0
-            this.xAxis = 0;
+            this.xAxis = this.collisionBlocks[0].xAxis;
             // Set the velocity in the x-axis to 0
             this.velX = 0;
             // Move the enemy to the right
