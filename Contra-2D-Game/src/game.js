@@ -2,6 +2,9 @@
 
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
+/* -------------------------------------------------------------------------- */
+/*                            Initial Initilization                           */
+/* -------------------------------------------------------------------------- */
 let mapIndex = 0;
 let playerBullets = [];
 let enemyBullets = [];
@@ -11,7 +14,9 @@ let enemyBulletCount = 0;
 let gameMap = new GameMap(0, 0, ctx, mapIndex);
 gameMap.createBlocksArray();
 let enemiesArray = gameMap.enemies;
+let turretsArray = gameMap.turrets;
 const player = new Player(PLAYER_INITIAL_SPAWN_X, PLAYER_INITIAL_SPAWN_Y, ctx, gameMap.collisionBlocks);
+/* ----------------------------------- --- ---------------------------------- */
 function render() {
     if (enemyBullets.length == 0 && enemyBulletCount == 3) {
         enemyBulletCount = 0;
@@ -21,7 +26,7 @@ function render() {
             mapIndex = getRandomMapIndex(3, 6);
         }
         mapIndex++;
-        resetGame();
+        updateGameMap();
     }
     drawGameMap();
     updateEnemies();
@@ -33,17 +38,23 @@ function render() {
         checkPlayerCollisions();
     }
     checkEnemyBulletCollision();
+    turretBulletCollision();
     displayPlayerHealthState(player.lives);
+    /* ------------------ Draw Grid lines for testing Purposes ------------------ */
+    // girdDraw(ctx, MAP_SECTION_ARRAY[mapIndex])
+    /* ----------------------------------- -- ----------------------------------- */
     requestAnimationFrame(render);
 }
+render();
 
-function resetGame() {
+function updateGameMap() {
     playerBullets = [];
     enemyBullets = [];
     gameMap.enemies = [];
     gameMap = new GameMap(0, 0, ctx, mapIndex);
     gameMap.createBlocksArray();
     enemiesArray = gameMap.enemies;
+    turretsArray = gameMap.turrets;
     player.xAxis = 0;
     player.yAxis = getPlayerLastPosY();
     player.collisionBlocks = gameMap.collisionBlocks;
@@ -54,13 +65,28 @@ function drawGameMap() {
 }
 
 function updateEnemies() {
-    gameMap.enemies.forEach(enemy => {
+    enemiesArray.forEach(enemy => {
         enemy.draw(ctx);
         enemy.update();
         if (enemy.canShoot && checkPlayerInProximity(enemy)) {
             enemyShoot(getEnemyShootingDirection(enemy, player), enemy);
         }
     });
+    turretsArray.forEach(turret => {
+        turret.draw(ctx);
+        turret.calculateAngleToPlayer(player);
+        turret.checkPlayerBulletCollision(player)
+        turret.updateBullets();
+        if (checkPlayerInProximity(turret)) {
+            if (player.xAxis - 160 <= 0) {
+                setTimeout(() => {
+                    turret.shoot();
+                }, 1000)
+            }
+            turret.shoot();
+
+        }
+    })
 }
 
 function checkPlayerCollisions() {
@@ -76,7 +102,6 @@ function getRandomMapIndex(min, max) {
     return Math.floor(generateRandomNumber(min, max));
 }
 
-render();
 function playerRender() {
     player.draw();
     player.update();
@@ -90,25 +115,33 @@ function detectMovement() {
     const from = PLAYER_ID
     if (inputs.shoot) {
         player.velX = 0
-        player.resetActions();
+
+        if (inputs.down && !inputs.left && !inputs.right && canShoot) {
+            shootBullet(bulletX, player.yAxis + player.height * 2 / 4, player.facing, from);
+            playerLastBullet = currentTime;
+        }
         if (!inputs.up && !inputs.down && canShoot) {
             shootBullet(bulletX, player.yAxis + player.height / 3, player.facing, from);
             playerLastBullet = currentTime;
-        } else if (inputs.up && !inputs.left && !inputs.right && canShoot) {
-            shootBullet(player.xAxis + player.width / 2, player.yAxis, DIRECTION_UP, from);
-            playerLastBullet = currentTime;
-        } else if (inputs.left && inputs.down && canShoot) {
-            shootBullet(player.xAxis, player.yAxis + player.height / 2, DIRECTION_DOWN_LEFT, from);
-            playerLastBullet = currentTime;
-        } else if (inputs.right && inputs.down && canShoot) {
-            shootBullet(player.xAxis + player.width, player.yAxis + player.height / 2, DIRECTION_DOWN_RIGHT, from);
-            playerLastBullet = currentTime;
-        } else if (inputs.left && inputs.up && canShoot) {
-            shootBullet(player.xAxis, player.yAxis, DIRECTION_UP_LEFT, from);
-            playerLastBullet = currentTime;
-        } else if (inputs.right && inputs.up && canShoot) {
-            shootBullet(player.xAxis + player.width, player.yAxis, DIRECTION_UP_RIGHT, from);
-            playerLastBullet = currentTime;
+        }
+        if (!player.inWater) {
+            if (inputs.up && !inputs.left && !inputs.right && canShoot) {
+                shootBullet(player.xAxis + player.width / 2, player.yAxis, DIRECTION_UP, from);
+                playerLastBullet = currentTime;
+            } else if (inputs.left && inputs.down && canShoot) {
+                shootBullet(player.xAxis, player.yAxis + player.height / 2, DIRECTION_DOWN_LEFT, from);
+                playerLastBullet = currentTime;
+            } else if (inputs.right && inputs.down && canShoot) {
+                shootBullet(player.xAxis + player.width, player.yAxis + player.height / 2, DIRECTION_DOWN_RIGHT, from);
+                playerLastBullet = currentTime;
+            } else if (inputs.left && inputs.up && canShoot) {
+                shootBullet(player.xAxis, player.yAxis, DIRECTION_UP_LEFT, from);
+                playerLastBullet = currentTime;
+            } else if (inputs.right && inputs.up && canShoot) {
+                shootBullet(player.xAxis + player.width, player.yAxis, DIRECTION_UP_RIGHT, from);
+                playerLastBullet = currentTime;
+            }
+
         }
     }
 }
@@ -158,11 +191,27 @@ function checkEnemyBulletCollision() {
         })
     })
 }
+function turretBulletCollision() {
+    turretsArray.forEach((turret, index) => {
+        playerBullets.forEach((bullet, bulletIndex) => {
+            if (detectRectCollision(turret, bullet)) {
+                if (turret.health === 0) {
+                    turretsArray.splice(index, 1);
+                }
+                else {
+                    turret.health--;
+                    playerBullets.splice(bulletIndex, 1);
+
+                }
+            }
+        })
+    })
+}
 function checkPlayerBulletCollision() {
     enemyBullets.forEach((bullet, bulletIndex) => {
         if (detectRectCollision(player, bullet)) {
             enemyBullets.splice(bulletIndex, 1);
-            console.log("Player is hit");
+            //console.log("Player is hit");
         }
     })
 }
@@ -171,7 +220,7 @@ function getEnemyShootingDirection(enemy, player) {
         enemy.actions = gunEnemy.upLeft;
         return DIRECTION_UP_LEFT;
     }
-    else if (player.yAxis < enemy.yAxis - PLAYER_HEIGHT && player.xAxis > enemy.xAxis) {
+    else if ( player.xAxis > enemy.xAxis && player.yAxis < enemy.yAxis - PLAYER_HEIGHT) {
         enemy.actions = gunEnemy.upRight;
         return DIRECTION_UP_RIGHT;
     }
