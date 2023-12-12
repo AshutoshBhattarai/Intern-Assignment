@@ -3,7 +3,7 @@ const runningRight = [
         x: 140,
         y: 16,
         height: 36,
-        width: 24
+        width: 30
     },
     {
         x: 145,
@@ -27,7 +27,7 @@ const runningRight = [
         x: 219,
         y: 132,
         height: 36,
-        width: 24
+        width: 22
     },
     {
         x: 240,
