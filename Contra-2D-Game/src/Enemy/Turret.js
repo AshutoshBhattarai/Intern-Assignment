@@ -9,7 +9,7 @@ class Turret {
         this.lastBulletTime = 0;
         this.bulletSpeed = 5;
         this.bullets = [];
-        this.bulletInterval = null;
+        this.bulletBurst = 0;
         this.action = turretSprites.left;
         this.turretImage = new Image();
         this.bulletImage = new Image();
@@ -42,10 +42,8 @@ class Turret {
         let currentTime = new Date();
         const canShoot = currentTime - this.lastBulletTime > BULLET_COOLDOWN;
         if (canShoot) {
-
             const xOffset = Math.cos(this.angle) * (this.width / 2);
             const yOffset = Math.sin(this.angle) * (this.height / 2);
-
             const bullet = {
                 // Adjust the starting position based on the turret's position and direction
                 xAxis: this.xAxis + this.width / 3 + xOffset - 2, // -2 to fine-tune the position
@@ -55,12 +53,20 @@ class Turret {
                 width: 5,
                 angle: this.angle
             }
-            this.bullets.push(bullet);
+            if(this.bulletBurst < 3)
+            {
+                this.bulletBurst++;
+                this.bullets.push(bullet);
+            }
             this.lastBulletTime = currentTime;
         }
     }
 
     updateBullets() {
+        if(this.bulletBurst == 3 && this.bullets.length == 0)
+        {
+            this.bulletBurst = 0;
+        }
         this.bullets.forEach((bullet) => {
             bullet.xAxis += Math.cos(bullet.angle) * bullet.speed;
             bullet.yAxis += Math.sin(bullet.angle) * bullet.speed;
