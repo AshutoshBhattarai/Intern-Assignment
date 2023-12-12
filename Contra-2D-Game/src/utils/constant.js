@@ -53,11 +53,8 @@ const MAP_SECTION_ARRAY = [
 /* ------------------------ Collision PLatform types ------------------------ */
 const COLLISION_PLATFORM = 'platform';
 const COLLISION_WATER = 'water';
-const COLLISION_DEATH_PIT = 'death-pit';
-
-
 /* ------------------------------- Enemy Types with ID's ------------------------------ */
 const ENEMY_RUNNING = 3;
 const ENEMY_SOLDIER = 4;
-const ENEMY_TANK = 5;
+const ENEMY_TURRET = 5;
 const ENEMY_ID = 33;
