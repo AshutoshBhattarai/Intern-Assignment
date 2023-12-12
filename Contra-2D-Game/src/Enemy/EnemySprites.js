@@ -103,7 +103,7 @@ const runningEnemy = {
 
 const gunEnemy = {
     left: {
-        x: 52,
+        x: 54,
         y: 255,
         height: 52,
         width: 42,
@@ -153,16 +153,16 @@ const gunEnemy = {
 
 }
 
-const tank = {
-    closed : {
+const turretSprites = {
+    closed: {
         x: 37,
         y: 106,
         height: 32,
         width: 32,
     },
     opening: {
-        x: 36,
-        y: 70,
+        x: 39,
+        y: 72,
         height: 32,
         width: 32,
     },
@@ -173,44 +173,44 @@ const tank = {
         width: 32,
     },
     right: {
-        x: 67,
+        x: 72,
         y: 106,
         height: 32,
         width: 32,
     },
     up: {
-        x: 140,
-        y: 33,
+        x: 39,
+        y: 39,
         height: 32,
         width: 32,
     },
     down: {
-        x: 154,
-        y: 208,
+        x: 38,
+        y: 175,
         height: 32,
         width: 32,
     },
     upLeft: {
-        x: 4,
-        y: 33,
+        x: 5,
+        y: 39,
         height: 32,
         width: 32,
     },
     upRight: {
-        x: 72,
-        y: 33,
+        x: 73,
+        y: 39,
         height: 32,
         width: 32,
     },
     downLeft: {
         x: 5,
-        y: 140,
+        y: 175,
         height: 32,
         width: 32,
     },
     downRight: {
-        x: 67,
-        y: 140,
+        x: 72,
+        y: 175,
         height: 32,
         width: 32,
     }
