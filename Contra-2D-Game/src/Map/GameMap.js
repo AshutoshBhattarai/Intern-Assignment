@@ -9,11 +9,11 @@ class GameMap {
         this.ctx = ctx;
         this.sectionIndex = sectionIndex;
         this.playerReSpawnPosition = {
-            x:0,
-            y:0,    
+            x: 0,
+            y: 0,
         }
         this.section = MAP_SECTION_ARRAY[this.sectionIndex];
-
+        this.turrets = []
     }
     draw() {
         // Create a new Image object
@@ -60,6 +60,9 @@ class GameMap {
                     case ENEMY_SOLDIER:
                         this.spawnSoldierEnemy(positionX, positionY);
                         break;
+                    case ENEMY_TURRET:
+                        this.spawnTurret(positionX, positionY);
+                        break;
                 }
             });
         });
@@ -86,12 +89,17 @@ class GameMap {
         const enemy = new SoldierEnemy(x, y, this.collisionBlocks); // Create a new soldier enemy object
         this.enemies.push(enemy); // Add the enemy to the enemies array
     }
-    setPlayerReSpawnPosition(x, y){
+
+    spawnTurret(x, y) {
+        const turret = new Turret(x, y);
+        this.turrets.push(turret);
+    }
+
+    setPlayerReSpawnPosition(x, y) {
         this.playerReSpawnPosition.x = x;
         this.playerReSpawnPosition.y = y;
     }
-    getPlayerReSpawnPosition()
-    {
+    getPlayerReSpawnPosition() {
         return this.playerReSpawnPosition;
     }
 }
