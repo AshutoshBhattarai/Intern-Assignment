@@ -14,6 +14,7 @@ class Player {
         this.inGround = false;
         this.inWater = false;
         this.facing = DIRECTION_RIGHT;
+        this.respawnFlicker = 0;
         this.actions = runningRight[0];
         this.collisionBlocks = collisionBLocks;
         this.isSpawning = false;
@@ -30,7 +31,16 @@ class Player {
         //  this.ctx.strokeRect(this.xAxis, this.yAxis, this.width, this.height);
         // Draw a rectangle around the player.☝️
         //? ----------------------------------- -- ----------------------------------- */
-
+        if (this.isSpawning) {
+            // Toggle between drawing and not drawing the player to create a flickering effect
+            if (this.respawnFlicker % 3 === 0) {
+                this.ctx.globalAlpha = 0; // Set alpha to 0 to make the player invisible
+            } else {
+                this.ctx.globalAlpha = 1; // Set alpha to 1 to make the player visible
+            }
+            // Increment the respawn flicker timer
+            this.respawnFlicker++;
+        }
         // Draw the player image on the canvas.
         this.ctx.drawImage(
             this.playerImage,   // The image to draw.
@@ -43,7 +53,8 @@ class Player {
             this.width,         // The width of the image on the canvas.
             this.height         // The height of the image on the canvas.
         );
-
+        //Reset the global alpha to make player visible
+        this.ctx.globalAlpha = 1;
     }
 
     /* ---- Function to reset player's action based on current direction and state(in water or ground) ------ */
@@ -239,7 +250,7 @@ class Player {
     }
 
     jumpDown() {
-        this.yAxis =  this.yAxis + 40;
+        this.yAxis = this.yAxis + 40;
         this.inGround = false;
         return;
     }
