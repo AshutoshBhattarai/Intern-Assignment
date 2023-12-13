@@ -4,7 +4,9 @@ const inputs = {
     up: false,
     down: false,
     shoot: false,
-    jump: false
+    jump: false,
+    space: false,
+    pause: false,
 }
 
 window.onkeydown = (event) => {
@@ -26,6 +28,12 @@ window.onkeydown = (event) => {
             break;
         case 'x':
             inputs.jump = true;
+            break;
+        case ' ':
+            inputs.space = true;
+            break;
+        case 'Escape':
+            inputs.pause = true;
             break;
     }
 }
@@ -49,6 +57,12 @@ window.onkeyup = (event) => {
             break;
         case 'x':
             inputs.jump = false;
+            break;
+        case ' ':
+            inputs.space = false;
+            break;
+        case 'Escape':
+            inputs.pause = false;
             break;
     }
 }
