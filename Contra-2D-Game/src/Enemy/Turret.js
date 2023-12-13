@@ -7,7 +7,7 @@ class Turret {
         this.height = TILE_SIZE * 2;
         this.width = TILE_SIZE * 2;
         this.lastBulletTime = 0;
-        this.bulletSpeed = 5;
+        this.bulletSpeed = 3;
         this.bullets = [];
         this.bulletBurst = 0;
         this.action = turretSprites.left;
@@ -32,8 +32,12 @@ class Turret {
 
     checkPlayerBulletCollision(player) {
         this.bullets.forEach((bullet, index) => {
-            if (detectRectCollision(player, bullet)) {
-                this.bullets.splice(index, 1);
+            if(!player.isSpawning)
+            {
+                if (detectRectCollision(player, bullet)) {
+                    this.bullets.splice(index, 1);
+                    respawnPlayerAfterHit()
+                }
             }
         })
     }
