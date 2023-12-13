@@ -7,17 +7,44 @@
     <title>Contra-2D</title>
   </head>
   <body>
-    
-    <!-- ------------------------------- Canvas -------------------------------- -->
-    <section id="game-screen">
-    <canvas id="canvas" width="1000" height="600"></canvas>
-    <div id="instructions">
-      <p>Move - Arrow Keys</p>
-      <p>Fire - Z</p>
-      <p>Jump - X</p>  
-    </div>
-  </section>
-    <!-- ---------------------------- ------------- ---------------------------- -->
+    <section class="screen" id="title-screen">
+      <div id="title-image">
+        <img src="./assets/images/Contra-title-screen.jpg" alt="Title Image" width="100%">
+      </div>
+      <div id="title-menu">
+        <div>
+          <button id="start-game">Start Game</button>
+        </div>
+        <div>
+          <button id="difficulty-selection">Select Difficulty</button>
+        </div>
+      </div>
+      <div id="title-difficulty">
+        <div><button id="difficulty-easy">Easy</button></div>
+        <div><button id="difficulty-medium">Medium</button></div>
+        <div><button id="difficulty-hard">Hard</button></div>
+      </div>
+    </section>
+
+    <!-- ------------------------- Game Screen Section ------------------------- -->
+    <section class="screen" id="game-screen">
+      <!-- ------------------------------- Canvas -------------------------------- -->
+      <canvas id="canvas" width="1000" height="600"></canvas>
+      <!-- ---------------------------- ------------- ---------------------------- -->
+      <div id="instructions">
+        <p>Move - Arrow Keys</p>
+        <p>Fire - Z</p>
+        <p>Jump - X</p>
+      </div>
+    </section>
+    <!-- --------------------------------- -- ---------------------------------- -->
+
+    <section class="screen" id="game-over-screen">
+      <div id="game-over-score">Score</div>
+      <div id="game-over-high-score"></div>
+      <div><button id="game-over-restart">Re-Start Game</button></div>
+      <div><button id="game-over-end">End Game</button></div>
+    </section>
 
     <!-- ----------------------------------------------------------------------- -->
     <!--                             Script Section                              -->
