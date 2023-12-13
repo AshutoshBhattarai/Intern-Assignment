@@ -3,22 +3,40 @@
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 /* -------------------------------------------------------------------------- */
-/*                            Initial Initilization                           */
+/*                     Initial Initilization Global Variables                 */
 /* -------------------------------------------------------------------------- */
-let mapIndex = 0;
-let difficulty = DIFFICULTY_EASY;//localStorage.getItem(difficulty) == null ? DIFFICULTY_EASY : localStorage.getItem(difficulty);
-let playerBullets = [];
-let enemyBullets = [];
-let playerLastBullet = 0;
-let enemyLastBullet = 0;
-let enemyBulletCount = 0;
-let score = 0;
-let scoreMultiplier = difficulty === DIFFICULTY_MEDIUM ? SCORE_MULTIPLIER_MEDIUM : SCORE_MULTIPLIER_HARD;
-let gameMap = new GameMap(0, 0, ctx, mapIndex);
-gameMap.createBlocksArray();
-let enemiesArray = gameMap.enemies;
-let turretsArray = gameMap.turrets;
-const player = new Player(PLAYER_INITIAL_SPAWN_X, PLAYER_INITIAL_SPAWN_Y, ctx, gameMap.collisionBlocks);
+let mapIndex;
+let difficulty;
+let playerBullets;
+let enemyBullets;
+let playerLastBullet;
+let enemyLastBullet;
+let enemyBulletCount;
+let score;
+let scoreMultiplier;
+let gameMap;
+let enemiesArray;
+let turretsArray;
+let player;
+
+
+
+function init() {
+    mapIndex = 0;
+    difficulty = localStorage.getItem(difficulty) == null ? DIFFICULTY_EASY : localStorage.getItem(difficulty);
+    playerBullets = [];
+    enemyBullets = [];
+    playerLastBullet = 0;
+    enemyLastBullet = 0;
+    enemyBulletCount = 0;
+    score = 0;
+    scoreMultiplier = difficulty === DIFFICULTY_MEDIUM ? SCORE_MULTIPLIER_MEDIUM : SCORE_MULTIPLIER_HARD;
+    gameMap = new GameMap(0, 0, ctx, mapIndex);
+    gameMap.createBlocksArray();
+    enemiesArray = gameMap.enemies;
+    turretsArray = gameMap.turrets;
+    player = new Player(PLAYER_INITIAL_SPAWN_X, PLAYER_INITIAL_SPAWN_Y, ctx, gameMap.collisionBlocks);
+}
 /* ----------------------------------- --- ---------------------------------- */
 function render() {
     if (enemyBullets.length == 0 && enemyBulletCount == 3) {
@@ -48,9 +66,13 @@ function render() {
     /* ------------------ Draw Grid lines for testing Purposes ------------------ */
     // girdDraw(ctx, MAP_SECTION_ARRAY[mapIndex])
     /* ----------------------------------- -- ----------------------------------- */
-    requestAnimationFrame(render);
+    const gameAnimation = requestAnimationFrame(render);
+    if(isGameOver())
+    {
+        cancelAnimationFrame(gameAnimation);
+        displayGameOverScreen();
+    }
 }
-render();
 
 function updateGameMap() {
     playerBullets = [];
@@ -257,7 +279,7 @@ function checkPlayerInProximity(enemy) {
     // Calculate the vertical distance between player and enemy
     const verticalDistance = Math.abs(player.yAxis - enemy.yAxis);
     // Checking if the distance is less than or equal to 80 pixels
-    if (horizontalDistance <= CANVAS_WIDTH/2) {
+    if (horizontalDistance <= CANVAS_WIDTH / 2) {
         return true;
     } else {
         return false;
@@ -360,4 +382,8 @@ function decreaseScoreOnHit() {
     score -= SCORE_HIT * (difficulty === DIFFICULTY_EASY ? 1 : scoreMultiplier);
 }
 /* ----------------------------------- -- ----------------------------------- */
+function isGameOver()
+{
+    return player.isDead();
+}
 

@@ -263,9 +263,6 @@ class Player {
     }
     playerHit() {
         this.lives--;
-        if (this.lives == 0) {
-            console.log("dead");
-        }
         this.isSpawning = true;
         setTimeout(() => {
             this.isSpawning = false;
@@ -279,7 +276,10 @@ class Player {
         this.xAxis = x;
         this.yAxis = y;
     }
-
+    isDead()
+    {
+        return this.lives <= 0;
+    }
     checkBoundary() {
         this.xAxis = Math.max(0, this.xAxis);
         this.yAxis = Math.min(CANVAS_HEIGHT - PLAYER_HEIGHT, this.yAxis);

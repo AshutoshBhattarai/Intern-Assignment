@@ -11,16 +11,7 @@ body {
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  padding-top: 5% ;
-  /* max-width: 1000px;
-  max-height: 700px; */
-  /* margin: auto;
-  display: block;
-  position: absolute;
-  top: 50%;
-  transform: translate(0, -50%);
-  left: 0;
-  right: 0; */
+  padding-top: 5%;
 }
 #canvas {
   /* background-color: black; */
@@ -31,6 +22,25 @@ body {
   justify-content: flex-start;
   gap: 40px;
 }
-#title-image{
-  
+#title-image {
+  width: 1000px;
+  height: 350px;
+}
+#game-over-screen{
+  color: white;
+  font-size: 30px;
+  gap: 30px;
+}
+button {
+  margin-top: 20px;
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 30px;
+}
+button:hover {
+  scale: 1.5;
+}
+#btn-difficulty-back {
+  color: gray;
 }

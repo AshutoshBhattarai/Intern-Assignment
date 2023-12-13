@@ -1,18 +1,104 @@
+/* -------------------------------------------------------------------------- */
+/*                                Main Screens                                */
+/* -------------------------------------------------------------------------- */
 const gameScreen = document.getElementById('game-screen');
 const titleScreen = document.getElementById('title-screen');
-const startGame = document.getElementById('start-game');
-const difficultlySelection = document.getElementById('difficulty-selection');
 const gameOverScreen = document.getElementById('game-over-screen');
+/* ----------------------------------- -- ----------------------------------- */
+/* -------------------------- Title Menu Subscreens ------------------------- */
+const titleMenu = document.getElementById('title-menu');
+const titleDifficulty = document.getElementById('title-difficulty');
+/* ----------------------------------- -- ----------------------------------- */
+/* -------------------------- Game Over Sub Screens ------------------------- */
 const displayCurrentScore = document.getElementById('game-over-score');
 const displayHighScore = document.getElementById('game-over-high-score');
-const restartGame = document.getElementById('game-over-restart');
-const endGame = document.getElementById('game-over-end');
-
-function displayGameScreen()
-{   
+/* ----------------------------------- -- ----------------------------------- */
+/* -------------------------------------------------------------------------- */
+/*                                   Buttons                                  */
+/* -------------------------------------------------------------------------- */
+const btnStartGame = document.getElementById('btn-start-game');
+const btnDifficultlySelection = document.getElementById('btn-difficulty-selection');
+const btnEasy = document.getElementById('btn-difficulty-easy');
+const btnMedium = document.getElementById('btn-difficulty-medium');
+const btnHard = document.getElementById('btn-difficulty-hard');
+const btnDifficultyBack = document.getElementById('btn-difficulty-back');
+const btnRestartGame = document.getElementById('game-over-restart');
+const btnEndGame = document.getElementById('game-over-end');
+/* ----------------------------------- -- ----------------------------------- */
+let initialDifficulty = DIFFICULTY_EASY;
+let highScore = localStorage.getItem('highScore') == null ? 0 : localStorage.getItem('highScore');
+function startGame() {
+    init();
+    render();
+}
+displayDifficulty();
+function displayGameScreen() {
     titleScreen.style.display = 'none';
     gameOverScreen.style.display = 'none';
     gameScreen.style.display = 'flex';
+    startGame();
+}
+function displayTitleScreen() {
+    titleScreen.style.display = 'flex';
+    gameOverScreen.style.display = 'none';
+    gameScreen.style.display = 'none';
+    titleDifficulty.style.display = 'none';
+    titleMenu.style.display = 'block';
+}
+function displayGameOverScreen() {
+    titleScreen.style.display = 'none';
+    gameOverScreen.style.display = 'flex';
+    gameScreen.style.display = 'none';
+    if (score > highScore) {
+        highScore = score;
+        localStorage.setItem('highScore', highScore);
+    }
+    displayCurrentScore.innerHTML = `Your Score ${score}`;
+    displayHighScore.innerHTML = `High Score  ${highScore}`;
 
 }
-displayGameScreen();
+
+/* -------------------------------------------------------------------------- */
+/*                          Button On Click Listeners                         */
+/* -------------------------------------------------------------------------- */
+btnStartGame.addEventListener('click', () => {
+    displayGameScreen();
+});
+btnDifficultlySelection.addEventListener('click', () => {
+    console.log("Select diff");
+    titleDifficulty.style.display = 'block';
+    titleMenu.style.display = 'none';
+});
+btnEasy.addEventListener('click', () => {
+    localStorage.setItem('difficulty', DIFFICULTY_EASY);
+    initialDifficulty = localStorage.getItem('difficulty');
+    displayDifficulty();
+});
+btnMedium.addEventListener('click', () => {
+    console.log("Medium");
+    localStorage.setItem('difficulty', DIFFICULTY_MEDIUM);
+    initialDifficulty = localStorage.getItem('difficulty');
+    displayDifficulty();
+});
+btnHard.addEventListener('click', () => {
+    console.log("Hard");
+    localStorage.setItem('difficulty', DIFFICULTY_HARD);
+    initialDifficulty = localStorage.getItem('difficulty');
+    displayDifficulty();
+});
+btnRestartGame.addEventListener('click', () => {
+    displayGameScreen();
+});
+btnEndGame.addEventListener('click', () => {
+    displayTitleScreen();
+});
+btnDifficultyBack.addEventListener('click', () => {
+    titleDifficulty.style.display = 'none';
+    titleMenu.style.display = 'block';
+});
+displayTitleScreen();
+function displayDifficulty() {
+    btnEasy.style.color = (initialDifficulty == DIFFICULTY_EASY) ? 'red' : 'white';
+    btnMedium.style.color = (initialDifficulty == DIFFICULTY_MEDIUM) ? 'red' : 'white';
+    btnHard.style.color = (initialDifficulty == DIFFICULTY_HARD) ? 'red' : 'white';
+}
