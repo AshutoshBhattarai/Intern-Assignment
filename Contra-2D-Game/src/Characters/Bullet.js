@@ -8,7 +8,7 @@ class Bullet {
         this.bulletSpeed = this.from === ENEMY_SOLDIER ? ENEMY_BULLET_SPEED : BULLET_SPEED;
         this.height = 5;
         this.bulletImage = new Image();
-        this.bulletImage.src = '../../assets/images/Contra-Extras.gif'
+        this.bulletImage.src = './assets/images/Contra-Extras.gif'
 
     }
 

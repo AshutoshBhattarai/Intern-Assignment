@@ -319,7 +319,7 @@ function displayPlayerHealthState(healthLeft) {
     // Destructure the properties x, y, height, and width from the healthDisplaySprite object
     let { x, y, height, width } = healthDisplaySprite;
     // Set the source of the image to the specified URL
-    image.src = '../assets/images/Contra-Extras.gif';
+    image.src = './assets/images/Contra-Extras.gif';
     // Loop from 1 to the player's current health state
     for (let i = 1; i <= healthLeft; i++) {
         // Draw the image onto the canvas

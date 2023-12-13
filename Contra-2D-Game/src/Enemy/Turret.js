@@ -13,8 +13,8 @@ class Turret {
         this.action = turretSprites.left;
         this.turretImage = new Image();
         this.bulletImage = new Image();
-        this.turretImage.src = '../../assets/images/Contra-Tanks.gif'
-        this.bulletImage.src = '../../assets/images/Contra-Extras.gif'
+        this.turretImage.src = './assets/images/Contra-Tanks.gif'
+        this.bulletImage.src = './assets/images/Contra-Extras.gif'
     }
 
     draw(ctx) {

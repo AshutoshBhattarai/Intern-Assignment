@@ -9,7 +9,7 @@ class Enemy {
         this.height = PLAYER_HEIGHT;
         this.collisionBlocks = collisionBlocks;
         this.enemyImage = new Image();
-        this.enemyImage.src = "../../assets/images/Enemies.gif";
+        this.enemyImage.src = "./assets/images/Enemies.gif";
     }
     draw(ctx) {
     }

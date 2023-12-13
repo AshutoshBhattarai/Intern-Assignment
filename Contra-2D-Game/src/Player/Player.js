@@ -20,7 +20,7 @@ class Player {
         this.isSpawning = false;
         this.lives = 3;
         this.playerImage = new Image();
-        this.playerImage.src = '../../assets/images/ContraSheet1.gif'
+        this.playerImage.src = './assets/images/ContraSheet1.gif'
     }
 
     // This function is responsible for drawing the player on the canvas.

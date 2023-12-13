@@ -21,7 +21,7 @@ class GameMap {
         // Get the coordinates and dimensions of the background sprite for the current section
         const { x, y, width, height } = mapBackgroundSprite[this.section];
         // Set the source of the background image
-        background.src = '../../assets/images/NES - Contra - Level 1.png';
+        background.src = './assets/images/NES - Contra - Level 1.png';
         // Once the background image is loaded, draw it on the canvas
         background.onload = () => {
             // Draw the background image on the canvas with the specified coordinates and dimensions
