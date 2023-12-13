@@ -6,14 +6,26 @@
 body {
   background-color: black;
 }
-
-#canvas {
-  margin: auto;
+#game-screen {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding-top: 5% ;
+  /* margin: auto;
   display: block;
   position: absolute;
   top: 50%;
   transform: translate(0, -50%);
   left: 0;
-  right: 0;
+  right: 0; */
+}
+#canvas {
   /* background-color: black; */
+}
+#instructions {
+  color: white;
+  display: flex;
+  justify-content: flex-start;
+  gap: 40px;
 }
