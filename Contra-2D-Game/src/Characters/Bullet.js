@@ -13,7 +13,7 @@ class Bullet {
     }
 
     draw(ctx) {
-        const { x, y, height, width } = this.from === ENEMY_SOLDIER ? enemyBulletSprite : playerBulletSprite;
+        const { x, y, height, width } = this.from === ENEMY_SOLDIER ? bulletSprite.enemy : bulletSprite.player;
         ctx.drawImage(this.bulletImage, x, y, height, width, this.xAxis, this.yAxis, this.width, this.height);
     }
 
@@ -69,11 +69,5 @@ class Bullet {
                 enemyBullets.splice(bulletIndex, 1);
             }
         }
-    }
-    setXAxis(xAxis) {
-        this.xAxis = xAxis;
-    }
-    setYAxis(yAxis) {
-        this.yAxis = yAxis;
     }
 }
