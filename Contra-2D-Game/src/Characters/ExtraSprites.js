@@ -93,15 +93,15 @@ const blockPowerupSprite = [
         width: 30,
     },
     {
-        x: 169,
-        y: 0,
-        height: 30,
-        width: 30,
+        x: 211,
+        y: 4,
+        height: 32,
+        width: 28,
     },
     {
-        x: 237,
-        y: 0,
-        height: 30,
-        width: 30,
+        x: 245,
+        y: 4,
+        height: 32,
+        width: 28,
     },
 ]
