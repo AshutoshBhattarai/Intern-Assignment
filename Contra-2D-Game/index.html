@@ -3,31 +3,61 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=VT323&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="./style/style.css" />
     <title>Contra-2D</title>
   </head>
   <body>
+    <!-- ----------------------------------------------------------------------- -->
+    <!--                              Title Section                              -->
+    <!-- ----------------------------------------------------------------------- -->
     <section class="screen" id="title-screen">
       <div id="title-image">
-        <img src="./assets/images/Contra-title-screen.jpg" alt="Title Image" width="100%">
+        <img
+          src="./assets/images/Contra-title-screen.jpg"
+          alt="Title Image"
+          width="100%"
+        />
       </div>
+      <!-- ----------------------------- Title Menu ------------------------------ -->
       <div id="title-menu">
         <div>
-          <button id="btn-start-game">Start Game</button>
+          <button class="btn-audio" id="btn-start-game">Start Game</button>
         </div>
         <div>
-          <button id="btn-difficulty-selection">Select Difficulty</button>
+          <button class="btn-audio" id="btn-difficulty-selection">
+            Select Difficulty
+          </button>
         </div>
       </div>
-      <div id="title-difficulty">
-        <div><button id="btn-difficulty-easy">Easy</button></div>
-        <div><button id="btn-difficulty-medium">Medium</button></div>
-        <div><button id="btn-difficulty-hard">Hard</button></div>
-        <div><button id="btn-difficulty-back">Back</button></div>
+      <!-- --------------------------------- -- ---------------------------------- -->
+      <!-- -------------------- Difficulty Selection Section --------------------- -->
+      <div class="btn-audio" id="title-difficulty">
+        <div>
+          <button class="btn-audio" id="btn-difficulty-easy">Easy</button>
+        </div>
+        <div>
+          <button class="btn-audio" id="btn-difficulty-medium">Medium</button>
+        </div>
+        <div>
+          <button class="btn-audio" id="btn-difficulty-hard">Hard</button>
+        </div>
+        <div>
+          <button class="btn-audio" id="btn-difficulty-back">Back</button>
+        </div>
       </div>
+      <!-- --------------------------------- -- ---------------------------------- -->
     </section>
+    <!-- ---------------------------- End of Title ----------------------------- -->
 
-    <!-- ------------------------- Game Screen Section ------------------------- -->
+    <!-- ----------------------------------------------------------------------- -->
+    <!--                           Game Screen Section                           -->
+    <!-- ----------------------------------------------------------------------- -->
     <section class="screen" id="game-screen">
       <!-- ------------------------------- Canvas -------------------------------- -->
       <canvas id="canvas" width="1000" height="600"></canvas>
@@ -40,14 +70,34 @@
     </section>
     <!-- --------------------------------- -- ---------------------------------- -->
 
+    <!-- ----------------------------------------------------------------------- -->
+    <!--                        Game Over Screen Section                         -->
+    <!-- ----------------------------------------------------------------------- -->
     <section class="screen" id="game-over-screen">
+      <div id="title-image">
+        <img
+          src="./assets/images/Contra-title-screen.jpg"
+          alt="Title Image"
+          width="100%"
+        />
+      </div>
+      <div>Game Over</div>
+      <!-- ------------------------------- Scores -------------------------------- -->
       <div id="game-over-score">Score : Score</div>
       <div id="game-over-high-score">High Score</div>
+      <!-- --------------------------------- -- ---------------------------------- -->
+      <!-- ----------------------- Restart or end the game ----------------------- -->
       <div class="game-over-buttons">
-        <div><button id="game-over-restart">Restart Game</button></div>
-        <div><button id="game-over-end">End Game</button></div>
+        <div>
+          <button class="btn-audio" id="game-over-restart">Restart Game</button>
+        </div>
+        <div>
+          <button class="btn-audio" id="game-over-end">End Game</button>
+        </div>
       </div>
+      <!-- --------------------------------- -- ---------------------------------- -->
     </section>
+    <!-- --------------------------------- -- ---------------------------------- -->
 
     <!-- ----------------------------------------------------------------------- -->
     <!--                             Script Section                              -->
@@ -61,6 +111,8 @@
     <!-- --------------------------- Player JS Files --------------------------- -->
     <script src="./src/Characters/Bullet.js"></script>
     <script src="./src/Characters/Character.js"></script>
+    <script src="./src/Characters/Powerups.js"></script>
+    <script src="./src/Characters/PowerupBlock.js"></script>
     <script src="./src/Player/PlayerSprite.js"></script>
     <script src="./src/Characters/ExtraSprites.js"></script>
     <script src="./src/Player/Player.js"></script>
@@ -72,9 +124,10 @@
     <script src="./src/Enemy/SoldierEnemy.js"></script>
     <script src="./src/Enemy/EnemySprites.js"></script>
     <!-- --------------------------------- -- ---------------------------------- -->
-    <!-- --------------------------- Level JS Files ---------------------------- -->
+    <!-- --------------------------- Map JS Files ---------------------------- -->
     <script src="./src/Map/CollisionBlock.js"></script>
     <script src="./src/Map/MapSection.js"></script>
+    <script src="./src/Map/Audio.js"></script>
     <script src="./src/Map/GameMap.js"></script>
     <script src="./src/Map/Test.js"></script>
     <!-- --------------------------------- -- ---------------------------------- -->
