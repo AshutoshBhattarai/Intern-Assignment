@@ -1,3 +1,5 @@
+let audio;
+
 function detectBlockCollision(rect1, rect2) {
   return (
     rect1.xAxis < rect2.xAxis + rect2.width &&
@@ -15,7 +17,16 @@ function detectRectCollision(rect1, rect2) {
   );
 }
 
-function generateRandomNumber(min,max)
+function generateRandomNumber(min, max) {
+  return Math.random() * (max - min) + min;
+}
+
+function playAudio(audioPath) {
+ audio = new Audio(audioPath);
+ audio.play();
+}
+
+function stopAudio()
 {
-    return Math.random() * (max - min) + min;
+  audio.pause();
 }
