@@ -10,6 +10,8 @@ class Turret {
         this.bulletSpeed = 3;
         this.bullets = [];
         this.bulletBurst = 0;
+        this.isOpen = false;
+        this.animationTimer = 0;
         this.action = turretSprites.left;
         this.turretImage = new Image();
         this.bulletImage = new Image();
@@ -22,7 +24,7 @@ class Turret {
         const { x, y, height, width } = this.action;
         ctx.drawImage(this.turretImage, x, y, width, height, this.xAxis - 2, this.yAxis - 7, this.width, this.height);
         this.bullets.forEach(bullet => {
-            const { x, y, height, width } = enemyBulletSprite;
+            const { x, y, height, width } = bulletSprite.enemy;
             ctx.drawImage(this.bulletImage, x, y, height, width, bullet.xAxis + 20, bullet.yAxis + 20, bullet.width, bullet.height);
         });
     }
@@ -32,8 +34,7 @@ class Turret {
 
     checkPlayerBulletCollision(player) {
         this.bullets.forEach((bullet, index) => {
-            if(!player.isSpawning)
-            {
+            if (!player.isSpawning) {
                 if (detectRectCollision(player, bullet)) {
                     this.bullets.splice(index, 1);
                     respawnPlayerAfterHit()
@@ -46,19 +47,18 @@ class Turret {
         let currentTime = new Date();
         const canShoot = currentTime - this.lastBulletTime > BULLET_COOLDOWN;
         if (canShoot) {
-            const xOffset = Math.cos(this.angle) * (this.width / 2);
-            const yOffset = Math.sin(this.angle) * (this.height / 2);
+            const xOffset = Math.cos(this.angle) * (this.width / 3);
+            const yOffset = Math.sin(this.angle) * (this.height / 3);
             const bullet = {
                 // Adjust the starting position based on the turret's position and direction
-                xAxis: this.xAxis + this.width / 3 + xOffset - 2, // -2 to fine-tune the position
+                xAxis: this.xAxis + this.width / 3 + xOffset - 4, // -2 to fine-tune the position
                 yAxis: this.yAxis + this.height / 3 + yOffset - 7,
                 speed: bulletSpeed,
                 height: 5,
                 width: 5,
                 angle: this.angle
             }
-            if(this.bulletBurst < 3)
-            {
+            if (this.bulletBurst < 3) {
                 this.bulletBurst++;
                 this.bullets.push(bullet);
             }
@@ -67,18 +67,19 @@ class Turret {
     }
 
     updateBullets() {
-        if(this.bulletBurst == 3 && this.bullets.length == 0)
-        {
+        if (this.bulletBurst == 3 && this.bullets.length == 0) {
             this.bulletBurst = 0;
         }
         this.bullets.forEach((bullet) => {
             bullet.xAxis += Math.cos(bullet.angle) * bullet.speed;
             bullet.yAxis += Math.sin(bullet.angle) * bullet.speed;
         });
-        this.bullets = this.bullets.filter(bullet => bullet.xAxis >= 0
+
+        this.bullets = this.bullets.filter(bullet =>
+            bullet.xAxis >= 0
             && bullet.xAxis <= canvas.width
             && bullet.yAxis >= 0
-            && bullet.yAxis <= canvas.height);
+            && bullet.yAxis <= canvas.height - 60);
     }
     #findDirection(radian) {
         const angle = (radian * 180 / Math.PI + 360) % 360;
