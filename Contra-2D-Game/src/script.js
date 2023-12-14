@@ -26,6 +26,7 @@ const btnRestartGame = document.getElementById('game-over-restart');
 const btnEndGame = document.getElementById('game-over-end');
 /* ----------------------------------- -- ----------------------------------- */
 let initialDifficulty = DIFFICULTY_EASY;
+localStorage.setItem('difficulty', initialDifficulty);
 let highScore = localStorage.getItem('highScore') == null ? 0 : localStorage.getItem('highScore');
 let inGameTitleScreen = true;
 function startGame() {
