@@ -8,8 +8,8 @@ const PLAYER_INITIAL_SPAWN_X = 80;
 const PLAYER_INITIAL_SPAWN_Y = 10;
 const SPEED = 0.1;
 const SPEED_LIMIT = 3;
-const GRAVITY = 1.5;
-const JUMP_HEIGHT = -20;
+const GRAVITY = 1.1;
+const JUMP_HEIGHT = -15;
 const DIRECTION_LEFT = 'left';
 const DIRECTION_RIGHT = 'right';
 const DIRECTION_UP = 'up';
@@ -67,7 +67,11 @@ SCORE_POWERUP = 1000;
 SCORE_DISTANCE_TRAVELLED = 100;
 SCORE_MULTIPLIER_MEDIUM = 1.5;
 SCORE_MULTIPLIER_HARD = 2;
-
+/* -------------------------- Difficulty Constants -------------------------- */
 DIFFICULTY_EASY = 1;
 DIFFICULTY_MEDIUM = 2;
 DIFFICULTY_HARD = 3;
+/* ------------------------------ Powerup ID's ------------------------------ */
+POWERUP_HEALTH = 100;
+POWERUP_MULTIPLIER = 500;
+POWERUP_BLOCK = 600;
