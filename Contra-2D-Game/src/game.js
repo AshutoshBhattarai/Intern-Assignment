@@ -18,40 +18,59 @@ let gameMap;
 let enemiesArray;
 let turretsArray;
 let player;
-
+let powerupArray;
+let powerupBlock;
+let gameAudio;
 
 
 function init() {
     mapIndex = 0;
-    difficulty = localStorage.getItem(difficulty) == null ? DIFFICULTY_EASY : localStorage.getItem(difficulty);
+    gameAudio = new Audio(gameAudios.gameMusic);
+    gameAudio.play();
+
+    difficulty = localStorage.getItem('difficulty') || DIFFICULTY_EASY;
+
     playerBullets = [];
     enemyBullets = [];
+    powerupArray = [];
     playerLastBullet = 0;
     enemyLastBullet = 0;
     enemyBulletCount = 0;
+
     score = 0;
     scoreMultiplier = difficulty === DIFFICULTY_MEDIUM ? SCORE_MULTIPLIER_MEDIUM : SCORE_MULTIPLIER_HARD;
+
     gameMap = new GameMap(0, 0, ctx, mapIndex);
     gameMap.createBlocksArray();
     enemiesArray = gameMap.enemies;
     turretsArray = gameMap.turrets;
+    powerupBlock = gameMap.powerupBlock;
+
     player = new Player(PLAYER_INITIAL_SPAWN_X, PLAYER_INITIAL_SPAWN_Y, ctx, gameMap.collisionBlocks);
 }
-/* ----------------------------------- --- ---------------------------------- */
 function render() {
     if (enemyBullets.length == 0 && enemyBulletCount == 3) {
         enemyBulletCount = 0;
     }
+
     if (player.xAxis > gameMap.width) {
         if (mapIndex >= MAP_SECTION_ARRAY.length - 1) {
             mapIndex = getRandomMapIndex(3, 6);
         }
+
         mapIndex++;
         increaseScoreOnDistance();
         updateGameMap();
     }
+
+    powerupArray.forEach((power) => {
+        power.draw(ctx);
+        power.update(TILE_SIZE * 6);
+    });
+
     drawGameMap();
     updateEnemies();
+    drawPowerUpBlock();
     playerRender();
     updateBullets(playerBullets);
     updateBullets(enemyBullets);
@@ -61,17 +80,20 @@ function render() {
     }
     checkEnemyBulletCollision();
     turretBulletCollision();
+    checkPowerUpCollision(player);
     displayPlayerHealthState(player.lives);
-    displayPlayerScore()
-    /* ------------------ Draw Grid lines for testing Purposes ------------------ */
-    // girdDraw(ctx, MAP_SECTION_ARRAY[mapIndex])
-    /* ----------------------------------- -- ----------------------------------- */
+    displayPlayerScore();
+
     const gameAnimation = requestAnimationFrame(render);
-    if(isGameOver())
-    {
+    if (isGameOver()) {
+        gameAudio.pause();
         cancelAnimationFrame(gameAnimation);
         displayGameOverScreen();
     }
+
+    /* ------------------ Draw Grid lines for testing Purposes ------------------ */
+    //girdDraw(ctx, MAP_SECTION_ARRAY[mapIndex])
+    /* ----------------------------------- -- ----------------------------------- */
 }
 
 function updateGameMap() {
@@ -80,6 +102,7 @@ function updateGameMap() {
     gameMap.enemies = [];
     gameMap = new GameMap(0, 0, ctx, mapIndex);
     gameMap.createBlocksArray();
+    powerupBlock = gameMap.powerupBlock == undefined ? undefined : gameMap.powerupBlock;
     enemiesArray = gameMap.enemies;
     turretsArray = gameMap.turrets;
     player.xAxis = 0;
@@ -134,31 +157,31 @@ function detectMovement() {
     const bulletX = player.facing === DIRECTION_RIGHT ? player.xAxis + player.width : player.xAxis;
     const canShoot = currentTime - playerLastBullet > BULLET_COOLDOWN;
     const from = PLAYER_ID
-    if (inputs.shoot) {
-        player.velX = 0
-
-        if (inputs.down && !inputs.left && !inputs.right && canShoot) {
+    if (inputs.shoot && canShoot) {
+        player.velX = 0;
+        playAudio(gameAudios.playerGun);
+        if (inputs.down && !inputs.left && !inputs.right) {
             shootBullet(bulletX, player.yAxis + player.height * 2 / 4, player.facing, from);
             playerLastBullet = currentTime;
         }
-        if (!inputs.up && !inputs.down && canShoot) {
+        if (!inputs.up && !inputs.down) {
             shootBullet(bulletX, player.yAxis + player.height / 3, player.facing, from);
             playerLastBullet = currentTime;
         }
         if (!player.inWater) {
-            if (inputs.up && !inputs.left && !inputs.right && canShoot) {
+            if (inputs.up && !inputs.left && !inputs.right) {
                 shootBullet(player.xAxis + player.width / 2, player.yAxis, DIRECTION_UP, from);
                 playerLastBullet = currentTime;
-            } else if (inputs.left && inputs.down && canShoot) {
+            } else if (inputs.left && inputs.down) {
                 shootBullet(player.xAxis, player.yAxis + player.height / 2, DIRECTION_DOWN_LEFT, from);
                 playerLastBullet = currentTime;
-            } else if (inputs.right && inputs.down && canShoot) {
+            } else if (inputs.right && inputs.down) {
                 shootBullet(player.xAxis + player.width, player.yAxis + player.height / 2, DIRECTION_DOWN_RIGHT, from);
                 playerLastBullet = currentTime;
-            } else if (inputs.left && inputs.up && canShoot) {
+            } else if (inputs.left && inputs.up) {
                 shootBullet(player.xAxis, player.yAxis, DIRECTION_UP_LEFT, from);
                 playerLastBullet = currentTime;
-            } else if (inputs.right && inputs.up && canShoot) {
+            } else if (inputs.right && inputs.up) {
                 shootBullet(player.xAxis + player.width, player.yAxis, DIRECTION_UP_RIGHT, from);
                 playerLastBullet = currentTime;
             }
@@ -190,7 +213,7 @@ function checkEnemyPlayerCollision() {
         if (detectRectCollision(player, enemy)) {
             if (!enemy.canShoot) {
                 enemiesArray.splice(enemyIndex, 1);
-                respawnPlayerAfterHit()
+                respawnPlayerAfterHit();
             }
         }
     })
@@ -200,6 +223,7 @@ function checkEnemyBulletCollision() {
         playerBullets.forEach((bullet, bulletIndex) => {
             if (bullet.from == PLAYER_ID) {
                 if (detectRectCollision(enemy, bullet)) {
+                    enemyHitSoundEffect();
                     playerBullets.splice(bulletIndex, 1);
                     increaseScoreOnHit();
                     enemy.health--;
@@ -349,13 +373,28 @@ function displayPlayerHealthState(healthLeft) {
     }
 }
 function displayPlayerScore() {
-    ctx.font = "20px Comic Sans MS";
+    ctx.font = "20px VT323";
     ctx.fillStyle = "white"
     ctx.fillText("Score: " + score, 20, 50);
 }
 
+function checkPowerUpCollision(player) {
+    powerupArray.forEach((power, index) => {
+        if (detectRectCollision(player, power)) {
+            if (power.type == POWERUP_HEALTH) {
+                player.lives += 1;
+            }
+            if (power.type == POWERUP_MULTIPLIER) {
+                score *= difficulty == DIFFICULTY_EASY ? 1.25 : scoreMultiplier;
+            }
+            powerupArray.splice(index, 1);
+        }
+    })
+}
+
 function respawnPlayerAfterHit() {
     const { x, y } = gameMap.getPlayerReSpawnPosition();
+    playerHitSoundEffect();
     decreaseScoreOnHit();
     player.playerHit();
     player.playerReSpawn(x, y);
@@ -365,25 +404,50 @@ function respawnPlayerAfterHit() {
 /* -------------------------------------------------------------------------- */
 /* ------------ Logic to manipulate Score on different Conditions ----------- */
 function increaseScoreOnDistance() {
-    score += SCORE_DISTANCE_TRAVELLED * (difficulty === DIFFICULTY_EASY ? 1 : scoreMultiplier);
+    score += SCORE_DISTANCE_TRAVELLED * (difficulty == DIFFICULTY_EASY ? 1 : scoreMultiplier);
 }
 function increaseScoreOnHit() {
-    score += SCORE_HIT * (difficulty === DIFFICULTY_EASY ? 1 : scoreMultiplier);
+    score += SCORE_HIT * (difficulty == DIFFICULTY_EASY ? 1 : scoreMultiplier);
 }
 function increaseScoreOnEnemyKilled(enemy) {
     const baseScore = enemy.canShoot ? SCORE_SOLDIER : SCORE_RUNNING_ENEMY;
-    const finalScore = baseScore * (difficulty === DIFFICULTY_EASY ? 1 : scoreMultiplier);
-    score += finalScore;
+    score += baseScore * (difficulty == DIFFICULTY_EASY ? 1 : scoreMultiplier);
 }
 function increaseScoreOnTurretDestroyed() {
-    score += SCORE_TURRET * (difficulty === DIFFICULTY_EASY ? 1 : scoreMultiplier);
+    score += SCORE_TURRET * (difficulty == DIFFICULTY_EASY ? 1 : scoreMultiplier);
 }
 function decreaseScoreOnHit() {
-    score -= SCORE_HIT * (difficulty === DIFFICULTY_EASY ? 1 : scoreMultiplier);
+    score -= SCORE_HIT * (difficulty == DIFFICULTY_EASY ? 1 : scoreMultiplier);
 }
 /* ----------------------------------- -- ----------------------------------- */
-function isGameOver()
-{
+function isGameOver() {
     return player.isDead();
+}
+function playerHitSoundEffect() {
+    playAudio(gameAudios.playerHit);
+}
+function enemyHitSoundEffect() {
+    playAudio(gameAudios.enemyHit);
+}
+
+function drawPowerUpBlock() {
+    if (powerupBlock == undefined) { }
+    else {
+        powerupBlock.draw(ctx);
+        powerupBlock.update(player);
+        checkBulletPowerUpBlockCollision();
+    }
+}
+function checkBulletPowerUpBlockCollision() {
+    const randomPowerup = Math.round(generateRandomNumber(1, 2)) % 2 == 0 ? POWERUP_HEALTH : POWERUP_MULTIPLIER;
+    playerBullets.forEach((bullet, index) => {
+        if (powerupBlock.isOpen && detectRectCollision(bullet, powerupBlock)) {
+            playerBullets.splice(index, 1);
+            powerupBlock.hit--;
+            if (powerupBlock.hit == 0) {
+                powerupArray.push(new Powerups(powerupBlock.xAxis + TILE_SIZE, powerupBlock.yAxis, randomPowerup));
+            }
+        }
+    })
 }
 
