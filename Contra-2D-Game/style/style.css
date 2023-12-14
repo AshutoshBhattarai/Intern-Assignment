@@ -5,6 +5,7 @@
 
 body {
   background-color: black;
+  
 }
 .screen {
   display: flex;
@@ -12,6 +13,7 @@ body {
   align-items: center;
   flex-direction: column;
   padding-top: 5%;
+  font-family: 'VT323', monospace;
 }
 #canvas {
   /* background-color: black; */
@@ -29,11 +31,12 @@ body {
 #game-over-screen{
   color: white;
   font-size: 30px;
-  gap: 30px;
+  /* gap: 30px; */
 }
 button {
   margin-top: 20px;
   background: transparent;
+  font-family: 'VT323', monospace;
   border: none;
   color: white;
   font-size: 30px;
