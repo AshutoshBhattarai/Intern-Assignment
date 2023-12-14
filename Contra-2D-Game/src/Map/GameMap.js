@@ -108,6 +108,6 @@ class GameMap {
     }
 
     createPowerupBlock(x, y) {
-        this.powerupBlock = new PowerupBlock(x, y);
+        this.powerupBlock = new PowerupBlock(x, y,mapIndex);
     }
 }
