@@ -5,6 +5,7 @@ class CollisionBlock {
         this.height = TILE_SIZE;
         this.width = TILE_SIZE;
         this.type = type;
+        this.isColliding = false;
 
     }
     draw(ctx)
