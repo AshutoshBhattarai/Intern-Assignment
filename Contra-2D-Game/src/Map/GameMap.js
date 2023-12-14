@@ -13,7 +13,8 @@ class GameMap {
             y: 0,
         }
         this.section = MAP_SECTION_ARRAY[this.sectionIndex];
-        this.turrets = []
+        this.turrets = [];
+        this.powerupBlock;
     }
     draw() {
         // Create a new Image object
@@ -63,6 +64,9 @@ class GameMap {
                     case ENEMY_TURRET:
                         this.spawnTurret(positionX, positionY);
                         break;
+                    case POWERUP_BLOCK:
+                        this.createPowerupBlock(positionX, positionY);
+                        break;
                 }
             });
         });
@@ -101,5 +105,9 @@ class GameMap {
     }
     getPlayerReSpawnPosition() {
         return this.playerReSpawnPosition;
+    }
+
+    createPowerupBlock(x, y) {
+        this.powerupBlock = new PowerupBlock(x, y);
     }
 }
