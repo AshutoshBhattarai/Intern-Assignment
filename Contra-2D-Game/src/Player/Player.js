@@ -27,8 +27,8 @@ class Player {
     draw() {
         //? ------------------------ Done for testing purposes ----------------------- */
         // Set the color of the stroke to red.⏬
-        this.ctx.strokeStyle = 'red';
-        this.ctx.strokeRect(this.xAxis, this.yAxis, this.width, this.height);
+        // this.ctx.strokeStyle = 'red';
+        // this.ctx.strokeRect(this.xAxis, this.yAxis, this.width, this.height);
         // Draw a rectangle around the player.☝️
         //? ----------------------------------- -- ----------------------------------- */
         if (this.isSpawning) {
@@ -138,7 +138,7 @@ class Player {
         }
 
         // Handles going prone
-        if (inputs.down && !(inputs.left || inputs.right)) {
+        if (!this.jumping && inputs.down && !(inputs.left || inputs.right)) {
             this.stopMoving();
             this.goProne();
         }
@@ -146,9 +146,9 @@ class Player {
         // Reset actions and button press count if no inputs
         if (Object.values(inputs).every(value => value === false)) {
             this.animationTimer = 0;
-            this.stopMoving();
-            this.resetActions();
             this.buttonPressCount = 0;
+            this.stopMoving();
+            if (!this.jumping) this.resetActions();
         }
 
         // Set inGround to false if not in collision block
@@ -332,7 +332,7 @@ class Player {
                         this.resetPlayerSize();
                         // Position the player just above the platform
                         this.yAxis = block.yAxis - this.height - 1;
-                        // Set the player to be on the ground and not in water
+                        // Set the player to be on the ground, not in water and not jumping
                         this.inGround = true;
                         this.inWater = false;
                         this.jumping = false;
@@ -392,7 +392,7 @@ class Player {
     }
 
 
-    // Check if the current object is colliding with any of the collision blocks
+    // Check if the player is colliding with any of the collision blocks
     checkInCollisionBlock() {
         // Iterate over each collision block
         for (let i = 0; i < this.collisionBlocks.length; i++) {
