@@ -26,10 +26,9 @@ let gameAudio;
 function init() {
     mapIndex = 0;
     gameAudio = new Audio(gameAudios.gameMusic);
-    gameAudio.play();
+    // gameAudio.play();
 
     difficulty = localStorage.getItem('difficulty') || DIFFICULTY_EASY;
-
     playerBullets = [];
     enemyBullets = [];
     powerupArray = [];
@@ -245,6 +244,7 @@ function turretBulletCollision() {
                     turretsArray.splice(index, 1);
                 }
                 else {
+                    playAudio(gameAudios.metalHit)
                     increaseScoreOnHit();
                     turret.health--;
                     playerBullets.splice(bulletIndex, 1);
@@ -381,11 +381,12 @@ function displayPlayerScore() {
 function checkPowerUpCollision(player) {
     powerupArray.forEach((power, index) => {
         if (detectRectCollision(player, power)) {
+            playAudio(gameAudios.collectPowerup);
             if (power.type == POWERUP_HEALTH) {
                 player.lives += 1;
             }
             if (power.type == POWERUP_MULTIPLIER) {
-                score *= difficulty == DIFFICULTY_EASY ? 1.25 : scoreMultiplier;
+                score *= Math.ceil(difficulty == DIFFICULTY_EASY ? 1.25 : scoreMultiplier);
             }
             powerupArray.splice(index, 1);
         }
@@ -442,6 +443,7 @@ function checkBulletPowerUpBlockCollision() {
     const randomPowerup = Math.round(generateRandomNumber(1, 2)) % 2 == 0 ? POWERUP_HEALTH : POWERUP_MULTIPLIER;
     playerBullets.forEach((bullet, index) => {
         if (powerupBlock.isOpen && detectRectCollision(bullet, powerupBlock)) {
+            playAudio(gameAudios.metalHit)
             playerBullets.splice(index, 1);
             powerupBlock.hit--;
             if (powerupBlock.hit == 0) {
