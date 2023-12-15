@@ -7,9 +7,12 @@ class Turret {
         this.height = TILE_SIZE * 2;
         this.width = TILE_SIZE * 2;
         this.lastBulletTime = 0;
-        this.bulletSpeed = 3;
+        this.bulletSpeed = 2;
         this.bullets = [];
         this.bulletBurst = 0;
+        this.burstLimit = 2;
+        this.bulletInitialX = this.xAxis;
+        this.bulletInitialY = this.yAxis;
         this.isOpen = false;
         this.animationTimer = 0;
         this.action = turretSprites.left;
@@ -17,6 +20,11 @@ class Turret {
         this.bulletImage = new Image();
         this.turretImage.src = './assets/images/Contra-Tanks.gif'
         this.bulletImage.src = './assets/images/Contra-Extras.gif'
+        if(difficulty == DIFFICULTY_MEDIUM || difficulty == DIFFICULTY_HARD)
+        {
+            this.bulletSpeed = difficulty == DIFFICULTY_MEDIUM ? 3 : 4;
+            this.burstLimit = difficulty == DIFFICULTY_MEDIUM ? 3 : 4;
+        }
     }
 
     draw(ctx) {
@@ -43,22 +51,18 @@ class Turret {
         })
     }
     shoot() {
-        const bulletSpeed = this.bulletSpeed;
         let currentTime = new Date();
         const canShoot = currentTime - this.lastBulletTime > BULLET_COOLDOWN;
         if (canShoot) {
-            const xOffset = Math.cos(this.angle) * (this.width / 3);
-            const yOffset = Math.sin(this.angle) * (this.height / 3);
             const bullet = {
-                // Adjust the starting position based on the turret's position and direction
-                xAxis: this.xAxis + this.width / 3 + xOffset - 4, // -4 to fine-tune the position
-                yAxis: this.yAxis + this.height / 3 + yOffset - 7,
-                speed: bulletSpeed,
+                xAxis: this.bulletInitialX,
+                yAxis: this.bulletInitialY,
+                speed: this.bulletSpeed,
                 height: 5,
                 width: 5,
                 angle: this.angle
             }
-            if (this.bulletBurst < 3) {
+            if (this.bulletBurst < this.burstLimit) {
                 this.bulletBurst++;
                 this.bullets.push(bullet);
             }
@@ -67,46 +71,74 @@ class Turret {
     }
 
     updateBullets() {
-        if (this.bulletBurst == 3 && this.bullets.length == 0) {
-            this.bulletBurst = 0;
-        }
-        this.bullets.forEach((bullet) => {
+        this.bullets = this.bullets.filter(bullet =>
+            bullet.xAxis >= 0 &&
+            bullet.xAxis <= canvas.width &&
+            bullet.yAxis >= 0 &&
+            bullet.yAxis <= canvas.height - 60
+        );
+
+        this.bullets.forEach(bullet => {
             bullet.xAxis += Math.cos(bullet.angle) * bullet.speed;
             bullet.yAxis += Math.sin(bullet.angle) * bullet.speed;
         });
 
-        this.bullets = this.bullets.filter(bullet =>
-            bullet.xAxis >= 0
-            && bullet.xAxis <= canvas.width
-            && bullet.yAxis >= 0
-            && bullet.yAxis <= canvas.height - 60);
-    }
-    #findDirection(radian) {
-        const angle = (radian * 180 / Math.PI + 360) % 360;
-        if ((angle >= 0 && angle < 22.5) || (angle >= 337.5 && angle <= 360)) {
-            this.action = turretSprites.right;
-            // return "right";
-        } else if (angle >= 22.5 && angle < 67.5) {
-            this.action = turretSprites.downRight;
-            // return "down-right";
-        } else if (angle >= 67.5 && angle < 112.5) {
-            this.action = turretSprites.down;
-            // return "down";
-        } else if (angle >= 112.5 && angle < 157.5) {
-            this.action = turretSprites.downLeft;
-            // return "down-left";
-        } else if (angle >= 157.5 && angle < 202.5) {
-            this.action = turretSprites.left;
-            // return "left";
-        } else if (angle >= 202.5 && angle < 247.5) {
-            this.action = turretSprites.upLeft;
-            // return "up-left";
-        } else if (angle >= 247.5 && angle < 292.5) {
-            this.action = turretSprites.up;
-            // return "up";
-        } else if (angle >= 292.5 && angle < 337.5) {
-            this.action = turretSprites.upRight;
-            // return "up-right";
+        if (this.bulletBurst === this.burstLimit && this.bullets.length === 0) {
+            this.bulletBurst = 0;
         }
     }
+
+    #findDirection(radian) {
+        const angle = (radian * 180 / Math.PI + 360) % 360;
+        // Right
+        if ((angle >= 0 && angle < 22.5) || (angle >= 337.5 && angle <= 360)) {
+            this.action = turretSprites.right;
+            this.bulletInitialX = this.xAxis + TILE_SIZE + 10;
+            this.bulletInitialY = this.yAxis + 5;
+            //Down Right
+        } else if (angle >= 22.5 && angle < 67.5) {
+            this.action = turretSprites.downRight;
+            this.bulletInitialX = this.xAxis + TILE_SIZE + 10;
+            this.bulletInitialY = this.yAxis + TILE_SIZE;
+        }
+        // Down Left";
+        else if (angle >= 112.5 && angle < 157.5) {
+            this.action = turretSprites.downLeft;
+            this.bulletInitialX = this.xAxis;
+            this.bulletInitialY = this.yAxis + TILE_SIZE;
+        }
+        // Down 
+        else if (angle >= 67.5 && angle < 112.5) {
+            this.bulletInitialX = this.xAxis + 15;
+            this.bulletInitialY = this.yAxis + TILE_SIZE + 5;
+            this.action = turretSprites.down;
+        }
+        // Left;
+
+        else if (angle >= 157.5 && angle < 202.5) {
+            this.action = turretSprites.left;
+            this.bulletInitialX = this.xAxis - 10;
+            this.bulletInitialY = this.yAxis + 5;
+        }
+        // Up
+        else if (angle >= 247.5 && angle < 292.5) {
+            this.bulletInitialX = this.xAxis + 15;
+            this.bulletInitialY = this.yAxis - TILE_SIZE + 5;
+            this.action = turretSprites.up;
+        }
+        // Up Left
+        else if (angle >= 202.5 && angle < 247.5) {
+            this.action = turretSprites.upLeft;
+            this.bulletInitialX = this.xAxis;
+            this.bulletInitialY = this.yAxis - TILE_SIZE + 10;
+        }
+        // Up Right
+        else if (angle >= 292.5 && angle < 337.5) {
+            this.action = turretSprites.upRight;
+            this.bulletInitialX = this.xAxis + TILE_SIZE;
+            this.bulletInitialY = this.yAxis - TILE_SIZE + 10;
+        }
+    }
+
+
 }
