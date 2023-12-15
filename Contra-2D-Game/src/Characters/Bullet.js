@@ -3,10 +3,11 @@ class Bullet {
         this.xAxis = xAxis;
         this.yAxis = yAxis;
         this.direction = direction;
+        //this.angle = angle;
         this.from = from;
         this.width = 5;
-        this.bulletSpeed = this.from === ENEMY_SOLDIER ? ENEMY_BULLET_SPEED : BULLET_SPEED;
         this.height = 5;
+        this.bulletSpeed = this.from === ENEMY_SOLDIER ? ENEMY_BULLET_SPEED : BULLET_SPEED;
         this.bulletImage = new Image();
         this.bulletImage.src = './assets/images/Contra-Extras.gif'
 
@@ -18,37 +19,54 @@ class Bullet {
     }
 
     update() {
-        if (this.direction === DIRECTION_RIGHT) {
-            this.xAxis += this.bulletSpeed;
+        if(this.angle == undefined)
+        {
+            this.basicBulletMovement();
         }
-        if (this.direction === DIRECTION_LEFT) {
-            this.xAxis -= this.bulletSpeed;
-        }
-        if (this.direction === DIRECTION_UP) {
-            this.yAxis -= this.bulletSpeed;
-        }
-        if (this.direction === DIRECTION_DOWN) {
-            this.yAxis += this.bulletSpeed;
-        }
-        if (this.direction === DIRECTION_DOWN_LEFT) {
-            this.yAxis += this.bulletSpeed;
-            this.xAxis -= this.bulletSpeed;
-        }
-        if (this.direction === DIRECTION_DOWN_RIGHT) {
-            this.yAxis += this.bulletSpeed;
-            this.xAxis += this.bulletSpeed;
-        }
-        if (this.direction === DIRECTION_UP_LEFT) {
-            this.yAxis -= this.bulletSpeed;
-            this.xAxis -= this.bulletSpeed;
-        }
-        if (this.direction === DIRECTION_UP_RIGHT) {
-            this.yAxis -= this.bulletSpeed;
-            this.xAxis += this.bulletSpeed;
+        else 
+        {
+            console.log("Shoot Accurate Bullets");
         }
         if (this.isOutOfBounds()) {
             this.removeBullet(this.from);
         }
+    }
+    basicBulletMovement() {
+        switch (this.direction) {
+            case DIRECTION_RIGHT:
+                this.xAxis += this.bulletSpeed;
+                break;
+            case DIRECTION_LEFT:
+                this.xAxis -= this.bulletSpeed;
+                break;
+            case DIRECTION_UP:
+                this.yAxis -= this.bulletSpeed;
+                break;
+            case DIRECTION_DOWN:
+                this.yAxis += this.bulletSpeed;
+                break;
+            case DIRECTION_DOWN_LEFT:
+                this.yAxis += this.bulletSpeed;
+                this.xAxis -= this.bulletSpeed;
+                break;
+            case DIRECTION_DOWN_RIGHT:
+                this.yAxis += this.bulletSpeed;
+                this.xAxis += this.bulletSpeed;
+                break;
+            case DIRECTION_UP_LEFT:
+                this.yAxis -= this.bulletSpeed;
+                this.xAxis -= this.bulletSpeed;
+                break;
+            case DIRECTION_UP_RIGHT:
+                this.yAxis -= this.bulletSpeed;
+                this.xAxis += this.bulletSpeed;
+                break;
+        }
+    }
+
+    accurateBulletMovement()
+    {
+
     }
 
     isOutOfBounds() {
