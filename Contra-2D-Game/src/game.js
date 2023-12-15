@@ -53,18 +53,23 @@ function render() {
     }
 
     if (player.xAxis > gameMap.width) {
-        if (mapIndex >= MAP_SECTION_ARRAY.length - 1) {
-            mapIndex = getRandomMapIndex(3, 6);
+        if (!turretsArray.length > 0 && !enemiesArray.length > 0) {
+            if (mapIndex >= MAP_SECTION_ARRAY.length - 1) {
+                mapIndex = getRandomMapIndex(3, 6);
+            }
+            mapIndex++;
+            increaseScoreOnDistance();
+            updateGameMap();
         }
-
-        mapIndex++;
-        increaseScoreOnDistance();
-        updateGameMap();
+        else {
+            player.xAxis = CANVAS_WIDTH - player.width;
+        }
     }
-
     powerupArray.forEach((power) => {
-        power.draw(ctx);
-        power.update(TILE_SIZE * 6);
+        if (power != "") {
+            power.draw(ctx);
+            power.update(TILE_SIZE * 6);
+        }
     });
 
     drawGameMap();
@@ -82,7 +87,7 @@ function render() {
     checkPowerUpCollision(player);
     displayPlayerHealthState(player.lives);
     displayPlayerScore();
-
+    upgradeDifficulty();
     const gameAnimation = requestAnimationFrame(render);
     if (isGameOver()) {
         gameAudio.pause();
@@ -98,6 +103,7 @@ function render() {
 function updateGameMap() {
     playerBullets = [];
     enemyBullets = [];
+    powerupArray = [];
     gameMap.enemies = [];
     gameMap = new GameMap(0, 0, ctx, mapIndex);
     gameMap.createBlocksArray();
@@ -302,7 +308,7 @@ function checkPlayerInProximity(enemy) {
     const horizontalDistance = Math.abs(player.xAxis - enemy.xAxis);
     // Calculate the vertical distance between player and enemy
     const verticalDistance = Math.abs(player.yAxis - enemy.yAxis);
-    // Checking if the distance is less than or equal to 80 pixels
+    // Checking if the distance is less than or equal to half canvas width pixels
     if (horizontalDistance <= CANVAS_WIDTH / 2) {
         return true;
     } else {
@@ -432,24 +438,38 @@ function enemyHitSoundEffect() {
 }
 
 function drawPowerUpBlock() {
-    if (powerupBlock == undefined) { }
-    else {
+    if (powerupBlock != undefined) {
         powerupBlock.draw(ctx);
         powerupBlock.update(player);
         checkBulletPowerUpBlockCollision();
     }
 }
 function checkBulletPowerUpBlockCollision() {
-    const randomPowerup = Math.round(generateRandomNumber(1, 2)) % 2 == 0 ? POWERUP_HEALTH : POWERUP_MULTIPLIER;
+    const randomPowerup = Math.round(generateRandomNumber(1, 3)) % 2 == 0 ? POWERUP_HEALTH : POWERUP_MULTIPLIER;
+    const generatePowerUp = Math.round(generateRandomNumber(1, 2)) % 2 == 0 ? true : false;
     playerBullets.forEach((bullet, index) => {
         if (powerupBlock.isOpen && detectRectCollision(bullet, powerupBlock)) {
             playAudio(gameAudios.metalHit)
             playerBullets.splice(index, 1);
             powerupBlock.hit--;
             if (powerupBlock.hit == 0) {
-                powerupArray.push(new Powerups(powerupBlock.xAxis + TILE_SIZE, powerupBlock.yAxis, randomPowerup));
+                if ((difficulty == DIFFICULTY_HARD || difficulty == DIFFICULTY_MEDIUM) && !generatePowerUp) {
+                    powerupArray.push("");
+                }
+                else powerupArray.push(new Powerups(powerupBlock.xAxis + TILE_SIZE, powerupBlock.yAxis, randomPowerup));
             }
         }
     })
+}
+
+function upgradeDifficulty() {
+    if (difficulty == DIFFICULTY_EASY && score >= 5000) {
+        difficulty = DIFFICULTY_MEDIUM;
+        localStorage.setItem('difficulty', difficulty);
+    }
+    else if (difficulty == DIFFICULTY_MEDIUM && score >= 20000) {
+        difficulty = DIFFICULTY_HARD;
+        localStorage.setItem('difficulty', difficulty);
+    }
 }
 

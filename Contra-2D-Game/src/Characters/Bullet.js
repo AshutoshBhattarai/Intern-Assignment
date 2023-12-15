@@ -1,16 +1,18 @@
 class Bullet {
-    constructor(xAxis, yAxis, direction, from) {
+    constructor(xAxis, yAxis, direction, from, angle) {
         this.xAxis = xAxis;
         this.yAxis = yAxis;
         this.direction = direction;
-        //this.angle = angle;
+        this.angle = angle;
         this.from = from;
         this.width = 5;
         this.height = 5;
         this.bulletSpeed = this.from === ENEMY_SOLDIER ? ENEMY_BULLET_SPEED : BULLET_SPEED;
         this.bulletImage = new Image();
         this.bulletImage.src = './assets/images/Contra-Extras.gif'
-
+        if (difficulty == DIFFICULTY_MEDIUM || difficulty == DIFFICULTY_HARD) {
+            this.bulletSpeed = (difficulty == DIFFICULTY_MEDIUM && this.from == ENEMY_SOLDIER) ? (ENEMY_BULLET_SPEED + 1) : (ENEMY_BULLET_SPEED + 2);
+        }
     }
 
     draw(ctx) {
@@ -19,12 +21,10 @@ class Bullet {
     }
 
     update() {
-        if(this.angle == undefined)
-        {
+        if (this.angle == undefined) {
             this.basicBulletMovement();
         }
-        else 
-        {
+        else {
             console.log("Shoot Accurate Bullets");
         }
         if (this.isOutOfBounds()) {
@@ -62,11 +62,6 @@ class Bullet {
                 this.xAxis += this.bulletSpeed;
                 break;
         }
-    }
-
-    accurateBulletMovement()
-    {
-
     }
 
     isOutOfBounds() {
