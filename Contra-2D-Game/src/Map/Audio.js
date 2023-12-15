@@ -7,5 +7,8 @@ const gameAudios = {
     gameOverMusic: './assets/sound/game-over.mp3',
     enemyHit: './assets/sound/enemy-hit.mp3',
     playerHit: './assets/sound/dead.mp3',
-    playerGun : "./assets/sound/enemy-gun.mp3"
+    playerGun : "./assets/sound/enemy-gun.mp3",
+    metalHit : './assets/sound/explosion_asteroid-101886.mp3',
+    collectPowerup : './assets/sound/8-bit-powerup-6768.mp3',
+    explosion : './assets/sound/vibrating-thud-39536.mp3',
 }
