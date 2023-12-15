@@ -51,7 +51,7 @@ class Turret {
             const yOffset = Math.sin(this.angle) * (this.height / 3);
             const bullet = {
                 // Adjust the starting position based on the turret's position and direction
-                xAxis: this.xAxis + this.width / 3 + xOffset - 4, // -2 to fine-tune the position
+                xAxis: this.xAxis + this.width / 3 + xOffset - 4, // -4 to fine-tune the position
                 yAxis: this.yAxis + this.height / 3 + yOffset - 7,
                 speed: bulletSpeed,
                 height: 5,
