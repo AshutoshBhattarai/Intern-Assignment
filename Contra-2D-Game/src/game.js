@@ -17,6 +17,7 @@ let scoreMultiplier;
 let gameMap;
 let enemiesArray;
 let turretsArray;
+let explosionArray;
 let player;
 let powerupArray;
 let powerupBlock;
@@ -32,6 +33,7 @@ function init() {
     playerBullets = [];
     enemyBullets = [];
     powerupArray = [];
+    explosionArray = [];
     playerLastBullet = 0;
     enemyLastBullet = 0;
     enemyBulletCount = 0;
@@ -48,22 +50,21 @@ function init() {
     player = new Player(PLAYER_INITIAL_SPAWN_X, PLAYER_INITIAL_SPAWN_Y, ctx, gameMap.collisionBlocks);
 }
 function render() {
-    if (enemyBullets.length == 0 && enemyBulletCount == 3) {
+    if (enemyBullets.length == 0 && enemyBulletCount == 2) {
         enemyBulletCount = 0;
     }
-
     if (player.xAxis > gameMap.width) {
-        if (!turretsArray.length > 0 && !enemiesArray.length > 0) {
-            if (mapIndex >= MAP_SECTION_ARRAY.length - 1) {
-                mapIndex = getRandomMapIndex(3, 6);
-            }
-            mapIndex++;
-            increaseScoreOnDistance();
-            updateGameMap();
+        // if (!turretsArray.length > 0 && !enemiesArray.length > 0) {
+        if (mapIndex >= MAP_SECTION_ARRAY.length - 1) {
+            mapIndex = getRandomMapIndex(3, 6);
         }
-        else {
-            player.xAxis = CANVAS_WIDTH - player.width;
-        }
+        mapIndex++;
+        increaseScoreOnDistance();
+        updateGameMap();
+        // }
+        // else {
+        //player.xAxis = CANVAS_WIDTH - player.width;
+        // }
     }
     powerupArray.forEach((power) => {
         if (power != "") {
@@ -71,6 +72,13 @@ function render() {
             power.update(TILE_SIZE * 6);
         }
     });
+    explosionArray.forEach((explosion) => {
+        explosion.draw(ctx);
+        explosion.update();
+        if (explosion.removeExplosion) {
+            explosionArray.splice(explosionArray.indexOf(explosion), 1);
+        }
+    })
 
     drawGameMap();
     updateEnemies();
@@ -81,6 +89,9 @@ function render() {
     detectMovement();
     if (!player.isSpawning) {
         checkPlayerCollisions();
+    }
+    if (player.hasSpecialBullet) {
+        showSpecialMove()
     }
     checkEnemyBulletCollision();
     turretBulletCollision();
@@ -122,7 +133,7 @@ function drawGameMap() {
 function updateEnemies() {
     enemiesArray.forEach(enemy => {
         enemy.draw(ctx);
-        enemy.update();
+        enemy.update(player);
         if (enemy.canShoot && checkPlayerInProximity(enemy)) {
             enemyShoot(getEnemyShootingDirection(enemy, player), enemy);
         }
@@ -196,7 +207,12 @@ function detectMovement() {
 }
 
 function shootBullet(xAxis, yAxis, direction, from) {
-    const bullet = new Bullet(xAxis, yAxis, direction, from);
+    let isSpecialBullet = false;
+    if (player.hasSpecialBullet && inputs.special) {
+        isSpecialBullet = true;
+        player.specialBulletCount -= 1;
+    }
+    const bullet = new Bullet(xAxis, yAxis, direction, from, isSpecialBullet);
     if (from === PLAYER_ID) { playerBullets.push(bullet); }
     if (from === ENEMY_SOLDIER) {
         if (enemyBulletCount < 3) {
@@ -228,11 +244,17 @@ function checkEnemyBulletCollision() {
         playerBullets.forEach((bullet, bulletIndex) => {
             if (bullet.from == PLAYER_ID) {
                 if (detectRectCollision(enemy, bullet)) {
+                    if (bullet.isSpecial) {
+                        createExplosionEffect(bullet.xAxis, bullet.yAxis, EXPLOSION_SPECIAL);
+                    }
                     enemyHitSoundEffect();
                     playerBullets.splice(bulletIndex, 1);
                     increaseScoreOnHit();
-                    enemy.health--;
-                    if (enemy.health === 0) {
+                    enemy.health -= bullet.damage;
+                    if (enemy.health <= 0) {
+                        if (!bullet.isSpecial) {
+                            createExplosionEffect(enemy.xAxis, enemy.yAxis, EXPLOSION_NORMAL);
+                        }
                         increaseScoreOnEnemyKilled(enemy);
                         enemiesArray.splice(enemyIndex, 1);
                     }
@@ -245,14 +267,21 @@ function turretBulletCollision() {
     turretsArray.forEach((turret, index) => {
         playerBullets.forEach((bullet, bulletIndex) => {
             if (detectRectCollision(turret, bullet)) {
-                if (turret.health === 0) {
+                if (bullet.isSpecial) {
+                    createExplosionEffect(bullet.xAxis, bullet.yAxis, EXPLOSION_SPECIAL);
+                }
+                if (turret.health <= 0) {
+                    createExplosionEffect(turret.xAxis, turret.yAxis, EXPLOSION_SPECIAL);
                     increaseScoreOnTurretDestroyed()
                     turretsArray.splice(index, 1);
                 }
                 else {
+                    if (!bullet.isSpecial) {
+                        createExplosionEffect(bullet.xAxis, bullet.yAxis, EXPLOSION_NORMAL);
+                    }
                     playAudio(gameAudios.metalHit)
                     increaseScoreOnHit();
-                    turret.health--;
+                    turret.health -= bullet.damage;
                     playerBullets.splice(bulletIndex, 1);
 
                 }
@@ -378,11 +407,24 @@ function displayPlayerHealthState(healthLeft) {
         ctx.drawImage(image, x, y, width, height, i * 20, 50, 50, 50);
     }
 }
+function showSpecialMove() {
+    let image = new Image();
+    // Destructure the properties x, y, height, and width from the healthDisplaySprite object
+    let { x, y, height, width } = powerupSprite.specialMove;
+    // Set the source of the image to the specified URL
+    image.src = './assets/images/Contra-Extras.gif';
+    let gap = 50;
+    for (let i = 1; i <= player.specialBulletCount; i++) {
+        ctx.drawImage(image, x, y, width, height, CANVAS_WIDTH - gap, 50, 50, 50);
+        gap += 50;
+    }
+}
 function displayPlayerScore() {
     ctx.font = "20px VT323";
     ctx.fillStyle = "white"
     ctx.fillText("Score: " + score, 20, 50);
 }
+
 
 function checkPowerUpCollision(player) {
     powerupArray.forEach((power, index) => {
@@ -393,6 +435,10 @@ function checkPowerUpCollision(player) {
             }
             if (power.type == POWERUP_MULTIPLIER) {
                 score *= Math.ceil(difficulty == DIFFICULTY_EASY ? 1.25 : scoreMultiplier);
+            }
+            if (power.type == POWERUP_SPECIAL) {
+                player.hasSpecialBullet = true;
+                player.specialBulletCount++;
             }
             powerupArray.splice(index, 1);
         }
@@ -406,6 +452,7 @@ function respawnPlayerAfterHit() {
     player.playerHit();
     player.playerReSpawn(x, y);
 }
+
 /* -------------------------------------------------------------------------- */
 /*                             Score Manipulation                             */
 /* -------------------------------------------------------------------------- */
@@ -445,31 +492,49 @@ function drawPowerUpBlock() {
     }
 }
 function checkBulletPowerUpBlockCollision() {
-    const randomPowerup = Math.round(generateRandomNumber(1, 3)) % 2 == 0 ? POWERUP_HEALTH : POWERUP_MULTIPLIER;
-    const generatePowerUp = Math.round(generateRandomNumber(1, 2)) % 2 == 0 ? true : false;
+    const randomPowerUp = Math.round(generateRandomNumber(1, 5));
+    const shouldGeneratePowerUp = Math.round(generateRandomNumber(1, 2)) % 2 === 0;
+    let powerUp;
+
+    if (randomPowerUp < 2) {
+        powerUp = POWERUP_HEALTH;
+    } else if (randomPowerUp < 4) {
+        powerUp = POWERUP_MULTIPLIER;
+    } else {
+        powerUp = POWERUP_SPECIAL;
+    }
+
     playerBullets.forEach((bullet, index) => {
         if (powerupBlock.isOpen && detectRectCollision(bullet, powerupBlock)) {
-            playAudio(gameAudios.metalHit)
+            playAudio(gameAudios.metalHit);
             playerBullets.splice(index, 1);
             powerupBlock.hit--;
-            if (powerupBlock.hit == 0) {
-                if ((difficulty == DIFFICULTY_HARD || difficulty == DIFFICULTY_MEDIUM) && !generatePowerUp) {
+
+            if (powerupBlock.hit === 0) {
+                if ((difficulty === DIFFICULTY_HARD || difficulty === DIFFICULTY_MEDIUM) && !shouldGeneratePowerUp) {
                     powerupArray.push("");
+                } else {
+                    powerupArray.push(new Powerups(powerupBlock.xAxis + TILE_SIZE, powerupBlock.yAxis, POWERUP_SPECIAL));
                 }
-                else powerupArray.push(new Powerups(powerupBlock.xAxis + TILE_SIZE, powerupBlock.yAxis, randomPowerup));
             }
         }
-    })
+    });
 }
 
 function upgradeDifficulty() {
-    if (difficulty == DIFFICULTY_EASY && score >= 5000) {
+    const EASY_THRESHOLD = 10000;
+    const MEDIUM_THRESHOLD = 20000;
+    if (difficulty === DIFFICULTY_EASY && score >= EASY_THRESHOLD) {
         difficulty = DIFFICULTY_MEDIUM;
         localStorage.setItem('difficulty', difficulty);
-    }
-    else if (difficulty == DIFFICULTY_MEDIUM && score >= 20000) {
+    } else if (difficulty === DIFFICULTY_MEDIUM && score >= MEDIUM_THRESHOLD) {
         difficulty = DIFFICULTY_HARD;
         localStorage.setItem('difficulty', difficulty);
     }
+}
+
+function createExplosionEffect(x, y, type) {
+    const explosion = new Explosion(x, y, type);
+    explosionArray.push(explosion);
 }
 
