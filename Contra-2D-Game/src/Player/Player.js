@@ -14,7 +14,7 @@ class Player {
         this.inGround = false;
         this.inWater = false;
         this.hasSpecialBullet = false;
-        this.specialBulletCount = 4;
+        this.specialBulletCount = 0;
         this.facing = DIRECTION_RIGHT;
         this.respawnFlicker = 0;
         this.actions = runningRight[0];
