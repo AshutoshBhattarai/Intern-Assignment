@@ -1,31 +1,31 @@
 class Turret {
-    constructor(xAxis, yAxis) {
-        this.xAxis = xAxis;
-        this.yAxis = yAxis;
-        this.angle = 0;
-        this.health = 5;
-        this.height = TILE_SIZE * 2;
-        this.width = TILE_SIZE * 2;
-        this.lastBulletTime = 0;
-        this.bulletSpeed = 2;
-        this.bullets = [];
-        this.bulletBurst = 0;
-        this.burstLimit = 2;
-        this.bulletInitialX = this.xAxis;
-        this.bulletInitialY = this.yAxis;
-        this.isOpen = false;
-        this.animationTimer = 0;
-        this.action = turretSprites.left;
-        this.turretImage = new Image();
-        this.bulletImage = new Image();
-        this.turretImage.src = './assets/images/Contra-Tanks.gif'
-        this.bulletImage.src = './assets/images/Contra-Extras.gif'
-        if(difficulty == DIFFICULTY_MEDIUM || difficulty == DIFFICULTY_HARD)
-        {
-            this.bulletSpeed = difficulty == DIFFICULTY_MEDIUM ? 3 : 4;
-            this.burstLimit = difficulty == DIFFICULTY_MEDIUM ? 3 : 4;
-        }
+constructor(xAxis, yAxis) {
+    this.xAxis = xAxis;
+    this.yAxis = yAxis;
+    this.angle = 0;
+    this.health = 5;
+    this.height = TILE_SIZE * 2;
+    this.width = TILE_SIZE * 2;
+    this.lastBulletTime = 0;
+    this.bulletSpeed = 2;
+    this.bullets = [];
+    this.bulletBurst = 0;
+    this.burstLimit = 2;
+    this.bulletInitialX = this.xAxis;
+    this.bulletInitialY = this.yAxis;
+    this.isOpen = false;
+    this.animationTimer = 0;
+    this.action = turretSprites.left;
+    this.turretImage = new Image();
+    this.bulletImage = new Image();
+    this.turretImage.src = './assets/images/Contra-Tanks.gif'
+    this.bulletImage.src = './assets/images/Contra-Extras.gif'
+    if(difficulty == DIFFICULTY_MEDIUM || difficulty == DIFFICULTY_HARD)
+    {
+        this.bulletSpeed = difficulty == DIFFICULTY_MEDIUM ? 3 : 4;
+        this.burstLimit = difficulty == DIFFICULTY_MEDIUM ? 3 : 4;
     }
+}
 
     draw(ctx) {
         this.#findDirection(this.angle)
