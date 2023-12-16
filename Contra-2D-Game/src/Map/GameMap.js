@@ -25,8 +25,10 @@ class GameMap {
         background.src = './assets/images/NES - Contra - Level 1.png';
         // Once the background image is loaded, draw it on the canvas
         background.onload = () => {
+            this.ctx.fillStyle = "black";
+            this.ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
             // Draw the background image on the canvas with the specified coordinates and dimensions
-            this.ctx.drawImage(background, x, y, width, height, this.xAxis, this.yAxis, 1000, 600);
+            this.ctx.drawImage(background, x, y, width, height, this.xAxis, this.yAxis, CANVAS_WIDTH, CANVAS_HEIGHT);
         }
     }
     createBlocksArray() {

@@ -24,7 +24,7 @@ let gameAudio;
 /* ------ Initialize the game variables to their initial/default values ----- */
 function init() {
     // Set the initial map index/section
-    mapIndex = 0;
+    mapIndex = 6;
     // Play the game music
     gameAudio = new Audio(gameAudios.gameMusic);
     gameAudio.play();
@@ -59,6 +59,7 @@ function init() {
     player = new Player(PLAYER_INITIAL_SPAWN_X, PLAYER_INITIAL_SPAWN_Y, ctx, gameMap.collisionBlocks);
 }
 function render() {
+    gameMap.draw();
     // Check if player is out of bounds
     if (player.xAxis > gameMap.width) {
         // Check if there are no turrets and enemies
@@ -93,8 +94,7 @@ function render() {
         }
     });
 
-    // Draw game map and update enemies
-    gameMap.draw();
+    // Update enemies
     updateEnemies();
 
     // Draw powerup block, player, and update bullets
