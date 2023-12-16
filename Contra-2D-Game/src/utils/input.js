@@ -7,6 +7,7 @@ const inputs = {
     jump: false,
     space: false,
     pause: false,
+    special: false,
 }
 
 window.onkeydown = (event) => {
@@ -34,6 +35,9 @@ window.onkeydown = (event) => {
             break;
         case 'Escape':
             inputs.pause = true;
+            break;
+        case 'c':
+            inputs.special = true;
             break;
     }
 }
@@ -63,6 +67,9 @@ window.onkeyup = (event) => {
             break;
         case 'Escape':
             inputs.pause = false;
+            break;
+        case 'c':
+            inputs.special = false;
             break;
     }
 }
