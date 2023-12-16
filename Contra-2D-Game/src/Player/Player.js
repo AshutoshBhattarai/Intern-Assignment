@@ -274,7 +274,7 @@ class Player {
             }
             else {
                 jumpFrame++;
-                if (jumpFrame >= jumpingLeft.length - 1) {
+                if (jumpFrame >= jumpingSprite.length - 1) {
                     jumpFrame = 0;
                 }
                 else this.actions = jumpingSprite[jumpFrame];
