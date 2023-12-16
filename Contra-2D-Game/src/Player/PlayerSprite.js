@@ -1,39 +1,39 @@
 const runningRight = [
     {
-        x: 140,
+        x: 142,
         y: 16,
-        height: 36,
-        width: 30
+        height: 39,
+        width: 27
     },
     {
-        x: 145,
+        x: 144,
         y: 132,
-        height: 36,
-        width: 24
+        height: 39,
+        width: 22
     },
     {
         x: 168,
-        y: 132,
-        height: 36,
+        y: 130,
+        height: 39,
         width: 20
     },
     {
-        x: 192,
-        y: 132,
-        height: 36,
-        width: 22
-    },
-    {
-        x: 219,
-        y: 132,
-        height: 36,
-        width: 22
-    },
-    {
-        x: 240,
-        y: 132,
-        height: 36,
+        x: 189,
+        y: 130,
+        height: 39,
         width: 24
+    },
+    {
+        x: 218,
+        y: 131,
+        height: 36,
+        width: 23
+    },
+    {
+        x: 241,
+        y: 130,
+        height: 39,
+        width: 23
     },
 ]
 
@@ -47,36 +47,36 @@ const runningLeft = [
     {
         x: 113,
         y: 132,
-        height: 36,
-        width: 24
+        height: 38,
+        width: 23
     },
     {
-        x: 90,
+        x: 92,
         y: 132,
-        height: 36,
-        width: 24
+        height: 37,
+        width: 19
     },
     {
-        x: 65,
+        x: 67,
         y: 132,
-        height: 36,
-        width: 24
+        height: 37,
+        width: 23
     },
     {
         x: 40,
-        y: 132,
-        height: 36,
-        width: 24
+        y: 130,
+        height: 39,
+        width: 23
     },
     {
-        x: 16,
-        y: 132,
-        height: 36,
-        width: 24
+        x: 18,
+        y: 128,
+        height: 41,
+        width: 22
     },
 ]
 
-const jumpingLeft = [
+const jumpingSprite = [
     {
         x: 180,
         y: 172,
@@ -104,16 +104,16 @@ const jumpingLeft = [
 ]
 const playerPronePosition = {
     right: {
-        x: 146,
-        y: 170,
-        height: 20,
-        width: 34
+        x: 144,
+        y: 174,
+        height: 18,
+        width: 39
     },
     left: {
-        x: 102,
-        y: 170,
-        height: 20,
-        width: 33
+        x: 99,
+        y: 174,
+        height: 18,
+        width: 39
     }
 }
 
@@ -153,31 +153,31 @@ const swimming = [
 const playerTargetUp = {
     left: [
         {
-            x: 36,
-            y: 11,
-            height: 40,
-            width: 24,
+            x: 58,
+            y: 6,
+            height: 47,
+            width: 21,
         },
         {
-            x: 112,
-            y: 55,
-            height: 36,
-            width: 24,
+            x: 117,
+            y: 53,
+            height: 40,
+            width: 21,
         }
     ],
     right: [
         {
-            x: 198,
-            y: 11,
-            height: 40,
-            width: 22,
+            x: 202,
+            y: 4,
+            height: 50,
+            width: 18,
         }
         ,
         {
-            x: 140,
-            y: 55,
-            height: 36,
-            width: 24,
+            x: 142,
+            y: 53,
+            height: 40,
+            width: 21,
         }
     ]
 }
@@ -185,14 +185,14 @@ const playerTargetDown = {
     left: {
         x: 113,
         y: 93,
-        height: 36,
-        width: 24,
+        height: 37,
+        width: 25,
     },
     right: {
-        x: 136,
+        x: 141,
         y: 93,
-        height: 36,
-        width: 30,
+        height: 37,
+        width: 25,
     }
 }
 

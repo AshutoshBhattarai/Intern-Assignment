@@ -266,7 +266,7 @@ class Player {
     }
     animateJump() {
         let jumpFrame = 0;
-        this.actions = jumpingLeft[jumpFrame];
+        this.actions = jumpingSprite[jumpFrame];
         const jumpAnimationInterval = setInterval(() => {
             if (!this.jumping) {
                 clearInterval(jumpAnimationInterval);
@@ -277,7 +277,7 @@ class Player {
                 if (jumpFrame >= jumpingLeft.length - 1) {
                     jumpFrame = 0;
                 }
-                else this.actions = jumpingLeft[jumpFrame];
+                else this.actions = jumpingSprite[jumpFrame];
             }
         }, 50);
     }
