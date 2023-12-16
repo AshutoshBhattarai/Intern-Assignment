@@ -23,7 +23,40 @@ const bulletSprite = {
         y: 502,
         height: 3,
         width: 3
-    }
+    },
+    specialRay: {
+        x: 218,
+        y: 494,
+        height: 14,
+        width: 19
+    },
+    specialFire: [
+        {
+            x: 195,
+            y: 459,
+            height: 19,
+            width: 20
+        },
+        {
+            x: 214,
+            y: 459,
+            height: 19,
+            width: 19
+        },
+        {
+            x: 233,
+            y: 459,
+            height: 19,
+            width: 18
+        },
+        {
+            x: 251,
+            y: 459,
+            height: 19,
+            width: 20
+        },
+    ]
+
 }
 const powerupSprite = {
     extraHealth: {
@@ -38,34 +71,53 @@ const powerupSprite = {
         height: 22,
         width: 27
     },
-    shield: {
+    specialMove: {
         x: 182,
-        y: 143,
+        y: 141,
         height: 22,
         width: 27
     },
 }
-const explosion = {
-    big: {
+const cloudExplosionSprite = [
+    {
         x: 156,
-        y: 504,
-        height: 32,
-        width: 32
-    }
-    ,
-    medium: {
-        x: 189,
-        y: 506,
-        height: 27,
-        width: 23
+        y: 511,
+        height: 36,
+        width: 36,
     },
-    small: {
-        x: 217,
-        y: 518,
-        height: 18,
-        width: 15
+    {
+        x: 190,
+        y: 514,
+        height: 31,
+        width: 27,
+    },
+    {
+        x: 216,
+        y: 523,
+        height: 23,
+        width: 19
     }
-}
+]
+const normalExplosionSprite = [
+    {
+        x: 235,
+        y: 517,
+        height: 28,
+        width: 26
+    },
+    {
+        x: 261,
+        y: 514,
+        height: 32,
+        width: 31
+    },
+    {
+        x: 291,
+        y: 510,
+        height: 36,
+        width: 35
+    },
+]
 
 const blockPowerupSprite = [
     {
