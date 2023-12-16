@@ -8,11 +8,7 @@ const ctx = canvas.getContext('2d');
 let mapIndex;
 let difficulty;
 let playerBullets;
-let enemyBullets;
 let playerLastBullet;
-let enemyLastBullet;
-let enemyBulletCount;
-let enemyBulletLimit;
 let score;
 let scoreMultiplier;
 let gameMap;
@@ -32,13 +28,9 @@ function init() {
 
     difficulty = localStorage.getItem('difficulty') || DIFFICULTY_EASY;
     playerBullets = [];
-    enemyBullets = [];
     powerupArray = [];
     explosionArray = [];
     playerLastBullet = 0;
-    enemyLastBullet = 0;
-    enemyBulletCount = 0;
-    enemyBulletLimit = 2;
 
     score = 0;
     scoreMultiplier = difficulty === DIFFICULTY_MEDIUM ? SCORE_MULTIPLIER_MEDIUM : SCORE_MULTIPLIER_HARD;
@@ -52,54 +44,73 @@ function init() {
     player = new Player(PLAYER_INITIAL_SPAWN_X, PLAYER_INITIAL_SPAWN_Y, ctx, gameMap.collisionBlocks);
 }
 function render() {
-    if (enemyBullets.length == 0 && enemyBulletCount == enemyBulletLimit) {
-        enemyBulletCount = 0;
-    }
+    // Reset enemy bullet count if there are no enemy bullets
+
+
+    // Check if player is out of bounds
     if (player.xAxis > gameMap.width) {
-        // if (!turretsArray.length > 0 && !enemiesArray.length > 0) {
-        if (mapIndex >= MAP_SECTION_ARRAY.length - 1) {
-            mapIndex = getRandomMapIndex(3, 6);
+        // Check if there are no turrets and enemies
+        if (turretsArray.length === 0 && enemiesArray.length === 0) {
+            // Check if mapIndex is the last index
+            if (mapIndex >= MAP_SECTION_ARRAY.length - 1) {
+                mapIndex = Math.round(generateRandomNumber(3, 6));
+            }
+            mapIndex++;
+            increaseScoreOnDistance();
+            updateGameMap();
+        } else {
+            // Set player's x-axis position to the right edge of the canvas
+            player.xAxis = CANVAS_WIDTH - player.width;
         }
-        mapIndex++;
-        increaseScoreOnDistance();
-        updateGameMap();
-        // }
-        // else {
-        //player.xAxis = CANVAS_WIDTH - player.width;
-        // }
     }
+
+    // Draw and update powerups
     powerupArray.forEach((power) => {
-        if (power != "") {
+        if (power !== "") {
             power.draw(ctx);
             power.update(TILE_SIZE * 6);
         }
     });
+
+    // Draw and update explosions, remove if necessary
     explosionArray.forEach((explosion) => {
         explosion.draw(ctx);
         explosion.update();
         if (explosion.removeExplosion) {
             explosionArray.splice(explosionArray.indexOf(explosion), 1);
         }
-    })
+    });
 
-    drawGameMap();
+    // Draw game map and update enemies
+    gameMap.draw();
     updateEnemies();
+
+    // Draw powerup block, player, and update bullets
     drawPowerUpBlock();
     playerRender();
     updateBullets(playerBullets);
-    updateBullets(enemyBullets);
+
+    // Detect player movement and check collisions
     detectMovement();
     if (!player.isSpawning) {
         checkPlayerCollisions();
     }
+
+    // Show special move if player has special bullets
     if (player.hasSpecialBullet) {
-        showSpecialMove()
+        showSpecialMove();
     }
+
+    // Check enemy bullet and turret bullet collisions
     checkEnemyBulletCollision();
     turretBulletCollision();
+
+    // Check powerup collision, display player health state and score
     checkPowerUpCollision(player);
     displayPlayerHealthState(player.lives);
     displayPlayerScore();
+
+    // Upgrade difficulty and check if game is over
     upgradeDifficulty();
     const gameAnimation = requestAnimationFrame(render);
     if (isGameOver()) {
@@ -107,15 +118,10 @@ function render() {
         cancelAnimationFrame(gameAnimation);
         displayGameOverScreen();
     }
-
-    /* ------------------ Draw Grid lines for testing Purposes ------------------ */
-    //girdDraw(ctx, MAP_SECTION_ARRAY[mapIndex])
-    /* ----------------------------------- -- ----------------------------------- */
 }
 
 function updateGameMap() {
     playerBullets = [];
-    enemyBullets = [];
     powerupArray = [];
     gameMap.enemies = [];
     gameMap = new GameMap(0, 0, ctx, mapIndex);
@@ -128,16 +134,14 @@ function updateGameMap() {
     player.collisionBlocks = gameMap.collisionBlocks;
 }
 
-function drawGameMap() {
-    gameMap.draw();
-}
 
 function updateEnemies() {
     enemiesArray.forEach(enemy => {
         enemy.draw(ctx);
         enemy.update(player);
-        if (enemy.canShoot && checkPlayerInProximity(enemy)) {
-            enemy.shoot(player);
+        if (enemy.canShoot) {
+            updateBullets(enemy.bullets);
+            if (checkPlayerInProximity(enemy)) enemy.shoot(player);
         }
     });
     turretsArray.forEach(turret => {
@@ -158,10 +162,6 @@ function checkPlayerCollisions() {
 
 function getPlayerLastPosY() {
     return player.yAxis;
-}
-
-function getRandomMapIndex(min, max) {
-    return Math.floor(generateRandomNumber(min, max));
 }
 
 function playerRender() {
@@ -208,20 +208,15 @@ function detectMovement() {
     }
 }
 
-function shootBullet(xAxis, yAxis, direction, from) {
+function shootBullet(xAxis, yAxis, direction) {
     let isSpecialBullet = false;
     if (player.hasSpecialBullet && inputs.special) {
         isSpecialBullet = true;
         player.specialBulletCount -= 1;
     }
-    const bullet = new Bullet(xAxis, yAxis, direction, from, isSpecialBullet);
-    if (from === PLAYER_ID) { playerBullets.push(bullet); }
-    if (from === ENEMY_SOLDIER) {
-        if (enemyBulletCount < enemyBulletLimit) {
-            enemyBulletCount++;
-            enemyBullets.push(bullet);
-        }
-    }
+    const bullet = new Bullet(xAxis, yAxis, direction, PLAYER_ID, isSpecialBullet, playerBullets);
+    playerBullets.push(bullet);
+
 }
 function updateBullets(bulletsArray) {
     for (let i = bulletsArray.length - 1; i >= 0; i--) {
@@ -266,37 +261,39 @@ function checkEnemyBulletCollision() {
     })
 }
 function turretBulletCollision() {
-    turretsArray.forEach((turret, index) => {
+    turretsArray.forEach((turret, turretIndex) => {
         playerBullets.forEach((bullet, bulletIndex) => {
             if (detectRectCollision(turret, bullet)) {
                 if (bullet.isSpecial) {
                     createExplosionEffect(bullet.xAxis, bullet.yAxis, EXPLOSION_SPECIAL);
-                }
-                if (!bullet.isSpecial) {
+                } else {
                     createExplosionEffect(bullet.xAxis, bullet.yAxis, EXPLOSION_NORMAL);
                 }
-                playAudio(gameAudios.metalHit)
+                playAudio(gameAudios.metalHit);
                 increaseScoreOnHit();
                 turret.health -= bullet.damage;
                 playerBullets.splice(bulletIndex, 1);
                 if (turret.health <= 0) {
                     createExplosionEffect(turret.xAxis, turret.yAxis, EXPLOSION_SPECIAL);
-                    increaseScoreOnTurretDestroyed()
-                    turretsArray.splice(index, 1);
+                    increaseScoreOnTurretDestroyed();
+                    turretsArray.splice(turretIndex, 1);
                 }
             }
-        })
-    })
+        });
+    });
 }
 function checkPlayerBulletCollision() {
-    enemyBullets.forEach((bullet, bulletIndex) => {
-        if (detectRectCollision(player, bullet)) {
-            enemyBullets.splice(bulletIndex, 1);
-            respawnPlayerAfterHit()
+    enemiesArray.forEach(enemy => {
+        if (enemy.canShoot) {
+            enemy.bullets.forEach((bullet, bulletIndex) => {
+                if (detectRectCollision(bullet, player)) {
+                    enemy.bullets.splice(bulletIndex, 1);
+                    respawnPlayerAfterHit();
+                }
+            })
         }
     })
 }
-
 
 function checkPlayerInProximity(enemy) {
     // Calculating the distance between player and enemy using the distance formula
@@ -412,13 +409,12 @@ function checkBulletPowerUpBlockCollision() {
     const randomPowerUp = Math.round(generateRandomNumber(1, 5));
     const shouldGeneratePowerUp = Math.round(generateRandomNumber(1, 2)) % 2 === 0;
     let powerUp;
-
     if (randomPowerUp < 2) {
-        powerUp = POWERUP_HEALTH;
+        powerUp = POWERUP_SPECIAL;
     } else if (randomPowerUp < 4) {
         powerUp = POWERUP_MULTIPLIER;
     } else {
-        powerUp = POWERUP_SPECIAL;
+        powerUp = POWERUP_HEALTH;
     }
 
     playerBullets.forEach((bullet, index) => {
@@ -431,7 +427,7 @@ function checkBulletPowerUpBlockCollision() {
                 if ((difficulty === DIFFICULTY_HARD || difficulty === DIFFICULTY_MEDIUM) && !shouldGeneratePowerUp) {
                     powerupArray.push("");
                 } else {
-                    powerupArray.push(new Powerups(powerupBlock.xAxis + TILE_SIZE, powerupBlock.yAxis, POWERUP_SPECIAL));
+                    powerupArray.push(new Powerups(powerupBlock.xAxis + TILE_SIZE, powerupBlock.yAxis, powerUp));
                 }
             }
         }

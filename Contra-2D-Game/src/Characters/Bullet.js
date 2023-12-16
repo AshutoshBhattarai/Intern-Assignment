@@ -1,10 +1,11 @@
 class Bullet {
-    constructor(xAxis, yAxis, direction, from, isSpecial) {
+    constructor(xAxis, yAxis, direction, from, isSpecial, bulletArray) {
         this.xAxis = xAxis;
         this.yAxis = yAxis;
         this.direction = direction;
         this.isSpecial = isSpecial;
         this.from = from;
+        this.bulletArray = bulletArray || [];
         this.width = 5;
         this.height = 5;
         this.animationTimer = 0;
@@ -31,9 +32,9 @@ class Bullet {
 
     update() {
         this.basicBulletMovement();
-        if(this.isSpecial) this.animateSpecialBullet();
+        if (this.isSpecial) this.animateSpecialBullet();
         if (this.isOutOfBounds()) {
-            this.removeBullet(this.from);
+            this.removeBullet(this.bulletArray);
         }
     }
     basicBulletMovement() {
@@ -74,18 +75,10 @@ class Bullet {
         const { width, height } = canvas;
         return xAxis > width || xAxis < 0 || yAxis > height - 40 || yAxis < 0;
     }
-    removeBullet(from) {
-        if (from === PLAYER_ID) {
-            const bulletIndex = playerBullets.indexOf(this);
-            if (bulletIndex !== -1) {
-                playerBullets.splice(bulletIndex, 1);
-            }
-        }
-        else {
-            const bulletIndex = enemyBullets.indexOf(this);
-            if (bulletIndex !== -1) {
-                enemyBullets.splice(bulletIndex, 1);
-            }
+    removeBullet(bulletArray) {
+        const bulletIndex = this.bulletArray.indexOf(this);
+        if (bulletIndex !== -1) {
+            this.bulletArray.splice(bulletIndex, 1);
         }
     }
     animateSpecialBullet() {

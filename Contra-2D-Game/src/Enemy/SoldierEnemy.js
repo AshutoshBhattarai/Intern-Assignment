@@ -3,6 +3,10 @@ class SoldierEnemy extends Enemy {
         super(xAxis, yAxis, collisionBlocks);
         this.health = 3;
         this.actions = gunEnemy.left;
+        this.bullets = [];
+        this.lastBullet = 0;
+        this.bulletCount = 0;
+        this.bulletLimit = 2;
     }
 
     draw(ctx) {
@@ -14,6 +18,7 @@ class SoldierEnemy extends Enemy {
         ctx.drawImage(this.enemyImage, x, y, width, height, this.xAxis, this.yAxis, this.width, this.height);
     }
     update() {
+
         this.yAxis += this.velY;
         this.checkVerticalCollisions();
         if (!this.inGround) {
@@ -21,11 +26,12 @@ class SoldierEnemy extends Enemy {
         }
     }
     shoot(player) {
+
         const direction = this.getEnemyShootingDirection(player);
         // Get the current time
         const currentTime = Date.now();
         // Check if enough time has passed since the enemy last shot a bullet
-        const canShoot = currentTime - enemyLastBullet > BULLET_COOLDOWN;
+        const canShoot = currentTime - this.lastBullet > BULLET_COOLDOWN;
         // Set the origin of the bullet to the enemy soldier
         const from = ENEMY_SOLDIER;
         // If enough time has passed, determine the position and direction of the bullet based on the given direction
@@ -61,9 +67,20 @@ class SoldierEnemy extends Enemy {
                 bulletDirection = DIRECTION_DOWN_RIGHT;
             }
             if (bulletDirection) {
-                shootBullet(bulletX, bulletY, bulletDirection, from);
-                enemyLastBullet = currentTime;
+                this.shootBullet(bulletX, bulletY, bulletDirection);
+                this.lastBullet = currentTime;
             }
+        }
+    }
+    shootBullet(x, y, direction) {
+        console.log(this.bullets);
+        if (this.bullets.length === 0 && this.bulletCount === this.bulletLimit) {
+            this.bulletCount = 0;
+        }
+        const bullet = new Bullet(x, y, direction, ENEMY_SOLDIER, false,this.bullets);
+        if (this.bulletCount < this.bulletLimit) {
+            this.bulletCount++;
+            this.bullets.push(bullet);
         }
     }
     getEnemyShootingDirection(player) {
@@ -107,3 +124,4 @@ class SoldierEnemy extends Enemy {
         }
     }
 }
+
