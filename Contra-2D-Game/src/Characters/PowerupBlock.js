@@ -8,7 +8,7 @@ class PowerupBlock {
         this.height = TILE_SIZE * 2;
         this.width = TILE_SIZE * 2;
         this.image = new Image();
-        this.image.src = '../../assets/images/Contra-Tanks.gif';
+        this.image.src = './assets/images/Contra-Tanks.gif';
         this.frame = 0;
         this.state = blockPowerupSprite[this.frame];
     }
