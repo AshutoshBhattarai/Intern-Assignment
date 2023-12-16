@@ -12,6 +12,7 @@ let enemyBullets;
 let playerLastBullet;
 let enemyLastBullet;
 let enemyBulletCount;
+let enemyBulletLimit;
 let score;
 let scoreMultiplier;
 let gameMap;
@@ -37,6 +38,7 @@ function init() {
     playerLastBullet = 0;
     enemyLastBullet = 0;
     enemyBulletCount = 0;
+    enemyBulletLimit = 2;
 
     score = 0;
     scoreMultiplier = difficulty === DIFFICULTY_MEDIUM ? SCORE_MULTIPLIER_MEDIUM : SCORE_MULTIPLIER_HARD;
@@ -50,7 +52,7 @@ function init() {
     player = new Player(PLAYER_INITIAL_SPAWN_X, PLAYER_INITIAL_SPAWN_Y, ctx, gameMap.collisionBlocks);
 }
 function render() {
-    if (enemyBullets.length == 0 && enemyBulletCount == 2) {
+    if (enemyBullets.length == 0 && enemyBulletCount == enemyBulletLimit) {
         enemyBulletCount = 0;
     }
     if (player.xAxis > gameMap.width) {
@@ -135,7 +137,7 @@ function updateEnemies() {
         enemy.draw(ctx);
         enemy.update(player);
         if (enemy.canShoot && checkPlayerInProximity(enemy)) {
-            enemyShoot(getEnemyShootingDirection(enemy, player), enemy);
+            enemy.shoot(player);
         }
     });
     turretsArray.forEach(turret => {
@@ -215,7 +217,7 @@ function shootBullet(xAxis, yAxis, direction, from) {
     const bullet = new Bullet(xAxis, yAxis, direction, from, isSpecialBullet);
     if (from === PLAYER_ID) { playerBullets.push(bullet); }
     if (from === ENEMY_SOLDIER) {
-        if (enemyBulletCount < 3) {
+        if (enemyBulletCount < enemyBulletLimit) {
             enemyBulletCount++;
             enemyBullets.push(bullet);
         }
@@ -270,20 +272,17 @@ function turretBulletCollision() {
                 if (bullet.isSpecial) {
                     createExplosionEffect(bullet.xAxis, bullet.yAxis, EXPLOSION_SPECIAL);
                 }
+                if (!bullet.isSpecial) {
+                    createExplosionEffect(bullet.xAxis, bullet.yAxis, EXPLOSION_NORMAL);
+                }
+                playAudio(gameAudios.metalHit)
+                increaseScoreOnHit();
+                turret.health -= bullet.damage;
+                playerBullets.splice(bulletIndex, 1);
                 if (turret.health <= 0) {
                     createExplosionEffect(turret.xAxis, turret.yAxis, EXPLOSION_SPECIAL);
                     increaseScoreOnTurretDestroyed()
                     turretsArray.splice(index, 1);
-                }
-                else {
-                    if (!bullet.isSpecial) {
-                        createExplosionEffect(bullet.xAxis, bullet.yAxis, EXPLOSION_NORMAL);
-                    }
-                    playAudio(gameAudios.metalHit)
-                    increaseScoreOnHit();
-                    turret.health -= bullet.damage;
-                    playerBullets.splice(bulletIndex, 1);
-
                 }
             }
         })
@@ -297,40 +296,7 @@ function checkPlayerBulletCollision() {
         }
     })
 }
-function getEnemyShootingDirection(enemy, player) {
-    if (player.xAxis < enemy.xAxis && player.yAxis < enemy.yAxis - PLAYER_HEIGHT) {
-        enemy.actions = gunEnemy.upLeft;
-        return DIRECTION_UP_LEFT;
-    }
-    else if (player.xAxis > enemy.xAxis && player.yAxis < enemy.yAxis - PLAYER_HEIGHT) {
-        enemy.actions = gunEnemy.upRight;
-        return DIRECTION_UP_RIGHT;
-    }
-    else if (player.xAxis > enemy.xAxis && player.yAxis > enemy.yAxis + PLAYER_HEIGHT) {
-        enemy.actions = gunEnemy.downRight;
-        return DIRECTION_DOWN_RIGHT;
-    }
-    else if (player.yAxis > enemy.yAxis + PLAYER_HEIGHT && player.xAxis < enemy.xAxis) {
-        enemy.actions = gunEnemy.downLeft;
-        return DIRECTION_DOWN_LEFT;
-    }
-    else if (player.xAxis < enemy.xAxis) {
-        enemy.actions = gunEnemy.left;
-        return DIRECTION_LEFT;
-    }
-    else if (player.yAxis < enemy.yAxis) {
-        enemy.actions = gunEnemy.up;
-        return DIRECTION_UP;
-    }
-    else if (player.xAxis > enemy.xAxis) {
-        enemy.actions = gunEnemy.right;
-        return DIRECTION_RIGHT;
-    }
-    else if (player.yAxis > enemy.yAxis) {
-        enemy.actions = gunEnemy.down;
-        return DIRECTION_DOWN;
-    }
-}
+
 
 function checkPlayerInProximity(enemy) {
     // Calculating the distance between player and enemy using the distance formula
@@ -344,55 +310,6 @@ function checkPlayerInProximity(enemy) {
         return false;
     }
 }
-
-
-function enemyShoot(direction, enemy) {
-    // Get the current time
-    const currentTime = Date.now();
-    // Check if enough time has passed since the enemy last shot a bullet
-    const canShoot = currentTime - enemyLastBullet > BULLET_COOLDOWN;
-    // Set the origin of the bullet to the enemy soldier
-    const from = ENEMY_SOLDIER;
-    // If enough time has passed, determine the position and direction of the bullet based on the given direction
-    if (canShoot) {
-        let bulletX, bulletY, bulletDirection;
-        if (direction === DIRECTION_LEFT) {
-            bulletX = enemy.xAxis;
-            bulletY = enemy.yAxis + enemy.height / 3;
-            bulletDirection = DIRECTION_LEFT;
-        } else if (direction === DIRECTION_RIGHT) {
-            bulletX = enemy.xAxis + PLAYER_WIDTH;
-            bulletY = enemy.yAxis + enemy.height / 3;
-            bulletDirection = DIRECTION_RIGHT;
-        } else if (direction === DIRECTION_UP) {
-            bulletX = enemy.xAxis + enemy.width / 2;
-            bulletY = enemy.yAxis;
-            bulletDirection = DIRECTION_UP;
-        } else if (direction === DIRECTION_UP_LEFT) {
-            bulletX = enemy.xAxis;
-            bulletY = enemy.yAxis;
-            bulletDirection = DIRECTION_UP_LEFT;
-        } else if (direction === DIRECTION_UP_RIGHT) {
-            bulletX = enemy.xAxis + enemy.width;
-            bulletY = enemy.yAxis;
-            bulletDirection = DIRECTION_UP_RIGHT;
-        } else if (direction === DIRECTION_DOWN_LEFT) {
-            bulletX = enemy.xAxis;
-            bulletY = enemy.yAxis + enemy.height / 2;
-            bulletDirection = DIRECTION_DOWN_LEFT;
-        } else if (direction === DIRECTION_DOWN_RIGHT) {
-            bulletX = enemy.xAxis + enemy.width;
-            bulletY = enemy.yAxis + enemy.height / 2;
-            bulletDirection = DIRECTION_DOWN_RIGHT;
-        }
-        // If a valid bullet direction is determined, shoot the bullet and update the last bullet time
-        if (bulletDirection) {
-            shootBullet(bulletX, bulletY, bulletDirection, from);
-            enemyLastBullet = currentTime;
-        }
-    }
-}
-
 function displayPlayerHealthState(healthLeft) {
     // Function to display the player's health state on the screen
     // Create a new Image object
