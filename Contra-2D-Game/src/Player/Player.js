@@ -7,20 +7,19 @@ class Player {
         this.ctx = ctx;
         this.velX = 0;
         this.velY = 0;
-        this.moving = false;
-        this.jumping = false;
+        this.isJumping = false;
         this.buttonPressCount = 0;
         this.animationTimer = 0;
         this.inGround = false;
         this.inWater = false;
         this.hasSpecialBullet = false;
         this.specialBulletCount = 0;
-        this.facing = DIRECTION_RIGHT;
+        this.isFacing = DIRECTION_RIGHT;
         this.respawnFlicker = 0;
         this.actions = runningRight[0];
         this.collisionBlocks = collisionBLocks;
         this.isSpawning = false;
-        this.lives = 3;
+        this.lives = difficulty == DIFFICULTY_EASY ? PLAYER_LIVES : (difficulty == DIFFICULTY_MEDIUM ? (PLAYER_LIVES - 1) : (PLAYER_LIVES - 2));
         this.playerImage = new Image();
         this.playerImage.src = './assets/images/ContraSheet1.gif'
     }
@@ -62,7 +61,7 @@ class Player {
     /* ---- Function to reset player's action based on current direction and state(in water or ground) ------ */
     resetActions() {
 
-        this.actions = this.inWater ? (this.facing === DIRECTION_LEFT ? swimming[0] : swimming[4]) : (this.facing === DIRECTION_LEFT ? runningLeft[0] : runningRight[0]);
+        this.actions = this.inWater ? (this.isFacing === DIRECTION_LEFT ? swimming[0] : swimming[4]) : (this.isFacing === DIRECTION_LEFT ? runningLeft[0] : runningRight[0]);
     }
     // Reset the player size to the default values
     resetPlayerSize() {
@@ -76,7 +75,7 @@ class Player {
         if (!this.inGround && !this.inWater) {
             this.applyGravity();
         }
-        if (!this.inGround && !this.inWater && !this.jumping) {
+        if (!this.inGround && !this.inWater && !this.isJumping) {
             this.resetPlayerSize();
         }
 
@@ -140,7 +139,7 @@ class Player {
         }
 
         // Handles going prone
-        if (!this.jumping && inputs.down && !(inputs.left || inputs.right)) {
+        if (!this.isJumping && inputs.down && !(inputs.left || inputs.right)) {
             this.stopMoving();
             this.goProne();
         }
@@ -150,7 +149,7 @@ class Player {
             this.animationTimer = 0;
             this.buttonPressCount = 0;
             this.stopMoving();
-            if (!this.jumping) this.resetActions();
+            if (!this.isJumping) this.resetActions();
         }
 
         // Set inGround to false if not in collision block
@@ -169,7 +168,7 @@ class Player {
     }
     aimUp(direction) {
         if (direction === undefined) {
-            this.actions = this.facing == DIRECTION_RIGHT ? playerTargetUp.right[0] : playerTargetUp.left[0]
+            this.actions = this.isFacing == DIRECTION_RIGHT ? playerTargetUp.right[0] : playerTargetUp.left[0]
         }
         else {
             this.actions = direction == DIRECTION_LEFT ? playerTargetUp.left[1] : playerTargetUp.right[1]
@@ -210,13 +209,13 @@ class Player {
         this.velX = this.velX < -4 ? -4 : this.velX;
 
         // Change the facing direction of the player to left
-        this.facing = DIRECTION_LEFT;
+        this.isFacing = DIRECTION_LEFT;
         // Check if the player is in water
         if (this.inWater) {
             // Set the player's actions to the swimming animation for left movement
             this.actions = swimming[1];
         } else {
-            if (!inputs.jump && !this.jumping) {
+            if (!inputs.jump && !this.isJumping) {
                 this.playerRunning(DIRECTION_LEFT);
             }
             // Call the playerRunning function to set the player's actions for left movement
@@ -225,7 +224,7 @@ class Player {
     moveRight() {
         // Increase the horizontal velocity of the player
         this.velX += SPEED;
-        if (!inputs.jump && !this.jumping) {
+        if (!inputs.jump && !this.isJumping) {
             this.animateMovement();
 
         }
@@ -235,14 +234,14 @@ class Player {
         this.velX = Math.min(this.velX, 4);
 
         // Set the player's facing direction to right
-        this.facing = DIRECTION_RIGHT;
+        this.isFacing = DIRECTION_RIGHT;
 
         // Check if the player is in water
         if (this.inWater) {
             // Set the player's action to swimming
             this.actions = swimming[3];
         } else {
-            if (!inputs.jump && !this.jumping) {
+            if (!inputs.jump && !this.isJumping) {
                 this.playerRunning(DIRECTION_RIGHT);
             }
             // Run the player's running animation for the right direction
@@ -253,9 +252,9 @@ class Player {
         this.velY += GRAVITY;
     }
     jump() {
-        this.jumping = true;
+        this.isJumping = true;
         this.inGround = false;
-        if (this.jumping) {
+        if (this.isJumping) {
             this.height = TILE_SIZE;
             this.width = TILE_SIZE;
             this.animateJump();
@@ -268,7 +267,7 @@ class Player {
         let jumpFrame = 0;
         this.actions = jumpingSprite[jumpFrame];
         const jumpAnimationInterval = setInterval(() => {
-            if (!this.jumping) {
+            if (!this.isJumping) {
                 clearInterval(jumpAnimationInterval);
                 this.resetActions();
             }
@@ -295,7 +294,7 @@ class Player {
         this.yAxis += 40;
         this.height = PLAYER_WIDTH;
         this.width = PLAYER_HEIGHT;
-        this.actions = this.facing == DIRECTION_LEFT ? left : right;
+        this.actions = this.isFacing == DIRECTION_LEFT ? left : right;
     }
     playerHit() {
         this.lives--;
@@ -340,7 +339,7 @@ class Player {
                         // Set the player to be on the ground, not in water and not jumping
                         this.inGround = true;
                         this.inWater = false;
-                        this.jumping = false;
+                        this.isJumping = false;
                     }
                     // Check if the block is water
                     else if (block.type === COLLISION_WATER) {
@@ -349,7 +348,7 @@ class Player {
                         // Position the player just above the water
                         this.yAxis = block.yAxis - 1;
                         // Set the player to be in water and not on the ground
-                        this.jumping = false;
+                        this.isJumping = false;
                         //this.inGround = false;
                         this.inWater = true;
                         // Adjust the player's height to be half of the normal height

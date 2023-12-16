@@ -1,3 +1,7 @@
+/* -------------------------------------------------------------------------- */
+/*                      Extra sprites objects and arrays                      */
+/* -------------------------------------------------------------------------- */
+// Has bullet, medal, explosions, powerups etc.
 const healthDisplaySprite = {
     x: 282,
     y: 264,

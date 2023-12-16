@@ -1,3 +1,9 @@
+/* -------------------------------------------------------------------------- */
+/*                               Map Sectioning                               */
+/* -------------------------------------------------------------------------- */
+// Contains sprite image coordiantes for each section of the map
+// Also contains the array of collision blocks for each section
+
 const mapBackgroundSprite = {
     section1: {
         x: 0,

@@ -19,23 +19,27 @@ class PowerupBlock {
 
     update(player) {
         const distance = Math.abs(player.xAxis - this.xAxis)
+        //If player goes close to the block open it
+        // Animates the opening of the block through the function below
         if (distance < TILE_SIZE * 10 && !this.isOpen && !this.hit == 0) {
             this.animateOpening();
         }
         if (distance > TILE_SIZE * 10 && this.isOpen) {
-           this.animateClosing()
+            this.animateClosing()
         }
+        // if open change image on every hit
         if (this.isOpen) {
-            if(this.hit == 3) this.state = blockPowerupSprite[3];
+            if (this.hit == 3) this.state = blockPowerupSprite[3];
             if (this.hit == 2) {
                 this.frame = 4;
-                this.state = blockPowerupSprite[4] }
+                this.state = blockPowerupSprite[4]
+            }
             if (this.hit == 1) {
                 this.frame = 5;
                 this.state = blockPowerupSprite[5]
             }
-            if(this.hit == 0)
-            {
+            if (this.hit == 0) {
+                // Just closes it no animation :(
                 this.animateClosing()
             }
         }
@@ -54,7 +58,7 @@ class PowerupBlock {
     }
     animateClosing() {
         this.isOpen = false
-                this.state = blockPowerupSprite[0]
-                this.frame = 0
+        this.state = blockPowerupSprite[0]
+        this.frame = 0
     }
 }

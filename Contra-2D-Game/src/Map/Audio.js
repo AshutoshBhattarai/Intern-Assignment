@@ -1,3 +1,6 @@
+/* -------------------------------------------------------------------------- */
+/*                            Game Audio File PAths                           */
+/* -------------------------------------------------------------------------- */
 const gameAudios = {
     title: './assets/sound/title.mp3',
     menuSelect: './assets/sound/menu-selection.mp3',

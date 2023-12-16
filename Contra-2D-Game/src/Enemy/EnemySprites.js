@@ -1,158 +1,166 @@
+/* -------------------------------------------------------------------------- */
+/*               Sprite image coordinates for different actions               */
+/*               of the enemi                                                 */
+/* -------------------------------------------------------------------------- */
+
+/* -------------------------- Running Enemy Coords -------------------------- */
 const runningEnemy = {
     runningLeft: [
         {
-            x: 285,
-            y: 0,
-            height: 47,
-            width: 36
-        },
-        {
-            x: 260,
-            y: 0,
-            height: 52,
-            width: 28
-        },
-        {
-            x: 189,
-            y: 0,
-            height: 47,
-            width: 45
-        },
-        {
-            x: 149,
-            y: 0,
-            height: 47,
-            width: 36
-        },
-        {
-            x: 118,
-            y: 0,
-            height: 47,
+            x: 286,
+            y: 3,
+            height: 49,
             width: 34
         },
         {
-            x: 94,
+            x: 262,
+            y: 4,
+            height: 47,
+            width: 23
+        },
+        {
+            x: 230,
+            y: 3,
+            height: 47,
+            width: 31
+        },
+        {
+            x: 191,
+            y: 3,
+            height: 42,
+            width: 40
+        },
+        {
+            x: 150,
+            y: 3,
+            height: 45,
+            width: 40
+        },
+        {
+            x: 95,
             y: 0,
+            height: 53,
+            width: 24
+        },
+        {
+            x: 63,
+            y: 0,
+            height: 53,
+            width: 34
+        },
+        {
+            x: 21,
+            y: 2,
             height: 49,
-            width: 28
-        },
-        {
-            x: 60,
-            y: 0,
-            height: 47,
-            width: 36
-        },
-        {
-            x: 17,
-            y: 0,
-            height: 47,
-            width: 45
+            width: 40
         },
     ],
     runningRight: [
         {
             x: 320,
-            y: 0,
+            y: 3,
             height: 47,
-            width: 32
+            width: 33
         },
         {
-            x: 354,
-            y: 0,
-            height: 52,
-            width: 26
-        },
-        {
-            x: 381,
-            y: 0,
+            x: 355,
+            y: 3,
             height: 47,
-            width: 29
+            width: 24
         },
         {
-            x: 409,
-            y: 0,
-            height: 47,
-            width: 41
+            x: 379,
+            y: 3,
+            height: 44,
+            width: 31
         },
         {
-            x: 452,
-            y: 0,
-            height: 47,
-            width: 38
+            x: 410,
+            y: 3,
+            height: 43,
+            width: 42
         },
         {
-            x: 488,
-            y: 0,
-            height: 47,
-            width: 32
+            x: 451,
+            y: 2,
+            height: 43,
+            width: 39
         },
         {
-            x: 520,
-            y: 0,
-            height: 50,
-            width: 25
+            x: 489,
+            y: 3,
+            height: 43,
+            width: 30
         },
         {
-            x: 544,
-            y: 0,
-            height: 47,
-            width: 36
+            x: 522,
+            y: 3,
+            height: 48,
+            width: 22
+        },
+        {
+            x: 546,
+            y: 1,
+            height: 48,
+            width: 34
         },
     ]
 }
 
+
+/* ----------------------- Soldier Enemy Sprite Coords ---------------------- */
 const gunEnemy = {
     left: {
-        x: 54,
-        y: 255,
-        height: 52,
-        width: 42,
+        x: 96,
+        y: 257,
+        height: 51,
+        width: 39,
     },
     up: {
-        x: 263,
-        y: 248,
-        height: 60,
-        width: 33,
+        x: 349,
+        y: 247,
+        height: 61,
+        width: 26,
     },
     down: {
-        x: 130,
-        y: 306,
-        height: 51,
-        width: 33,
+        x: 481,
+        y: 311,
+        height: 47,
+        width: 29,
     },
     right: {
-        x: 543,
+        x: 586,
         y: 257,
-        height: 50,
-        width: 43,
+        height: 51,
+        width: 38,
     },
     upLeft: {
-        x: 133,
-        y: 244,
-        height: 60,
-        width: 35,
-    },
-    upRight: {
-        x: 405,
-        y: 244,
+        x: 203,
+        y: 247,
         height: 62,
         width: 33,
     },
+    upRight: {
+        x: 474,
+        y: 249,
+        height: 60,
+        width: 29,
+    },
     downLeft: {
-        x: 214,
-        y: 306,
-        height: 52,
-        width: 35,
+        x: 253,
+        y: 311,
+        height: 47,
+        width: 33,
     },
     downRight: {
-        x: 357,
-        y: 305,
-        height: 52,
+        x: 391,
+        y: 311,
+        height: 47,
         width: 33,
     }
-
 }
 
+/* -------------------------- Turret Sprite Coords -------------------------- */
 const turretSprites = {
     closed: {
         x: 37,
@@ -215,3 +223,4 @@ const turretSprites = {
         width: 32,
     }
 }
+/* ----------------------------------- -- ----------------------------------- */

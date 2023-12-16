@@ -10,10 +10,10 @@ class Bullet {
         this.height = 5;
         this.animationTimer = 0;
         this.damage = this.isSpecial ? SPECIAL_BULLET_DAMAGE : BULLET_DAMAGE;
-        this.bulletSpeed = this.from === ENEMY_SOLDIER ? ENEMY_BULLET_SPEED : BULLET_SPEED;
+        this.bulletSpeed = this.from == PLAYER_ID ? BULLET_SPEED : ENEMY_BULLET_SPEED;
         this.bulletImage = new Image();
         this.bulletImage.src = './assets/images/Contra-Extras.gif'
-        if (difficulty == DIFFICULTY_MEDIUM || difficulty == DIFFICULTY_HARD) {
+        if (difficulty != DIFFICULTY_EASY) {
             this.bulletSpeed = (difficulty == DIFFICULTY_MEDIUM && this.from == ENEMY_SOLDIER) ? (ENEMY_BULLET_SPEED + 1) : (ENEMY_BULLET_SPEED + 2);
         }
         this.specialBulletFrame = 0;
@@ -38,6 +38,7 @@ class Bullet {
         }
     }
     basicBulletMovement() {
+        // Shooting bullet in specified direction
         switch (this.direction) {
             case DIRECTION_RIGHT:
                 this.xAxis += this.bulletSpeed;
@@ -75,7 +76,7 @@ class Bullet {
         const { width, height } = canvas;
         return xAxis > width || xAxis < 0 || yAxis > height - 40 || yAxis < 0;
     }
-    removeBullet(bulletArray) {
+    removeBullet() {
         const bulletIndex = this.bulletArray.indexOf(this);
         if (bulletIndex !== -1) {
             this.bulletArray.splice(bulletIndex, 1);

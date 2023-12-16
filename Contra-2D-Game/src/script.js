@@ -25,39 +25,56 @@ const btnDifficultyBack = document.getElementById('btn-difficulty-back');
 const btnRestartGame = document.getElementById('game-over-restart');
 const btnEndGame = document.getElementById('game-over-end');
 /* ----------------------------------- -- ----------------------------------- */
+/* ------------------------- Variables Initilization ------------------------ */
 let initialDifficulty = DIFFICULTY_EASY;
 localStorage.setItem('difficulty', initialDifficulty);
 let highScore = localStorage.getItem('highScore') == null ? 0 : localStorage.getItem('highScore');
-let inGameTitleScreen = true;
+const titleMusic = new Audio(gameAudios.title);
+const gameOverMusic = new Audio(gameAudios.gameOverMusic);
+/* ----------------------------------- -- ----------------------------------- */
+
+/* -------------------------------------------------------------------------- */
+/*                                 Start Game                                 */
+/* -------------------------------------------------------------------------- */
+/* ------ Initializes the game variables and starts the animation frame ----- */
 function startGame() {
     init();
     render();
 }
+/* ----------------------------------- -- ----------------------------------- */
+/* ------------------ Display Initial Screen and functions ------------------ */
 displayTitleScreen();
-//displayGameScreen();
 displayDifficulty();
 buttonSoundEffects();
+
+/* --------------------- Function to display game Screen -------------------- */
 function displayGameScreen() {
     titleScreen.style.display = 'none';
     gameOverScreen.style.display = 'none';
     gameScreen.style.display = 'flex';
-    inGameTitleScreen = false;
     startGame();
+    titleMusic.pause();
+    gameOverMusic.pause();
+
 }
+
+/* --------------------- Function to display title Screen -------------------- */
 function displayTitleScreen() {
-    inGameTitleScreen = true;
     titleScreen.style.display = 'flex';
     gameOverScreen.style.display = 'none';
     gameScreen.style.display = 'none';
     titleDifficulty.style.display = 'none';
     titleMenu.style.display = 'block';
-    playAudio(gameAudios.title);
+    titleMusic.play();
+    gameOverMusic.pause();
 }
+
+/* ------------------ Function to display Game Over Screen ------------------ */
 function displayGameOverScreen() {
     titleScreen.style.display = 'none';
     gameOverScreen.style.display = 'flex';
     gameScreen.style.display = 'none';
-    playAudio(gameAudios.gameOverMusic);
+    gameOverMusic.play();
     if (score > highScore) {
         highScore = score;
         localStorage.setItem('highScore', highScore);
@@ -69,45 +86,56 @@ function displayGameOverScreen() {
 /* -------------------------------------------------------------------------- */
 /*                          Button On Click Listeners                         */
 /* -------------------------------------------------------------------------- */
+/* ------------------------------- Button to : ------------------------------ */
+// Start game
 btnStartGame.addEventListener('click', () => {
     displayGameScreen();
 });
+// Show difficulty selection section in menu
 btnDifficultlySelection.addEventListener('click', () => {
     titleDifficulty.style.display = 'block';
     titleMenu.style.display = 'none';
 });
+// Select easy difficulty
 btnEasy.addEventListener('click', () => {
     localStorage.setItem('difficulty', DIFFICULTY_EASY);
     initialDifficulty = localStorage.getItem('difficulty');
     displayDifficulty();
 });
+// Select medium difficulty
 btnMedium.addEventListener('click', () => {
     localStorage.setItem('difficulty', DIFFICULTY_MEDIUM);
     initialDifficulty = localStorage.getItem('difficulty');
     displayDifficulty();
 });
+// Select hard difficulty
 btnHard.addEventListener('click', () => {
     localStorage.setItem('difficulty', DIFFICULTY_HARD);
     initialDifficulty = localStorage.getItem('difficulty');
     displayDifficulty();
 });
+// Restart game
 btnRestartGame.addEventListener('click', () => {
     displayGameScreen();
 });
+// Go back to the title screen
 btnEndGame.addEventListener('click', () => {
     displayTitleScreen();
 });
+// Hides difficulty selection menu
 btnDifficultyBack.addEventListener('click', () => {
     titleDifficulty.style.display = 'none';
     titleMenu.style.display = 'block';
 });
 /* ----------------------------------- -- ----------------------------------- */
+/* --------------------- Show Selected difficulty -------------------------- */
 function displayDifficulty() {
     btnEasy.style.color = (initialDifficulty == DIFFICULTY_EASY) ? 'red' : 'white';
     btnMedium.style.color = (initialDifficulty == DIFFICULTY_MEDIUM) ? 'red' : 'white';
     btnHard.style.color = (initialDifficulty == DIFFICULTY_HARD) ? 'red' : 'white';
 }
-
+/* -------------------------------------------------------------------------- */
+/* --------------------- Apply sound effects to buttons --------------------- */
 function buttonSoundEffects() {
     const buttons = document.querySelectorAll('.btn-audio');
     buttons.forEach((button) => {
@@ -119,3 +147,4 @@ function buttonSoundEffects() {
         });
     });
 }
+/* ----------------------------------- -- ----------------------------------- */

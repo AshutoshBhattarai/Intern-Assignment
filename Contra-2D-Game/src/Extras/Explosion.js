@@ -17,6 +17,8 @@ class Explosion {
         ctx.drawImage(this.image, x, y, width, height, this.xAxis, this.yAxis, this.radius, this.radius);
     }
     update() {
+        // Basic looping over images to create animation
+        // Stops after certain time (100 for normal explosion, 50 for cloud explosion), when the last image is reached
         const isNormalExplosion = this.type === EXPLOSION_NORMAL;
         const lastFrame = isNormalExplosion ? normalExplosionSprite.length - 1 : cloudExplosionSprite.length - 1;
         const endTime = isNormalExplosion ? 100 : 50;

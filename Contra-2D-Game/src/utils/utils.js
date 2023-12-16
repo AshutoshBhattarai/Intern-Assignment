@@ -1,5 +1,4 @@
-let audio;
-
+/* ---------------------- Platform Collision Detection ---------------------- */
 function detectBlockCollision(rect1, rect2) {
   return (
     rect1.xAxis < rect2.xAxis + rect2.width &&
@@ -8,6 +7,8 @@ function detectBlockCollision(rect1, rect2) {
     rect1.yAxis + rect1.height > rect2.yAxis
   );
 }
+
+/* ---------------------- Normal Rectangle Collision Detection ---------------------- */
 function detectRectCollision(rect1, rect2) {
   return (
     rect1.xAxis < rect2.xAxis + rect2.width &&
@@ -17,16 +18,17 @@ function detectRectCollision(rect1, rect2) {
   );
 }
 
+/* ---------------------- Random Number Generator ---------------------- */
 function generateRandomNumber(min, max) {
   return Math.random() * (max - min) + min;
 }
-
+/* ---------------------- Create Audio Object and Play ---------------------- */
 function playAudio(audioPath) {
- audio = new Audio(audioPath);
- audio.play();
+  audio = new Audio(audioPath);
+  audio.play();
 }
 
-function stopAudio()
-{
+//! -------------------------- Stop audio (Not Used) ------------------------- */
+function stopAudio() {
   audio.pause();
 }

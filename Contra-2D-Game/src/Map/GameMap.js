@@ -79,8 +79,12 @@ class GameMap {
 
     // This function spawns a specified number of running enemies at a given position
     spawnRunningEnemy(x, y) {
-        const spawnLimit = 3; // The maximum number of enemies to spawn
-        const spawnInterval = 2000; // The time interval between each enemy spawn
+        let spawnLimit = 3; // The maximum number of enemies to spawn
+        let spawnInterval = 1750; // The time interval between each enemy spawn
+        if (difficulty != DIFFICULTY_EASY) {
+            spawnLimit = generateRandomNumber(4, 7);
+            spawnInterval = difficulty == DIFFICULTY_MEDIUM ? 1500 : 1000;
+        }
         // Loop through the spawn limit
         for (let i = 0; i < spawnLimit; i++) {
             setTimeout(() => {
@@ -108,6 +112,6 @@ class GameMap {
     }
 
     createPowerupBlock(x, y) {
-        this.powerupBlock = new PowerupBlock(x, y,mapIndex);
+        this.powerupBlock = new PowerupBlock(x, y, mapIndex);
     }
 }

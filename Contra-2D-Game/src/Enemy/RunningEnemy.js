@@ -3,8 +3,8 @@ class RunningEnemy extends Enemy {
         // Call the constructor of the parent class with the provided arguments
         super(xAxis, yAxis, collisionBlocks);
         // Initializing the health of the enemy to 2
-        this.health = 2;
-        this.speedLimit = 4;
+        this.health = ENEMY_RUNNING_HEALTH;
+        this.speedLimit = ENEMY_RUNNING_MAX_SPEED;
         // Initializing the actions property (is set later)
         this.actions;
         // Setting the initial direction of the enemy to left
@@ -20,6 +20,10 @@ class RunningEnemy extends Enemy {
         this.ticksPerFrame = 4;
         // Setting the number of frames for the running animation to the number of images available
         this.numberOfFrames = runningEnemy.runningLeft.length;
+        if (difficulty != DIFFICULTY_EASY) {
+            this.health = difficulty == DIFFICULTY_MEDIUM ? (ENEMY_RUNNING_HEALTH + 1) : (ENEMY_RUNNING_HEALTH + 2);
+            this.speedLimit = difficulty == DIFFICULTY_MEDIUM ? (ENEMY_RUNNING_MAX_SPEED + 1.5) : (ENEMY_RUNNING_MAX_SPEED + 3);
+        }
     }
 
     draw(ctx) {
@@ -72,8 +76,7 @@ class RunningEnemy extends Enemy {
         if (!this.inGround) {
             this.useGravity();
         }
-        if(difficulty == DIFFICULTY_MEDIUM || difficulty == DIFFICULTY_HARD)
-        {
+        if (!difficulty == DIFFICULTY_EASY) {
             this.trackPlayer(player);
         }
     }
@@ -139,13 +142,16 @@ class RunningEnemy extends Enemy {
         }
     }
 trackPlayer(player) {
+    // Set the distance threshold
     const distanceThreshold = TILE_SIZE * 4;
-
+    // Check if player is to the left of the current position by distanceThreshold
     if (player.xAxis + distanceThreshold < this.xAxis) {
+        // Move the enemy to the left
         this.moveLeft();
     }
-
+    // Check if player is to the right of the current position by distanceThreshold
     if (player.xAxis - distanceThreshold > this.xAxis) {
+        // Move the enemy to the right
         this.moveRight();
     }
 }

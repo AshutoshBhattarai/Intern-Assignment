@@ -18,15 +18,22 @@ class Enemy {
     }
 
     useGravity() {
+        // Increase the vertical velocity by the value of GRAVITY
         this.velY += GRAVITY;
     }
 
     checkVerticalCollisions() {
-        this.collisionBlocks.forEach((collisionBlocks) => {
-            if (detectBlockCollision(this, collisionBlocks)) {
-                if (this.velY > 0 && !this.inGround && collisionBlocks.type == COLLISION_PLATFORM) {
+        // Iterate over each collision block
+        this.collisionBlocks.forEach((collisionBlock) => {
+            // Check if there is a collision between the current block and the enemy
+            if (detectBlockCollision(this, collisionBlock)) {
+                // Check if the enemy is moving downwards, not already on the ground, and colliding with a platform
+                if (this.velY > 0 && !this.inGround && collisionBlock.type === COLLISION_PLATFORM) {
+                    // Stop the enemy's vertical velocity
                     this.velY = 0;
-                    this.yAxis = collisionBlocks.yAxis - this.height - 1;
+                    // Set the enemy's y position just above the collision block
+                    this.yAxis = collisionBlock.yAxis - this.height - 1;
+                    // Mark the enemy as being on the ground
                     this.inGround = true;
                 }
             }

@@ -1,3 +1,6 @@
+/* -------------------------------------------------------------------------- */
+/*                           Collision Blocks Object                          */
+/* -------------------------------------------------------------------------- */
 class CollisionBlock {
     constructor(xAxis, yAxis, type) {
         this.xAxis = xAxis;
@@ -8,10 +11,11 @@ class CollisionBlock {
         this.isColliding = false;
 
     }
-    draw(ctx)
-    {
+
+    //? ---------------------- Only used for testing Purpose --------------------- */
+    draw(ctx) {
         ctx.strokeStyle = "blue"
-        ctx.strokeRect(this.xAxis,this.yAxis,this.width,this.height);
+        ctx.strokeRect(this.xAxis, this.yAxis, this.width, this.height);
     }
-    
+
 }
