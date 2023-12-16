@@ -59,19 +59,26 @@ const ENEMY_SOLDIER = 4;
 const ENEMY_TURRET = 5;
 const ENEMY_ID = 33;
 /* ------------------------ Score Constant Variables ------------------------ */
-SCORE_TURRET = 500;
-SCORE_RUNNING_ENEMY = 100;
-SCORE_SOLDIER = 200;
-SCORE_HIT = 50;
-SCORE_POWERUP = 1000;
-SCORE_DISTANCE_TRAVELLED = 100;
-SCORE_MULTIPLIER_MEDIUM = 1.5;
-SCORE_MULTIPLIER_HARD = 2;
+const SCORE_TURRET = 500;
+const SCORE_RUNNING_ENEMY = 100;
+const SCORE_SOLDIER = 200;
+const SCORE_HIT = 50;
+const SCORE_POWERUP = 1000;
+const SCORE_DISTANCE_TRAVELLED = 100;
+const SCORE_MULTIPLIER_MEDIUM = 1.5;
+const SCORE_MULTIPLIER_HARD = 2;
 /* -------------------------- Difficulty Constants -------------------------- */
-DIFFICULTY_EASY = 1;
-DIFFICULTY_MEDIUM = 2;
-DIFFICULTY_HARD = 3;
+const DIFFICULTY_EASY = 1;
+const DIFFICULTY_MEDIUM = 2;
+const DIFFICULTY_HARD = 3;
 /* ------------------------------ Powerup ID's ------------------------------ */
-POWERUP_HEALTH = 100;
-POWERUP_MULTIPLIER = 500;
-POWERUP_BLOCK = 600;
+const POWERUP_HEALTH = 100;
+const POWERUP_MULTIPLIER = 500;
+const POWERUP_BLOCK = 600;
+const POWERUP_SPECIAL = 700;
+
+const SPECIAL_BULLET_DAMAGE = 6;
+const BULLET_DAMAGE = 1;
+
+const EXPLOSION_NORMAL = 'normal-explosion';
+const EXPLOSION_SPECIAL = 'special-explosion';
