@@ -15,15 +15,13 @@ class Bullet {
         if (difficulty == DIFFICULTY_MEDIUM || difficulty == DIFFICULTY_HARD) {
             this.bulletSpeed = (difficulty == DIFFICULTY_MEDIUM && this.from == ENEMY_SOLDIER) ? (ENEMY_BULLET_SPEED + 1) : (ENEMY_BULLET_SPEED + 2);
         }
-        this.specialBulletImg = new Image();
-        this.specialBulletImg.src = './assets/images/Contra-Extras.gif';
         this.specialBulletFrame = 0;
     }
 
     draw(ctx) {
         if (this.from == PLAYER_ID && this.isSpecial) {
             const { x, y, height, width } = bulletSprite.specialFire[this.specialBulletFrame];
-            ctx.drawImage(this.specialBulletImg, x, y, height, width, this.xAxis, this.yAxis, 30, 30);
+            ctx.drawImage(this.bulletImage, x, y, height, width, this.xAxis, this.yAxis, 30, 30);
         }
         else {
             const { x, y, height, width } = this.from === ENEMY_SOLDIER ? bulletSprite.enemy : bulletSprite.player;
