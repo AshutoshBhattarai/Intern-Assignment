@@ -1,32 +1,39 @@
 class Bullet {
-    constructor(xAxis, yAxis, direction, from, angle) {
+    constructor(xAxis, yAxis, direction, from, isSpecial) {
         this.xAxis = xAxis;
         this.yAxis = yAxis;
         this.direction = direction;
-        this.angle = angle;
+        this.isSpecial = isSpecial;
         this.from = from;
         this.width = 5;
         this.height = 5;
+        this.animationTimer = 0;
+        this.damage = this.isSpecial ? SPECIAL_BULLET_DAMAGE : BULLET_DAMAGE;
         this.bulletSpeed = this.from === ENEMY_SOLDIER ? ENEMY_BULLET_SPEED : BULLET_SPEED;
         this.bulletImage = new Image();
         this.bulletImage.src = './assets/images/Contra-Extras.gif'
         if (difficulty == DIFFICULTY_MEDIUM || difficulty == DIFFICULTY_HARD) {
             this.bulletSpeed = (difficulty == DIFFICULTY_MEDIUM && this.from == ENEMY_SOLDIER) ? (ENEMY_BULLET_SPEED + 1) : (ENEMY_BULLET_SPEED + 2);
         }
+        this.specialBulletImg = new Image();
+        this.specialBulletImg.src = './assets/images/Contra-Extras.gif';
+        this.specialBulletFrame = 0;
     }
 
     draw(ctx) {
-        const { x, y, height, width } = this.from === ENEMY_SOLDIER ? bulletSprite.enemy : bulletSprite.player;
-        ctx.drawImage(this.bulletImage, x, y, height, width, this.xAxis, this.yAxis, this.width, this.height);
+        if (this.from == PLAYER_ID && this.isSpecial) {
+            const { x, y, height, width } = bulletSprite.specialFire[this.specialBulletFrame];
+            ctx.drawImage(this.specialBulletImg, x, y, height, width, this.xAxis, this.yAxis, 30, 30);
+        }
+        else {
+            const { x, y, height, width } = this.from === ENEMY_SOLDIER ? bulletSprite.enemy : bulletSprite.player;
+            ctx.drawImage(this.bulletImage, x, y, height, width, this.xAxis, this.yAxis, this.width, this.height);
+        }
     }
 
     update() {
-        if (this.angle == undefined) {
-            this.basicBulletMovement();
-        }
-        else {
-            console.log("Shoot Accurate Bullets");
-        }
+        this.basicBulletMovement();
+        if(this.isSpecial) this.animateSpecialBullet();
         if (this.isOutOfBounds()) {
             this.removeBullet(this.from);
         }
@@ -82,5 +89,15 @@ class Bullet {
                 enemyBullets.splice(bulletIndex, 1);
             }
         }
+    }
+    animateSpecialBullet() {
+        this.animationTimer++;
+        if (this.animationTimer % 7 == 0 && this.animationTimer != 0) {
+            this.specialBulletFrame++;
+            if (this.specialBulletFrame >= bulletSprite.specialFire.length) {
+                this.specialBulletFrame = 0;
+            }
+        }
+
     }
 }

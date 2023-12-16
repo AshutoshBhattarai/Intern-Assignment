@@ -7,10 +7,15 @@ class Powerups {
         this.type = type;
         this.image = new Image();
         this.image.src = './assets/images/Contra-Extras.gif';
-        this.powerup = type == POWERUP_HEALTH ? powerupSprite.extraHealth : powerupSprite.extraPoints;
+        this.powerup;
     }
 draw(ctx) {
-    const { x, y, width, height } = this.powerup;
+    const powerupTypes = {
+        [POWERUP_HEALTH]: powerupSprite.extraHealth,
+        [POWERUP_MULTIPLIER]: powerupSprite.extraPoints,
+        [POWERUP_SPECIAL]: powerupSprite.specialMove,
+    };
+    const { x, y, width, height } = powerupTypes[this.type];
     ctx.drawImage(this.image, x, y, width, height, this.xAxis, this.yAxis, this.width, this.height);
 }
 update(end)
