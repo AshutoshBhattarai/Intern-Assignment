@@ -13,6 +13,8 @@ class Player {
         this.animationTimer = 0;
         this.inGround = false;
         this.inWater = false;
+        this.hasSpecialBullet = false;
+        this.specialBulletCount = 4;
         this.facing = DIRECTION_RIGHT;
         this.respawnFlicker = 0;
         this.actions = runningRight[0];
@@ -154,6 +156,9 @@ class Player {
         // Set inGround to false if not in collision block
         if (!this.checkInCollisionBlock()) {
             this.inGround = false;
+        }
+        if (this.specialBulletCount <= 0) {
+            this.hasSpecialBullet = false;
         }
     }
 
