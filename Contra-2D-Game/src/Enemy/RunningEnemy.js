@@ -4,7 +4,7 @@ class RunningEnemy extends Enemy {
         super(xAxis, yAxis, collisionBlocks);
         // Initializing the health of the enemy to 2
         this.health = 2;
-        this.speedLimit = generateRandomNumber(3,6);
+        this.speedLimit = 4;
         // Initializing the actions property (is set later)
         this.actions;
         // Setting the initial direction of the enemy to left
@@ -44,7 +44,7 @@ class RunningEnemy extends Enemy {
             this.height // Height of the image on the canvas
         );
     }
-    update() {
+    update(player) {
         // Check if the player is colliding with a block
         if (!this.checkInCollisionBlock()) {
             // this.inGround = false;
@@ -71,6 +71,10 @@ class RunningEnemy extends Enemy {
         // Apply gravity if the enemy is not on the ground
         if (!this.inGround) {
             this.useGravity();
+        }
+        if(difficulty == DIFFICULTY_MEDIUM || difficulty == DIFFICULTY_HARD)
+        {
+            this.trackPlayer(player);
         }
     }
     // Updat the animation
@@ -134,5 +138,15 @@ class RunningEnemy extends Enemy {
             this.yAxis = CANVAS_HEIGHT - PLAYER_HEIGHT;
         }
     }
+trackPlayer(player) {
+    const distanceThreshold = TILE_SIZE * 4;
 
+    if (player.xAxis + distanceThreshold < this.xAxis) {
+        this.moveLeft();
+    }
+
+    if (player.xAxis - distanceThreshold > this.xAxis) {
+        this.moveRight();
+    }
+}
 } 
