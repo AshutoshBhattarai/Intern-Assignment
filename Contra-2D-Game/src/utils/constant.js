@@ -57,6 +57,7 @@ const ENEMY_RUNNING = 3;
 const ENEMY_SOLDIER = 4;
 const ENEMY_TURRET = 5;
 const ENEMY_TANK = 450;
+const ENEMY_OPTIONAL = 505;
 const ENEMY_ID = 33;
 const ENEMY_RUNNING_HEALTH = 2;
 const ENEMY_SOLDIER_HEALTH = 3;
@@ -69,6 +70,7 @@ const SCORE_RUNNING_ENEMY = 100;
 const SCORE_SOLDIER = 200;
 const SCORE_HIT = 50;
 const SCORE_POWERUP = 1000;
+const SCORE_TANK = 3524;
 const SCORE_DISTANCE_TRAVELLED = 100;
 const SCORE_MULTIPLIER_MEDIUM = 1.5;
 const SCORE_MULTIPLIER_HARD = 2;
@@ -84,8 +86,9 @@ const POWERUP_SPECIAL = 700;
 /* ---------------------------- Bullet Properties --------------------------- */
 const BULLET_SPEED = 5;
 const BULLET_DAMAGE = 1;
-const SPECIAL_BULLET_DAMAGE = 6;
+const SPECIAL_BULLET_DAMAGE = 9;
 const BULLET_COOLDOWN = 400;
+const BULLET_RADIUS = 2.5;
 /* ----------------------------- Explosion Types ---------------------------- */
 const EXPLOSION_NORMAL = 'normal-explosion';
 const EXPLOSION_SPECIAL = 'special-explosion';
@@ -98,6 +101,6 @@ const TURRET_HEALTH = 5;
 /* ----------------------------- Tank Properties ---------------------------- */
 const TANK_HEIGHT = TILE_SIZE * 2;
 const TANK_WIDTH = TILE_SIZE * 2;
-const TANK_HEALTH = 45;
+const TANK_HEALTH = 27;
 const TANK_CANNON_RADIUS = 10;
-const CANNON_SPEED = 8;
+const CANNON_SPEED = 6;
