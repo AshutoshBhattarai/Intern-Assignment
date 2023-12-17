@@ -28,6 +28,12 @@ const bulletSprite = {
         height: 3,
         width: 3
     },
+    tankCannon: {
+        x: 233,
+        y: 267,
+        height: 16,
+        width: 16
+    },
     specialRay: {
         x: 218,
         y: 494,
