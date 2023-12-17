@@ -97,4 +97,7 @@ const TURRET_BULLET_SPEED = 2;
 const TURRET_HEALTH = 5;
 /* ----------------------------- Tank Properties ---------------------------- */
 const TANK_HEIGHT = TILE_SIZE * 2;
-const TANK_WIDTH = TILE_SIZE * 2
+const TANK_WIDTH = TILE_SIZE * 2;
+const TANK_HEALTH = 45;
+const TANK_CANNON_RADIUS = 10;
+const CANNON_SPEED = 8;
