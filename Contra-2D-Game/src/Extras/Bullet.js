@@ -6,8 +6,8 @@ class Bullet {
         this.isSpecial = isSpecial;
         this.from = from;
         this.bulletArray = bulletArray || [];
-        this.width = 5;
-        this.height = 5;
+        this.width = BULLET_RADIUS * 2;
+        this.height = BULLET_RADIUS * 2;
         this.animationTimer = 0;
         this.damage = this.isSpecial ? SPECIAL_BULLET_DAMAGE : BULLET_DAMAGE;
         this.bulletSpeed = this.from == PLAYER_ID ? BULLET_SPEED : ENEMY_BULLET_SPEED;
