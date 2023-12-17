@@ -14,7 +14,10 @@ class GameMap {
         }
         this.section = MAP_SECTION_ARRAY[this.sectionIndex];
         this.turrets = [];
+        this.tanks = [];
+        this.tempEnemies = [];
         this.powerupBlock;
+        this.canSpawnTank = difficulty == DIFFICULTY_EASY ? false : Math.round(generateRandomNumber(1, 5)) <= 4;
     }
     draw() {
         // Create a new Image object
@@ -56,6 +59,9 @@ class GameMap {
                     case DEATH_DROP_ID:
                         this.createCollisionBlock(positionX, positionY, DEATH_DROP_ID);
                         break;
+                    case POWERUP_BLOCK:
+                        this.createPowerupBlock(positionX, positionY);
+                        break;
                     // If the element is a running enemy, spawn a running enemy
                     case ENEMY_RUNNING:
                         this.spawnRunningEnemy(positionX, positionY);
@@ -66,8 +72,11 @@ class GameMap {
                     case ENEMY_TURRET:
                         this.spawnTurret(positionX, positionY);
                         break;
-                    case POWERUP_BLOCK:
-                        this.createPowerupBlock(positionX, positionY);
+                    case ENEMY_TANK:
+                        this.spawnTankEnemy(positionX, positionY);
+                        break;
+                    case ENEMY_OPTIONAL:
+                        this.spawnOptionalEnemy(positionX, positionY);
                         break;
                 }
             });
@@ -85,7 +94,8 @@ class GameMap {
         let spawnInterval = 1750; // The time interval between each enemy spawn
         if (difficulty != DIFFICULTY_EASY) {
             spawnLimit = generateRandomNumber(4, 7);
-            spawnInterval = difficulty == DIFFICULTY_MEDIUM ? 1500 : 1000;
+            const randomInterval = generateRandomNumber(1000, 2500);
+            spawnInterval = randomInterval;
         }
         // Loop through the spawn limit
         for (let i = 0; i < spawnLimit; i++) {
@@ -115,5 +125,15 @@ class GameMap {
 
     createPowerupBlock(x, y) {
         this.powerupBlock = new PowerupBlock(x, y, mapIndex);
+    }
+    spawnTankEnemy(x, y) {
+        const tank = new Tank(x, y);
+        if (this.canSpawnTank) this.tanks.push(tank);
+    }
+
+    spawnOptionalEnemy(x, y) {
+        if (difficulty == DIFFICULTY_EASY || !this.canSpawnTank) {
+            this.spawnSoldierEnemy(x, y);
+        }
     }
 }
