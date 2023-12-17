@@ -62,6 +62,7 @@ class Tank {
                 speed: this.cannonSpeed,
             }
             this.activeCannons.push(cannon);
+            playAudio(gameAudios.cannonHit);
             this.cannonCount++;
             if (this.cannonCount % 5 == 0 && this.cannonCount != 0) this.cannonSpeed++;
         }
