@@ -92,7 +92,6 @@ function render() {
         explosion.draw(ctx);
         explosion.update();
         if (explosion.removeExplosion) {
-            explosionSoundEffect();
             explosionArray.splice(explosionArray.indexOf(explosion), 1);
         }
     });
