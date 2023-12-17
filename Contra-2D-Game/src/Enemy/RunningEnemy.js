@@ -22,7 +22,7 @@ class RunningEnemy extends Enemy {
         this.numberOfFrames = runningEnemy.runningLeft.length;
         if (difficulty != DIFFICULTY_EASY) {
             this.health = difficulty == DIFFICULTY_MEDIUM ? (ENEMY_RUNNING_HEALTH + 1) : (ENEMY_RUNNING_HEALTH + 2);
-            this.speedLimit = difficulty == DIFFICULTY_MEDIUM ? (ENEMY_RUNNING_MAX_SPEED + 1.5) : (ENEMY_RUNNING_MAX_SPEED + 3);
+            this.speedLimit = difficulty == DIFFICULTY_MEDIUM ? (ENEMY_RUNNING_MAX_SPEED + 1.5) : (ENEMY_RUNNING_MAX_SPEED + 2);
         }
     }
 
@@ -76,7 +76,7 @@ class RunningEnemy extends Enemy {
         if (!this.inGround) {
             this.useGravity();
         }
-        if (!difficulty == DIFFICULTY_EASY) {
+        if (difficulty != DIFFICULTY_EASY) {
             this.trackPlayer(player);
         }
     }
@@ -141,18 +141,18 @@ class RunningEnemy extends Enemy {
             this.yAxis = CANVAS_HEIGHT - PLAYER_HEIGHT;
         }
     }
-trackPlayer(player) {
-    // Set the distance threshold
-    const distanceThreshold = TILE_SIZE * 4;
-    // Check if player is to the left of the current position by distanceThreshold
-    if (player.xAxis + distanceThreshold < this.xAxis) {
-        // Move the enemy to the left
-        this.moveLeft();
+    trackPlayer(player) {
+        // Set the distance threshold
+        const distanceThreshold = TILE_SIZE * 3;
+        // Check if player is to the left of the current position by distanceThreshold
+        if (player.xAxis + distanceThreshold < this.xAxis) {
+            // Move the enemy to the left
+            this.moveLeft();
+        }
+        // Check if player is to the right of the current position by distanceThreshold
+        if (player.xAxis - distanceThreshold > this.xAxis) {
+            // Move the enemy to the right
+            this.moveRight();
+        }
     }
-    // Check if player is to the right of the current position by distanceThreshold
-    if (player.xAxis - distanceThreshold > this.xAxis) {
-        // Move the enemy to the right
-        this.moveRight();
-    }
-}
 } 
