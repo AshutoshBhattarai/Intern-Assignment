@@ -14,6 +14,7 @@ let scoreMultiplier;
 let gameMap;
 let enemiesArray;
 let turretsArray;
+let tanksArray;
 let explosionArray;
 let player;
 let powerupArray;
@@ -24,10 +25,10 @@ let gameAudio;
 /* ------ Initialize the game variables to their initial/default values ----- */
 function init() {
     // Set the initial map index/section
-    mapIndex = 6;
-    // Play the game music
-    gameAudio = new Audio(gameAudios.gameMusic);
-    gameAudio.play();
+    mapIndex = 0;
+    // Play the game music(Removed as it was annoying😁)
+    // gameAudio = new Audio(gameAudios.gameMusic);
+    // gameAudio.play();
 
     // Set the difficulty level based on the value stored in local storage, or use the default value if not found
     difficulty = localStorage.getItem('difficulty') || DIFFICULTY_EASY;
@@ -53,6 +54,7 @@ function init() {
     // Set the enemies array, turrets array, and powerup block based on the game map
     enemiesArray = gameMap.enemies;
     turretsArray = gameMap.turrets;
+    tanksArray = gameMap.tanks;
     powerupBlock = gameMap.powerupBlock;
 
     // Create the Player object with the specified parameters
@@ -63,7 +65,7 @@ function render() {
     // Check if player is out of bounds
     if (player.xAxis > gameMap.width) {
         // Check if there are no turrets and enemies
-        if (turretsArray.length === 0 && enemiesArray.length === 0) {
+        if (checkMapClear()) {
             // Check if mapIndex is the last index
             if (mapIndex >= MAP_SECTION_ARRAY.length - 1) {
                 mapIndex = Math.round(generateRandomNumber(3, 6));
@@ -90,6 +92,7 @@ function render() {
         explosion.draw(ctx);
         explosion.update();
         if (explosion.removeExplosion) {
+            explosionSoundEffect();
             explosionArray.splice(explosionArray.indexOf(explosion), 1);
         }
     });
@@ -116,6 +119,7 @@ function render() {
     // Check enemy bullet and turret bullet collisions
     checkEnemyBulletCollision();
     turretBulletCollision();
+    tankBulletCollision();
 
     // Check powerup collision, display player health state and score
     checkPowerUpCollision(player);
@@ -127,7 +131,7 @@ function render() {
     const gameAnimation = requestAnimationFrame(render);
     //check if game is over
     if (isGameOver()) {
-        gameAudio.pause();
+        // gameAudio.pause();
         cancelAnimationFrame(gameAnimation);
         displayGameOverScreen();
     }
@@ -144,6 +148,7 @@ function updateGameMap() {
     powerupBlock = gameMap.powerupBlock == undefined ? undefined : gameMap.powerupBlock;
     enemiesArray = gameMap.enemies;
     turretsArray = gameMap.turrets;
+    tanksArray = gameMap.tanks;
     player.xAxis = 0;
     player.yAxis = getPlayerLastPosY();
     // updating player collision blocks(to detect collision...(???)) for the new map
@@ -152,6 +157,7 @@ function updateGameMap() {
 
 
 function updateEnemies() {
+    // Draw and update enemies 
     enemiesArray.forEach(enemy => {
         enemy.draw(ctx);
         enemy.update(player);
@@ -160,6 +166,7 @@ function updateEnemies() {
             if (checkPlayerInProximity(enemy)) enemy.shoot(player);
         }
     });
+    // Draw and update turrets
     turretsArray.forEach(turret => {
         turret.draw(ctx);
         turret.calculateAngleToPlayer(player);
@@ -167,6 +174,16 @@ function updateEnemies() {
         turret.updateBullets();
         if (checkPlayerInProximity(turret)) {
             turret.shoot();
+        }
+    });
+    // Draw and update tanks
+    tanksArray.forEach((tank) => {
+        tank.draw(ctx);
+        tank.update();
+        tank.updateCannons();
+        tank.checkCannonPlayerCollision(player);
+        if (tank.isUp) {
+            tank.shootCannon(player);
         }
     })
 }
@@ -176,7 +193,7 @@ function checkPlayerCollisions() {
     checkEnemyPlayerCollision();
     checkPlayerBulletCollision();
 }
-
+// Get player's last y-axis position (to set it on the next map section)
 function getPlayerLastPosY() {
     return player.yAxis;
 }
@@ -187,6 +204,7 @@ function playerRender() {
     player.update();
     player.checkBoundary();
 }
+
 
 /* -------------------------------------------------------------------------- */
 /*                            Player shooting logic                           */
@@ -233,6 +251,7 @@ function shootBullet(xAxis, yAxis, direction) {
     let isSpecialBullet = false;
     if (player.hasSpecialBullet && inputs.special) {
         isSpecialBullet = true;
+        playAudio(gameAudios.specialBullet);
         player.specialBulletCount -= 1;
     }
     const bullet = new Bullet(xAxis, yAxis, direction, PLAYER_ID, isSpecialBullet, playerBullets);
@@ -246,10 +265,24 @@ function updateBullets(bulletsArray) {
         currentBullet.draw(ctx);
     }
 }
+/* ----------------------------------- -- ----------------------------------- */
+
+/* --------------------- Checking if map is clear or not -------------------- */
+// To progress to next section;
+function checkMapClear() {
+    if (enemiesArray.length == 0 && turretsArray.length == 0 && tanksArray.length == 0) {
+        return true;
+    }
+    return false;
+}
 
 /* -------------------------------------------------------------------------- */
 /*                              Collision Checks                              */
 /* -------------------------------------------------------------------------- */
+// Function works as a collision checker for player and enemies(they work as their names)
+
+/* ----------- Checking if player collides with the running enemy ----------- */
+// Not applicable for other types.
 function checkEnemyPlayerCollision() {
     enemiesArray.forEach((enemy, enemyIndex) => {
         if (detectRectCollision(player, enemy)) {
@@ -260,6 +293,7 @@ function checkEnemyPlayerCollision() {
         }
     })
 }
+/* ----------------- Checking if player's bullet hits enemy ----------------- */
 function checkEnemyBulletCollision() {
     enemiesArray.forEach((enemy, enemyIndex) => {
         playerBullets.forEach((bullet, bulletIndex) => {
@@ -284,6 +318,7 @@ function checkEnemyBulletCollision() {
         })
     })
 }
+/* ------------------ Checking if player's bullet hits turrets ----------------- */
 function turretBulletCollision() {
     turretsArray.forEach((turret, turretIndex) => {
         playerBullets.forEach((bullet, bulletIndex) => {
@@ -293,20 +328,46 @@ function turretBulletCollision() {
                 } else {
                     createExplosionEffect(bullet.xAxis, bullet.yAxis, EXPLOSION_NORMAL);
                 }
-                playAudio(gameAudios.metalHit);
+                metalHitSoundEffect();
                 increaseScoreOnHit();
                 turret.health -= bullet.damage;
                 playerBullets.splice(bulletIndex, 1);
                 if (turret.health <= 0) {
                     createExplosionEffect(turret.xAxis, turret.yAxis, EXPLOSION_SPECIAL);
                     increaseScoreOnTurretDestroyed();
-                    playAudio(gameAudios.explosion);
+                    explosionSoundEffect();
                     turretsArray.splice(turretIndex, 1);
                 }
             }
         });
     });
 }
+/* ------------------ Checking if player's bullet hits tanks ----------------- */
+function tankBulletCollision() {
+    tanksArray.forEach((tank, tankIndex) => {
+        playerBullets.forEach((bullet, bulletIndex) => {
+            if (detectRectCollision(tank, bullet)) {
+                const explosionType = bullet.isSpecial ? EXPLOSION_SPECIAL : EXPLOSION_NORMAL;
+                createExplosionEffect(bullet.xAxis, bullet.yAxis, explosionType);
+                metalHitSoundEffect();
+                increaseScoreOnHit();
+                tank.health -= bullet.damage;
+                playerBullets.splice(bulletIndex, 1);
+                if (tank.health <= 0) {
+                    tank.isUp = false;
+                    increaseScoreOnTankDestroyed();
+                    playAudio(gameAudios.shutDown);
+                    setTimeout(() => {
+                        createExplosionEffect(tank.xAxis, tank.yAxis, EXPLOSION_SPECIAL);
+                        explosionSoundEffect();
+                        tanksArray.splice(tankIndex, 1);
+                    }, 1000);
+                }
+            }
+        });
+    });
+}
+/* -------------- Checking if player got hit by enemy's bullet -------------- */
 function checkPlayerBulletCollision() {
     enemiesArray.forEach(enemy => {
         if (enemy.canShoot) {
@@ -404,7 +465,10 @@ function respawnPlayerAfterHit() {
     player.playerHit();
     player.playerReSpawn(x, y);
 }
-
+// Is player dead or not ???
+function isGameOver() {
+    return player.isDead();
+}
 /* -------------------------------------------------------------------------- */
 /*                             Score Manipulation                             */
 /* -------------------------------------------------------------------------- */
@@ -422,20 +486,27 @@ function increaseScoreOnEnemyKilled(enemy) {
 function increaseScoreOnTurretDestroyed() {
     score += SCORE_TURRET * (difficulty == DIFFICULTY_EASY ? 1 : scoreMultiplier);
 }
+function increaseScoreOnTankDestroyed() {
+    score += SCORE_TANK;
+}
 function decreaseScoreOnHit() {
     score -= SCORE_HIT * (difficulty == DIFFICULTY_EASY ? 1 : scoreMultiplier);
 }
 /* ----------------------------------- -- ----------------------------------- */
-function isGameOver() {
-    return player.isDead();
-}
+/* -------------------------- Sound effects section ------------------------- */
 function playerHitSoundEffect() {
     playAudio(gameAudios.playerHit);
 }
 function enemyHitSoundEffect() {
     playAudio(gameAudios.enemyHit);
 }
-
+function explosionSoundEffect() {
+    playAudio(gameAudios.explosion);
+}
+function metalHitSoundEffect() {
+    playAudio(gameAudios.metalHit);
+}
+/* ------------------------- Powerup blocks section ------------------------- */
 function drawPowerUpBlock() {
     if (powerupBlock != undefined) {
         powerupBlock.draw(ctx);
@@ -450,9 +521,9 @@ function checkBulletPowerUpBlockCollision() {
     const shouldGeneratePowerUp = Math.round(generateRandomNumber(1, 2)) % 2 === 0;
     let powerUp;
     // Determine the type of power-up based on the random number generated
-    if (randomPowerUp < 2) {
+    if (randomPowerUp <= 3) {
         powerUp = POWERUP_SPECIAL;
-    } else if (randomPowerUp < 4) {
+    } else if (randomPowerUp == 4) {
         powerUp = POWERUP_MULTIPLIER;
     } else {
         powerUp = POWERUP_HEALTH;
@@ -460,14 +531,14 @@ function checkBulletPowerUpBlockCollision() {
     playerBullets.forEach((bullet, index) => {
         // Check if the power-up block is open and there is a collision between the bullet and the block
         if (powerupBlock.isOpen && detectRectCollision(bullet, powerupBlock)) {
-            playAudio(gameAudios.metalHit);
+            metalHitSoundEffect();
             playerBullets.splice(index, 1);
             // Decrease the hit count of the power-up block
             powerupBlock.hit--;
             // Check if the power-up block has been hit enough times to generate a power-up
             if (powerupBlock.hit === 0) {
                 // Check if the difficulty is hard or medium, if so a power-up should not be generated
-                if ((difficulty === DIFFICULTY_HARD || difficulty === DIFFICULTY_MEDIUM) && !shouldGeneratePowerUp) {
+                if ((difficulty === DIFFICULTY_HARD) && !shouldGeneratePowerUp) {
                     // Add an empty string to the powerupArray
                     powerupArray.push("");
                 } else {
@@ -479,9 +550,10 @@ function checkBulletPowerUpBlockCollision() {
     });
 }
 
+/* ------- Upgrading the difficulty if the game is getting to easy :) ------- */
 function upgradeDifficulty() {
     const EASY_THRESHOLD = 10000;
-    const MEDIUM_THRESHOLD = 20000;
+    const MEDIUM_THRESHOLD = 30000;
     if (difficulty == DIFFICULTY_EASY && score >= EASY_THRESHOLD) {
         difficulty = DIFFICULTY_MEDIUM;
         localStorage.setItem('difficulty', difficulty);
