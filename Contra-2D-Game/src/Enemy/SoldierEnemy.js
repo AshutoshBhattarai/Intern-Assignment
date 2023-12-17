@@ -92,6 +92,7 @@ class SoldierEnemy extends Enemy {
 
         // Check if the bulletCount is less than the bulletLimit.
         if (this.bulletCount < this.bulletLimit) {
+            playAudio(gameAudios.enemyShooting);
             // If so, increment the bulletCount by 1.
             this.bulletCount++;
             // Push the bullet object into the bullets array.

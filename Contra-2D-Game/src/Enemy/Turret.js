@@ -65,6 +65,7 @@ class Turret {
             }
             // Check if the burst limit has not been reached yet
             if (this.bulletBurst < this.burstLimit) {
+                playAudio(gameAudios.turretShooting);
                 // Increment the burst count and add the bullet to the bullets array
                 this.bulletBurst++;
                 this.bullets.push(bullet);
