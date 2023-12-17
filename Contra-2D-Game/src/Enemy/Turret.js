@@ -21,8 +21,8 @@ class Turret {
         this.turretImage.src = './assets/images/Contra-Tanks.gif'
         this.bulletImage.src = './assets/images/Contra-Extras.gif'
         if (difficulty != DIFFICULTY_EASY) {
-            this.bulletSpeed = difficulty == DIFFICULTY_MEDIUM ? (TURRET_BULLET_SPEED + 1) : (TURRET_BULLET_LIMIT + 2);
-            this.burstLimit = difficulty == DIFFICULTY_MEDIUM ? (TURRET_BULLET_LIMIT + 1) : (TURRET_BULLET_LIMIT + 2);
+            this.bulletSpeed = (TURRET_BULLET_LIMIT + 1.5);
+            this.burstLimit = (TURRET_BULLET_LIMIT + 1);
             this.health = difficulty == DIFFICULTY_MEDIUM ? (TURRET_HEALTH + 2) : (TURRET_HEALTH + 4);
         }
     }
@@ -59,8 +59,8 @@ class Turret {
                 xAxis: this.bulletInitialX,
                 yAxis: this.bulletInitialY,
                 speed: this.bulletSpeed,
-                height: 5,
-                width: 5,
+                height: BULLET_RADIUS * 2,
+                width: BULLET_RADIUS * 2,
                 angle: this.angle
             }
             // Check if the burst limit has not been reached yet
