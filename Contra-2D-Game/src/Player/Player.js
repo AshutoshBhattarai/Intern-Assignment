@@ -225,10 +225,9 @@ class Player {
         // Increase the horizontal velocity of the player
         this.velX += SPEED;
         if (!inputs.jump && !this.isJumping) {
+            // Trigger the animation for movement
             this.animateMovement();
-
         }
-        // Trigger the animation for movement
 
         // Limit the maximum horizontal velocity to 4
         this.velX = Math.min(this.velX, 4);
@@ -242,9 +241,9 @@ class Player {
             this.actions = swimming[3];
         } else {
             if (!inputs.jump && !this.isJumping) {
+                // Run the player's running animation for the right direction
                 this.playerRunning(DIRECTION_RIGHT);
             }
-            // Run the player's running animation for the right direction
         }
     }
     applyGravity() {
@@ -253,6 +252,7 @@ class Player {
     }
     jump() {
         this.isJumping = true;
+        // Set the inGround variable to false to indicate that the object is no longer on the ground
         this.inGround = false;
         if (this.isJumping) {
             this.height = TILE_SIZE;
@@ -261,7 +261,6 @@ class Player {
         }
         // Set the vertical velocity (velY) to predefined JUMP_HEIGHT to make the player jump
         this.velY = JUMP_HEIGHT;
-        // Set the inGround variable to false to indicate that the object is no longer on the ground
     }
     animateJump() {
         let jumpFrame = 0;
@@ -314,6 +313,7 @@ class Player {
     isDead() {
         return this.lives <= 0;
     }
+    //! (Not in use)
     checkBoundary() {
         this.xAxis = Math.max(0, this.xAxis);
         this.yAxis = Math.min(CANVAS_HEIGHT - PLAYER_HEIGHT, this.yAxis);
