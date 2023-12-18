@@ -19,5 +19,5 @@ const gameAudios = {
     shutDown: './assets/sound/discharged-battery-151926.mp3',
     specialBullet: './assets/sound/plasmacannon-94545.mp3',
     enemyShooting : './assets/sound/desert-eagle-gunshot-14622.mp3',
-    turretShooting : '../../assets/sound/laser-zap-90575.mp3',
+    turretShooting : './assets/sound/laser-zap-90575.mp3',
 }
