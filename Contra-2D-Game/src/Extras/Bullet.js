@@ -84,6 +84,7 @@ class Bullet {
     }
     animateSpecialBullet() {
         this.animationTimer++;
+        // 7 is used to control the animation speed of the bullet
         if (this.animationTimer % 7 == 0 && this.animationTimer != 0) {
             this.specialBulletFrame++;
             if (this.specialBulletFrame >= bulletSprite.specialFire.length) {

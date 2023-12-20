@@ -23,6 +23,7 @@ class Explosion {
         const lastFrame = isNormalExplosion ? normalExplosionSprite.length - 1 : cloudExplosionSprite.length - 1;
         const endTime = isNormalExplosion ? 100 : 50;
         this.animationTimer++;
+        // 5 is used to control the animation( can be any value it just increases or decreases the animation speed )
         if (this.animationTimer % 5 === 0 && this.frame < lastFrame) {
             this.frame++;
             this.state = isNormalExplosion ? normalExplosionSprite[this.frame] : cloudExplosionSprite[this.frame];

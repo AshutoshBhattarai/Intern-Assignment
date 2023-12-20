@@ -288,13 +288,18 @@ class Player {
         //     clearInterval(dropinterval)
         // }, 200)
     }
+    // Goes to the prone position
     goProne() {
         let { left, right } = playerPronePosition;
+        // 40 is used so the player doesn't float in the air in prone position
         this.yAxis += 40;
+        //Changing player height width
         this.height = PLAYER_WIDTH;
         this.width = PLAYER_HEIGHT;
+        // Turn where the player is facing
         this.actions = this.isFacing == DIRECTION_LEFT ? left : right;
     }
+    //Called when the player is hit by a bullet or enemy
     playerHit() {
         this.lives--;
         this.isSpawning = true;
@@ -302,7 +307,7 @@ class Player {
             this.isSpawning = false;
         }, 3000)
     }
-
+    // Respawns the player in cretain (x,y) coordinates
     playerReSpawn(x, y) {
         this.resetPlayerSize();
         this.resetActions();
@@ -310,10 +315,11 @@ class Player {
         this.xAxis = x;
         this.yAxis = y;
     }
+    // Checks whether the player has lives left or not
     isDead() {
         return this.lives <= 0;
     }
-    //! (Not in use)
+    // Doesn't let the player move beyond the left and bottom of the screen
     checkBoundary() {
         this.xAxis = Math.max(0, this.xAxis);
         this.yAxis = Math.min(CANVAS_HEIGHT - PLAYER_HEIGHT, this.yAxis);
