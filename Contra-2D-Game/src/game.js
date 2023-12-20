@@ -60,6 +60,8 @@ function init() {
     // Create the Player object with the specified parameters
     player = new Player(PLAYER_INITIAL_SPAWN_X, PLAYER_INITIAL_SPAWN_Y, ctx, gameMap.collisionBlocks);
 }
+
+// Game is rendered Here 
 function render() {
     gameMap.draw();
     // Check if player is out of bounds
@@ -150,7 +152,7 @@ function updateGameMap() {
     tanksArray = gameMap.tanks;
     player.xAxis = 0;
     player.yAxis = getPlayerLastPosY();
-    // updating player collision blocks(to detect collision...(???)) for the new map
+    // updating player collision blocks for the new map
     player.collisionBlocks = gameMap.collisionBlocks;
 }
 
@@ -269,10 +271,7 @@ function updateBullets(bulletsArray) {
 /* --------------------- Checking if map is clear or not -------------------- */
 // To progress to next section;
 function checkMapClear() {
-    if (enemiesArray.length == 0 && turretsArray.length == 0 && tanksArray.length == 0) {
-        return true;
-    }
-    return false;
+    return (enemiesArray.length == 0 && turretsArray.length == 0 && tanksArray.length == 0)
 }
 
 /* -------------------------------------------------------------------------- */
@@ -386,11 +385,7 @@ function checkPlayerInProximity(enemy) {
     // Calculating the horizontal distance between player and enemy using their X-axis Coords.
     const horizontalDistance = Math.abs(player.xAxis - enemy.xAxis);
     // Checking if the distance is less than or equal to threshold value (in pixel)
-    if (horizontalDistance <= threshold) {
-        return true;
-    } else {
-        return false;
-    }
+    return horizontalDistance <= threshold
 }
 
 /* ------------------------- Display available lives ------------------------ */
