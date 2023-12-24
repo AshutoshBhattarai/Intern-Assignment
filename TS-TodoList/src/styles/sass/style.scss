@@ -1,0 +1,12 @@
+* {
+  padding: 0;
+  margin: 0;
+  font-family: sans-serif;
+}
+@import "./partials/variables";
+@import "./partials/utils";
+@import "./partials/buttons";
+@import "./partials/inputs";
+@import './partials/checkbox';
+@import "./partials/header";
+@import "./partials/todo";

@@ -1,0 +1,3 @@
+export const ALPHABETS_SET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+export const NUMBER_SET = '0123456789';
+export const ID_LENGTH = 10;

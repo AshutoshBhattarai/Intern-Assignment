@@ -1,0 +1,17 @@
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0px 20px;
+  border-bottom-right-radius: 20px;
+  border-bottom-left-radius: 20px;
+  box-shadow: 0 4px 8px 0 rgba(70, 126, 223, 0.2);
+  margin-bottom: 20px;
+  &__title {
+    
+    color: $color-primary;
+  }
+  &__nav {
+    padding: 20px;
+  }
+}

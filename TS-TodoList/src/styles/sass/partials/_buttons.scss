@@ -1,0 +1,29 @@
+@mixin buttonFill($color) {
+  background-color: $color;
+  color: $color-white;
+}
+@mixin buttonStyle($color) {
+  color: $color;
+  border: 1px solid $color;
+  &:hover {
+    @include buttonFill($color);
+  }
+  &.active {
+    @include buttonFill($color);
+  }
+}
+button {
+  padding: 20px;
+  background: transparent;
+  border-radius: 10px;
+  cursor: pointer;
+  &.primary {
+    @include buttonStyle($color-primary);
+  }
+  &.secondary {
+    @include buttonStyle($color-black);
+  }
+  &.delete{
+    @include buttonStyle($color-red);
+  }
+}
