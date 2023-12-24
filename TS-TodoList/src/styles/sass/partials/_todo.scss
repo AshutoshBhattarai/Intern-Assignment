@@ -4,6 +4,7 @@
   &__item {
     display: flex;
     flex-direction: column;
+    position: relative;
     gap: 10px;
     border: 1px solid $color-primary;
     border-radius: 20px;
@@ -12,20 +13,49 @@
     color: $color-primary;
     font-size: $font-normal;
   }
-  &__search {
+  &__head {
     font-size: $font-title;
     display: flex;
     justify-content: space-around;
     gap: 20px;
   }
-  &__create{
-   padding: 10px;
+  &__create {
+    display: none;
+    padding: 10px;
+    &--input {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding: 20px;
+    }
+    &--btn {
+      display: flex;
+      gap: 10px;
+      padding: 0 20px;
+    }
   }
-  &__isCompleted{
+  &__isCompleted {
     display: flex;
     justify-content: start;
     gap: 20px;
     align-items: center;
   }
+  &__delete {
+    position: absolute;
+    right: 20px;
+    top: 10px;
+    left: auto;
+    bottom: auto;
+    font-size: 20px;
+  }
+  &__empty {
+    text-align: center;
+    padding: 20px;
+    color: $color-primary;
+    font-size: 18px;
+    background-color: #f9f9f9;
+    border: 1px solid $color-primary;
+    border-radius: 10px;
+    margin: 10px 0;
+  }
 }
-

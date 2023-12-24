@@ -13,7 +13,7 @@
   }
 }
 button {
-  padding: 20px;
+  padding: 10px 20px;
   background: transparent;
   border-radius: 10px;
   cursor: pointer;
@@ -23,7 +23,7 @@ button {
   &.secondary {
     @include buttonStyle($color-black);
   }
-  &.delete{
+  &.delete {
     @include buttonStyle($color-red);
   }
 }

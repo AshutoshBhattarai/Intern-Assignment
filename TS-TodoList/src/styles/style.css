@@ -10,7 +10,7 @@
 }
 
 button {
-  padding: 20px;
+  padding: 10px 20px;
   background: transparent;
   border-radius: 10px;
   cursor: pointer;
@@ -54,11 +54,11 @@ button.delete.active {
 
 input[type=text],
 textarea {
-  padding: 20px;
+  padding: 15px;
   border-radius: 10px;
   border: 1px solid #1e90ff;
   color: #1e90ff;
-  width: 100%;
+  width: 90%;
 }
 
 input[type=checkbox] {
@@ -89,6 +89,7 @@ input[type=checkbox] {
 .todo__item {
   display: flex;
   flex-direction: column;
+  position: relative;
   gap: 10px;
   border: 1px solid #1e90ff;
   border-radius: 20px;
@@ -97,20 +98,50 @@ input[type=checkbox] {
   color: #1e90ff;
   font-size: 14px;
 }
-.todo__search {
+.todo__head {
   font-size: 32px;
   display: flex;
   justify-content: space-around;
   gap: 20px;
 }
 .todo__create {
+  display: none;
   padding: 10px;
+}
+.todo__create--input {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 20px;
+}
+.todo__create--btn {
+  display: flex;
+  gap: 10px;
+  padding: 0 20px;
 }
 .todo__isCompleted {
   display: flex;
   justify-content: start;
   gap: 20px;
   align-items: center;
+}
+.todo__delete {
+  position: absolute;
+  right: 20px;
+  top: 10px;
+  left: auto;
+  bottom: auto;
+  font-size: 20px;
+}
+.todo__empty {
+  text-align: center;
+  padding: 20px;
+  color: #1e90ff;
+  font-size: 18px;
+  background-color: #f9f9f9;
+  border: 1px solid #1e90ff;
+  border-radius: 10px;
+  margin: 10px 0;
 }
 
 /*# sourceMappingURL=style.css.map */
