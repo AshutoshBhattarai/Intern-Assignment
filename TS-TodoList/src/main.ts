@@ -56,8 +56,9 @@ btnCancelTodo.addEventListener("click", () => {
 // This adds the new todo when the 'Add Todo' button is clicked
 btnAddTodo?.addEventListener("click", () => {
   // If there is input get the values from the input fields else use default values
-  const title: string = titleInput?.value || "Todo";
-  const desc: string = descInput?.value || "Nothing to describe here !! 😁";
+  const title: string = (titleInput as HTMLInputElement).value || "Todo";
+  const desc: string =
+    (descInput as HTMLInputElement).value || "Nothing to describe here !! 😁";
   // Creates a new Todo instance
   const todo = new Todo(title, desc);
   // Adds the todo to the list
@@ -189,6 +190,6 @@ function createTodoItem(todo: Todo, container: HTMLElement | null): void {
 function hideForm(): void {
   // Hides the form and clears the input fields if any of the add or cancel buttons are clicked
   todoCreateForm.style.display = "none";
-  titleInput.value = "";
-  descInput.value = "";
+  (titleInput as HTMLInputElement).value = "";
+  (descInput as HTMLInputElement).value = "";
 }
