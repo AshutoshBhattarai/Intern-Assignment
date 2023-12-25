@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TodoQuest</title>
+    <script type="module" crossorigin src="./assets/index-XM7wk3oh.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-pKwEvlY1.css">
+  </head>
+  <body>
+    <header class="header container">
+      <h1 class="header__title">TodoQuest</h1>
+      <section class="header__nav">
+        <button class="primary" id="btn-nav-all">All</button>
+        <button class="primary" id="btn-nav-completed">Completed</button>
+        <button class="primary" id="btn-nav-remaining">Remaining</button>
+      </section>
+    </header>
+    <main>
+      <section class="todo container">
+        <div class="todo__head">
+          <input type="text" placeholder="Search Todo" id="todo-search-input" />
+          <button class="primary" id="btn-create">Create Todo</button>
+        </div>
+        <div class="todo__create" id="todo-create">
+          <div class="todo__create--input">
+            <input
+              type="text"
+              id="todo-input-title"
+              placeholder="Enter Title"
+            />
+            <input
+              type="text"
+              id="todo-input-desc"
+              placeholder="Enter detailed info"
+            />
+          </div>
+          <div class="todo__create--btn">
+            <button class="delete" id="btn-cancel-todo">Cancel</button>
+            <button class="secondary" id="btn-add-todo">Add Todo</button>
+          </div>
+        </div>
+        <div class="todo__container" id="todo-container"></div>
+      </section>
+    </main>
+  </body>
+</html>
