@@ -19,5 +19,7 @@ export const login = async (req: Request, res: Response) => {
 };
 
 export const refresh = async (req: Request, res: Response) => {
-  
-}
+  const token = req.body.token;
+  const data = await authService.refreshToken(token);
+  res.json({ data });
+};
