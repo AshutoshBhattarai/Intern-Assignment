@@ -8,7 +8,7 @@ const router = Router();
 // Attaching sub-routes to router
 router.use(auth);
 router.use("/users", users);
-router.use("/todos", todo);
+router.use("/todos",authJwt, todo);
 
 //Exporting router
 export default router;

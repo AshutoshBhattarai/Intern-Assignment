@@ -10,8 +10,7 @@ export const authJwt = (expressReq: Request, res: Response, next: NextFunction) 
   else {
     try {
       const decoded = jwt.verify(token, config.jwt.accessTokenSecret!);
-      // req.user = decoded.user;
-      console.log(decoded);
+      req.user = decoded as any;
       next();
     } catch (error) {
       res.status(401).send({

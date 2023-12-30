@@ -16,12 +16,28 @@ export const login = async (user: UserModel) => {
   if (!foundUser) return { message: "User not found" };
   const isMatch = await bcrypt.compare(user.password, foundUser.password);
   if (isMatch) {
-    const accessToken = jwt.sign(foundUser, config.jwt.accessTokenSecret!, {
-      expiresIn: ACCESS_TOKEN_EXPIRY,
-    });
-    const refreshToken = jwt.sign(foundUser, config.jwt.refreshTokenSecret!, {
-      expiresIn: REFRESH_TOKEN_EXPIRY,
-    });
+    const accessToken = jwt.sign(
+      {
+        id: foundUser.id,
+        email: foundUser.email,
+      },
+      config.jwt.accessTokenSecret!,
+      {
+        expiresIn: ACCESS_TOKEN_EXPIRY,
+      }
+    );
+    const refreshToken = jwt.sign(
+      {
+        user: {
+          id: foundUser.id,
+          email: foundUser.email,
+        },
+      },
+      config.jwt.refreshTokenSecret!,
+      {
+        expiresIn: REFRESH_TOKEN_EXPIRY,
+      }
+    );
     return {
       message: "Login Successful",
       accessToken,
