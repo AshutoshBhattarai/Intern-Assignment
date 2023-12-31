@@ -1,10 +1,11 @@
 import express, { Express } from "express";
+import "reflect-metadata";
 import config from "./configs";
 import routes from "./routes";
-
+import databaseConnection from "./database/connection";
 const app: Express = express();
 const PORT = config.serverPort;
-
+databaseConnection();
 // Middleware to parse request body
 app.use(express.json());
 // Middleware to parse url encoded request body
