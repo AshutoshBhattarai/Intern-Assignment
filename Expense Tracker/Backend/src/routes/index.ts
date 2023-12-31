@@ -1,4 +1,5 @@
 import { Router } from "express";
+import users from "./User";
 const router = Router();
 
 // Initial route
@@ -8,5 +9,6 @@ router.get("/", (req, res) => {
   });
 });
 
+router.use("/users", users);
 // Export the router
 export default router;
