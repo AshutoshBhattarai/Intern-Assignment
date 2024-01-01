@@ -1,6 +1,7 @@
 import { Router } from "express";
 import users from "./User";
 import auth from "./Auth";
+import { jwtAuth } from "../middlewares/jwtAuth";
 const router = Router();
 
 /* -------------------------------------------------------------------------- */
@@ -15,7 +16,7 @@ router.get("/", (req, res) => {
 
 /* ------------------------------- Sub Routes ------------------------------- */
 // User routes
-router.use("/users", users);
+router.use("/users", jwtAuth, users);
 // Authentication routes
 router.use(auth);
 // Export the router
