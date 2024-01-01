@@ -16,10 +16,9 @@ export const login = async (req: Request, res: Response) => {
 export const register = async (req: Request, res: Response) => {
   try {
     const user: any = req.body;
-    const newUser = await authService.register(user);
+    await authService.register(user);
     successResponse(res, {
       message: "User Registered Successfully",
-      result: newUser,
     });
   } catch (error: any) {
     errorResponse(res, { message: error.message, result: error });
