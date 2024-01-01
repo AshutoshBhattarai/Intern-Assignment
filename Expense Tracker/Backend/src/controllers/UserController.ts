@@ -1,20 +1,16 @@
 import { Request, Response } from "express";
 import * as userService from "../services/UserService";
+import { errorResponse, successResponse } from "./Response";
 export const getAllUsers = async (req: Request, res: Response) => {
   try {
     const data = await userService.getAllUsers();
-    res.status(200).json(data);
-  } catch (error) {
-    console.error(error);
-    res.status(400).json({ message: "Something went wrong !", error });
+    successResponse(res, { message: "User Fetch Success", result: data });
+  } catch (error: any) {
+    errorResponse(res, { message: error.message });
   }
 };
 
-export const addUser = async (req: Request, res: Response) => {
+export const getUserById = async (req: Request, res: Response) => {
   try {
-    await userService.addUser(req.body);
-    res.status(200).json({ message: "User added successfully" });
-  } catch (err: Error | any) {
-    res.status(400).json({ message: err.message });
-  }
+  } catch (error) {}
 };
