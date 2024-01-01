@@ -1,7 +1,7 @@
 import { Response } from "express";
 type ResponseData = {
   message: string;
-  result?: Object | Object[];
+  result?: Object | Object[] | null;
 };
 export const successResponse = (res: Response, data: ResponseData) => {
   res.status(200).json({
