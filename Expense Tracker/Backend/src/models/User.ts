@@ -5,7 +5,7 @@ export class User {
   @PrimaryGeneratedColumn("uuid")
   id!: string;
   @Column()
-  name: string;
+  username: string;
   @Column({ unique: true })
   email: string;
   @Column()
@@ -18,8 +18,8 @@ export class User {
   refreshToken?: string;
   @Column({ name: "reset_code" })
   resetCode: string;
-  constructor(name: string, email: string, password: string) {
-    this.name = name;
+  constructor(username: string, email: string, password: string) {
+    this.username = username;
     this.email = email;
     this.password = password;
     this.createdAt = new Date();
