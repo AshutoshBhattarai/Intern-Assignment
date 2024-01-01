@@ -5,8 +5,10 @@ import { User } from "../models/User";
 export const getAllUsers = async (req: Request, res: Response) => {
   try {
     const data: User[] = await userService.getAllUsers();
-    data.map((user: User) => filterUser(user));
-    successResponse(res, { message: "User Fetch Success", result: data });
+    successResponse(res, {
+      message: "User Fetch Success",
+      result: data.map((user: User) => filterUser(user)),
+    });
   } catch (error: any) {
     errorResponse(res, { message: error.message });
   }
