@@ -1,5 +1,5 @@
 export class UserModel {
-  id: number;
+  id!: number;
   email: string;
   password: string;
   constructor(email: string, password: string) {
