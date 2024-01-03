@@ -8,30 +8,43 @@
     "start": "node dist/server.js",
     "build": "tsc",
     "dev": "nodemon src/server.ts",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "knex": "knex --knexfile=src/knexFile.ts",
+    "make:migration": "npm run knex migrate:make",
+    "migrate": "npm run knex migrate:latest --verbose",
+    "rollback": "npm run knex migrate:rollback --verbose",
+    "seed": "npm run knex seed:run --verbose",
+    "make:seeder": "npm run knex seed:make"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
+    "@types/camelize": "^1.0.0",
     "@types/express": "^4.17.21",
+    "@types/joi": "^17.2.3",
     "@types/jsonwebtoken": "^9.0.5",
     "@types/node": "^20.10.5",
+    "@types/to-snake-case": "^1.0.2",
     "@types/typescript": "^2.0.0",
-    "jsonwebtoken": "^9.0.2",
+    "@types/winston": "^2.4.4",
     "nodemon": "^3.0.2",
     "ts-node": "^10.9.2",
     "typescript": "^5.3.3"
   },
   "dependencies": {
-    "@types/joi": "^17.2.3",
-    "@types/winston": "^2.4.4",
     "bcrypt": "^5.1.1",
+    "camelize": "^1.0.1",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "http-status-codes": "^2.3.0",
     "joi": "^17.11.0",
+    "jsonwebtoken": "^9.0.2",
+    "knex": "^3.1.0",
+    "pg": "^8.11.3",
+    "sqlite3": "^5.1.7-rc.0",
+    "to-snake-case": "^1.0.0",
     "winston": "^3.11.0"
   }
 }
