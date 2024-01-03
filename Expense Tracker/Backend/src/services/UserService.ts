@@ -1,4 +1,4 @@
-import { User } from "../models/User";
+import User from "../models/User";
 import * as userRepo from "../repositories/UserRepo";
 
 export const getAllUsers = async (): Promise<User[]> => {
@@ -23,4 +23,3 @@ export const updateUser = async (id: string) => {
   const user = await userRepo.getUserById(id);
   if (!user) throw new Error("User not found");
 };
-

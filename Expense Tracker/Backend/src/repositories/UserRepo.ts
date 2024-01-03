@@ -1,6 +1,6 @@
 import { Repository } from "typeorm";
 import database from "../database/config";
-import { User } from "../models/User";
+import User from "../models/User";
 const userRepo: Repository<User> = database.getRepository("users");
 
 export const getAllUsers = async () => {
@@ -23,6 +23,6 @@ export const updateRefreshToken = async (id: string, refreshToken: string) => {
   return await userRepo.update(id, { refreshToken });
 };
 
-export const deleteUser = async (user : User) =>{
+export const deleteUser = async (user: User) => {
   return await userRepo.delete(user);
-}
+};

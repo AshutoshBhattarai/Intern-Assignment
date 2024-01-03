@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import * as userService from "../services/UserService";
 import { errorResponse, successResponse } from "./Response";
-import { User } from "../models/User";
+import User from "../models/User";
 export const getAllUsers = async (req: Request, res: Response) => {
   try {
     const data: User[] = await userService.getAllUsers();
