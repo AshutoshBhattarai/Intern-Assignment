@@ -35,7 +35,7 @@ export const getTodoById = (req: Request, res: Response) => {
 
 export const deleteTodo = (req: Request, res: Response) => {
   const id = parseInt(req.params.id);
-  const todo = todoService.deleteTodo(id);
+  const todo = todoService.deleteTodo(id, (req as CustomRequest).user.id);
   return res.json({ todo });
 };
 
