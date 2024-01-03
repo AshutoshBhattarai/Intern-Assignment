@@ -1,43 +1,39 @@
-import Users from "../Database/User";
 import { UserModel } from "../model/UserModel";
+import BaseRepo from "./BaseRepo";
 
-const users: UserModel[] = Users;
-
-export const getAllUsers = (): UserModel[] => {
-  return users;
+const query = BaseRepo.queryBuilder();
+export const getAllUsers = () => {
+  return query.select(selectFormat).from("users");
 };
 
-export const getUserById = (id: number): UserModel | undefined => {
-  return users.find((user) => user.id === id);
+export const getUserById = (id: number) => {
+  return query.select(selectFormat).from("users").where({ id }).first();
 };
-export const getUserByEmail = (email: string): UserModel | undefined => {
-  return users.find((user) => user.email == email);
+export const getUserByEmail = (email: string) => {
+  return query.select(selectFormat).from("users").where({ email }).first();
 };
-export const addUser = (user: UserModel): string => {
-  if (users.some((u) => u.email === user.email)) {
+export const addUser = async (user: UserModel) => {
+  const existingUser = await query
+    .select(selectFormat)
+    .from("users")
+    .where({ email: user.email })
+    .first();
+  if (existingUser) {
     return "Email already exists";
   }
-  user.id = users.length + 1;
-  users.push(user);
+  await query.insert(user).into("users");
   return "User Signed Up Sucessfully";
 };
 
-export const updateUser = (user: UserModel): string => {
-  const index = users.findIndex((u) => u.id === user.id);
-  if (index !== -1) {
-    users[index] = user;
-    return "User data updated successfully";
-  } else {
-    return "User not found";
-  }
+export const updateUser = (user: UserModel) => {
+  return query.update(user).from("users").where({ id: user.id });
 };
 
-export const deleteUser = (id: number): string => {
-  const index = users.findIndex((user) => user.id === id);
-  if (index !== -1) {
-    users.splice(index, 1);
-    return "User deleted successfully";
-  } else {
-    return "User not found";
-  }
+export const deleteUser = (id: number) => {
+  return query.from("users").where({ id }).del();
+};
+const selectFormat = {
+  id: "users.id",
+  password: "users.password",
+  email: "users.email",
 };
