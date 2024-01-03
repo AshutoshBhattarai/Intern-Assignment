@@ -10,12 +10,12 @@ export default class User {
   email: string;
   @Column()
   password: string;
-  @Column({default : new Date()})
+  @Column({ default: new Date(), name: "created_at" })
   createdAt: Date;
-  @Column({default : new Date()})
+  @Column({ default: new Date(), name: "updated_at" })
   updatedAt: Date;
   @Column({ nullable: true, name: "refresh_token" })
   refreshToken?: string;
-  @Column({ name: "reset_code",default:randomUUID() })
+  @Column({ name: "reset_code", default: randomUUID() })
   resetCode: string;
 }
