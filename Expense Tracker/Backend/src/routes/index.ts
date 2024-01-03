@@ -1,7 +1,7 @@
 import { Router } from "express";
 import users from "./User";
 import auth from "./Auth";
-import { jwtAuth } from "../middlewares/jwtAuth";
+import { jwtAuth } from "../middlewares/JwtAuth";
 const router = Router();
 
 /* -------------------------------------------------------------------------- */
