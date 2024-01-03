@@ -13,10 +13,11 @@ export const getUserTodos = (id: number) => {
 };
 
 export const addTodo = (todo: Todo) => {
-  return todoRepo.addTodo(todo);
+  const todos = todoRepo.addTodo(todo);
+  return todos;
 };
 
-export const getTodoById = (id: number, userid: number) => {
+export const getTodoById = (id: number, userid: number) :any => {
   const todos = todoRepo.getTodoById(id, userid);
   if (!todos) throw new NotFoundError("Todo not found");
   return todos;

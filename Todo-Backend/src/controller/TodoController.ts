@@ -2,16 +2,16 @@ import { Request, Response } from "express";
 import * as todoService from "../service/TodoService";
 import { Todo } from "../model/TodoModel";
 import { CustomRequest } from "../interfaces/CustomRequest";
-export const getAllTodos = (req: Request, res: Response) => {
-  const todos = todoService.getAllTodos().map((todo) => responseTodo(todo));
+export const getAllTodos = async (req: Request, res: Response) => {
+  const todos = (await todoService.getAllTodos()).map((todo) => responseTodo(todo));
   return res.json({ todos });
 };
 
-export const getUserTodos = (req: Request, res: Response) => {
+export const getUserTodos = async (req: Request, res: Response) => {
   const user = (req as CustomRequest).user;
-  const todos = todoService
-    .getUserTodos(user.id)
-    .map((todo) => responseTodo(todo));
+  const todos : any = (await todoService
+    .getUserTodos(user.id))
+    .map((todo: Todo | undefined) => responseTodo(todo));
   return res.json({ todos });
 };
 
