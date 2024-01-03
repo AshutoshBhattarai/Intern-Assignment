@@ -16,7 +16,7 @@ export const signup = async (user: UserModel) => {
 };
 
 export const login = async (user: UserModel) => {
-  const foundUser = userRepo.getUserByEmail(user.email);
+  const foundUser : any = await userRepo.getUserByEmail(user.email);
 
   if (!foundUser) {
     return { message: "User not found" };
