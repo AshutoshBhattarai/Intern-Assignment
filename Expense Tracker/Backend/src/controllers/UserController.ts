@@ -1,37 +1,35 @@
-import { Request, Response } from "express";
+import { Request, Response, NextFunction } from "express";
 import * as userService from "../services/UserService";
-import { errorResponse, successResponse } from "./Response";
+import HttpStatus from "http-status-codes";
 import User from "../models/User";
-export const getAllUsers = async (req: Request, res: Response) => {
+export const getAllUsers = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const data: User[] = await userService.getAllUsers();
-    successResponse(res, {
+    res.status(HttpStatus.ACCEPTED).json({
       message: "User Fetch Success",
-      result: data.map((user: User) => filterUser(user)),
+      result: data,
     });
-  } catch (error: any) {
-    errorResponse(res, { message: error.message });
+  } catch (error) {
+    next(error);
   }
 };
 
-export const getUserById = async (req: Request, res: Response) => {
+export const getUserById = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const user: User | null = await userService.getUserById(req.params.id);
-    successResponse(res, {
+    res.status(HttpStatus.ACCEPTED).json({
       message: "User Fetch Success",
-      result: filterUser(user!),
+      result: user,
     });
   } catch (error: any) {
-    errorResponse(res, { message: error.message });
+    next(error);
   }
-};
-
-const filterUser = (user: User) => {
-  return {
-    id: user.id,
-    username: user.username,
-    email: user.email,
-    createdAt: user.createdAt,
-    updatedAt: user.updatedAt,
-  };
 };
