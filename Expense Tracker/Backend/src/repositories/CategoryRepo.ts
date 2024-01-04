@@ -1,6 +1,7 @@
 import { Repository } from "typeorm";
 import Category from "../models/Category";
 import database from "../database/config";
+import User from "../models/User";
 
 const repo: Repository<Category> = database.getRepository("categories");
 export const createCategory = (category: Category) => {
@@ -8,8 +9,9 @@ export const createCategory = (category: Category) => {
   return result;
 };
 
-export const getAllCategories = async () => {
+export const getAllCategories = async (user: User) => {
   return await repo.find({
+    where: { user },
     relations: { user: true },
   });
 };

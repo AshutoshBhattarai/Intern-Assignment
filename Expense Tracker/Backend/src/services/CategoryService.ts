@@ -7,8 +7,8 @@ export const createCategory = async (category: Category) => {
   return categoryRepo.createCategory(category);
 };
 
-export const getAllCategories = async () => {
-  return await categoryRepo.getAllCategories();
+export const getAllCategories = async (user : User) => {
+  return await categoryRepo.getAllCategories(user);
 };
 
 export const getCategory = async (id: string) => {
