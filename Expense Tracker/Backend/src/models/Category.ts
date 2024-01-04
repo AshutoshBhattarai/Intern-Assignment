@@ -1,10 +1,8 @@
 import {
   Column,
-  CreateDateColumn,
   Entity,
-  OneToOne,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn
 } from "typeorm";
 import User from "./User";
 
@@ -13,11 +11,11 @@ export default class Category {
   @PrimaryGeneratedColumn("uuid")
   id: string;
   @Column()
-  name: string;
+  title: string;
   @Column()
   description: string;
-  @OneToOne(() => User, { onDelete: "CASCADE" })
-  user: User;
+  @ManyToOne(() => User, { onDelete: "CASCADE" })
+  user: string;
   @Column({ default: new Date(), name: "created_at" })
   createdAt: Date;
   @Column({ default: new Date(), name: "updated_at" })
