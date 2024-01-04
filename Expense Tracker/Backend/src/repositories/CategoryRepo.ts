@@ -17,10 +17,7 @@ export const getAllCategories = async (user: User) => {
 };
 
 export const getCategory = async (id: string) => {
-  const category = await repo.findOne({
-    where: { id },
-    relations: { user: true },
-  });
+  const category = await repo.findOneBy({ id });
   return category;
 };
 
