@@ -2,11 +2,11 @@ import User from "../models/User";
 import * as userRepo from "../repositories/UserRepo";
 import argon2 from "argon2";
 import jwt from "jsonwebtoken";
-import config from "../configs";
+import config from "../configs/Index";
 import {
   JWT_ACCESS_TOKEN_EXPIRY,
   JWT_REFRESH_TOKEN_EXPIRY,
-} from "../constants";
+} from "../constants/Index";
 import NotFoundError from "../errors/NotFound";
 import ForbiddenError from "../errors/Forbidden";
 
