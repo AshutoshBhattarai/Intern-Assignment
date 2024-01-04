@@ -10,9 +10,9 @@ const config = {
     password: process.env.DATABASE_PASSWORD,
     database: process.env.DATABASE_NAME,
   },
-  jwt :{
+  jwt: {
     accessSecret: process.env.JWT_ACCESS_SECRET_KEY!,
-    refreshSecret: process.env.JWT_REFRESH_SECRET_KEY!
-  }
+    refreshSecret: process.env.JWT_REFRESH_SECRET_KEY!,
+  },
 };
 export default config;
