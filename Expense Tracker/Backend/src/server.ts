@@ -1,8 +1,8 @@
 /* --------------------------------- Imports -------------------------------- */
 import express, { Express } from "express";
 import "reflect-metadata";
-import config from "./configs";
-import routes from "./routes";
+import config from "./configs/Index";
+import routes from "./routes/Index";
 import databaseConnection from "./database/connection";
 import logHandler from "./middlewares/LogHandler";
 import errorHandler from "./middlewares/ErrorHandler";
