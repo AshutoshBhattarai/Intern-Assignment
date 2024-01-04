@@ -1,9 +1,11 @@
 import {
   Column,
+  CreateDateColumn,
   Entity,
   ManyToOne,
   PrimaryGeneratedColumn,
   RelationId,
+  UpdateDateColumn,
 } from "typeorm";
 import User from "./User";
 
@@ -18,8 +20,8 @@ export default class Income {
   @ManyToOne(() => User, { onDelete: "CASCADE" })
   @RelationId((income: Income) => income.user)
   user: User;
-  @Column({ default: new Date(), name: "created_at", update: false })
+  @CreateDateColumn({ default: new Date(), name: "created_at", update: false })
   createdAt: Date;
-  @Column({ default: new Date(), name: "updated_at" })
+  @UpdateDateColumn({ default: new Date(), name: "updated_at" })
   updatedAt: Date;
 }

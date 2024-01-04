@@ -1,5 +1,5 @@
 import { randomUUID } from "crypto";
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 @Entity("users")
 export default class User {
   @PrimaryGeneratedColumn("uuid")
@@ -10,9 +10,9 @@ export default class User {
   email: string;
   @Column()
   password: string;
-  @Column({ default: new Date(), name: "created_at", update: false })
+  @CreateDateColumn({ default: new Date(), name: "created_at", update: false })
   createdAt: Date;
-  @Column({ default: new Date(), name: "updated_at" })
+  @UpdateDateColumn({ default: new Date(), name: "updated_at" })
   updatedAt: Date;
   @Column({ nullable: true, name: "refresh_token" })
   refreshToken?: string;

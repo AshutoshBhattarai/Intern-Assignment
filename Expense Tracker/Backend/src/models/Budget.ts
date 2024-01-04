@@ -2,14 +2,14 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   ManyToOne,
-  OneToOne,
   PrimaryGeneratedColumn,
   RelationId,
-  UpdateDateColumn,
+  UpdateDateColumn
 } from "typeorm";
-import User from "./User";
 import Category from "./Category";
+import User from "./User";
 
 @Entity("budgets")
 export default class Budget {
@@ -25,12 +25,14 @@ export default class Budget {
   endTime: Date;
   @ManyToOne(() => User, { onDelete: "CASCADE" })
   @RelationId((budget: Budget) => budget.user)
+  @JoinColumn({ name: "user_id" })
   user: User;
-  @OneToOne(() => Category, { onDelete: "CASCADE" })
+  @ManyToOne(() => Category,{ onDelete: "CASCADE" })
   @RelationId((budget: Budget) => budget.category)
+  @JoinColumn({ name: "category_id" })
   category: Category;
-  @Column({ default: new Date(), name: "created_at", update: false })
+  @CreateDateColumn({ default: new Date(), name: "created_at", update: false })
   createdAt: Date;
-  @Column({ default: new Date(), name: "updated_at" })
+  @UpdateDateColumn({ default: new Date(), name: "updated_at" })
   updatedAt: Date;
 }
