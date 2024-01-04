@@ -10,7 +10,6 @@ export const jwtAuth = (req: Request, res: Response, next: NextFunction) => {
     const tokenUser = jwt.verify(token!, config.jwt.accessSecret);
     if (!tokenUser) throw new ForbiddenError("Invalid access token");
     else {
-      console.log(tokenUser);
       (req as any).user = (tokenUser as any).userid;
       next();
     }
