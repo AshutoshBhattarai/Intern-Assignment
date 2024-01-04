@@ -23,12 +23,15 @@ export const createCategory = async (
 };
 
 export const getAllCategories = async (
-  _req: Request,
+  req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    const response = await categoryService.getAllCategories();
+    const userId = (req as any).user;
+    const user = new User();
+    user.id = userId;
+    const response = await categoryService.getAllCategories(user);
     res.status(HttpStatus.OK).json({
       message: "Categories fetched successfully",
       result: response,
