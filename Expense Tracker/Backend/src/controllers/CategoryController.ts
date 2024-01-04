@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import * as categoryService from "../services/CategoryService";
 import HttpStatus from "http-status-codes";
 import Category from "../models/Category";
+import User from "../models/User";
 export const createCategory = async (
   req: Request,
   res: Response,
@@ -62,7 +63,7 @@ export const updateCategory = async (
     const category: Category = req.body;
     const { id } = req.params;
     category.id = id;
-    category.user = (req as any).user;
+    category.user = new User().id = (req as any).user;
     const response = await categoryService.updateCategory(
       category.user,
       category

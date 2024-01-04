@@ -1,6 +1,7 @@
 import ForbiddenError from "../errors/Forbidden";
 import NotFoundError from "../errors/NotFound";
 import Category from "../models/Category";
+import User from "../models/User";
 import * as categoryRepo from "../repositories/CategoryRepo";
 export const createCategory = async (category: Category) => {
   return categoryRepo.createCategory(category);
@@ -14,7 +15,8 @@ export const getCategory = async (id: string) => {
   return await categoryRepo.getCategory(id);
 };
 
-export const updateCategory = async (userid: string, category: Category) => {
+export const updateCategory = async (userid: User, category: Category) => {
+
   const exists = await categoryRepo.getCategory(category.id);
   if (!exists) throw new NotFoundError("Category does not exist");
   if (userid != exists.user)
@@ -22,7 +24,7 @@ export const updateCategory = async (userid: string, category: Category) => {
   return categoryRepo.updateCategory(category.id, category);
 };
 
-export const deleteCategory = async (userid: string, categoryId: string) => {
+export const deleteCategory = async (userid: User, categoryId: string) => {
   const exists = await categoryRepo.getCategory(categoryId);
   if (!exists) throw new NotFoundError("Category does not exist");
   if (userid != exists.user)

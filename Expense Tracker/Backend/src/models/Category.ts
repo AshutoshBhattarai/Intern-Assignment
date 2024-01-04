@@ -1,8 +1,10 @@
 import {
   Column,
   Entity,
+  JoinColumn,
   ManyToOne,
-  PrimaryGeneratedColumn
+  PrimaryGeneratedColumn,
+  RelationId,
 } from "typeorm";
 import User from "./User";
 
@@ -15,7 +17,9 @@ export default class Category {
   @Column()
   description: string;
   @ManyToOne(() => User, { onDelete: "CASCADE" })
-  user: string;
+  @JoinColumn({ name: "user_id" })
+  @RelationId((category: Category) => category.user)
+  user: User;
   @Column({ default: new Date(), name: "created_at" })
   createdAt: Date;
   @Column({ default: new Date(), name: "updated_at" })
