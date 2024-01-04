@@ -1,4 +1,10 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  RelationId,
+} from "typeorm";
 import User from "./User";
 import Category from "./Category";
 
@@ -15,10 +21,12 @@ export default class Expense {
   @Column()
   image: string;
   @ManyToOne(() => User, { onDelete: "CASCADE" })
+  @RelationId((expense: Expense) => expense.user)
   user: User;
   @ManyToOne(() => Category, { onDelete: "SET NULL" })
+  @RelationId((expense: Expense) => expense.category)
   category: Category;
-  @Column({ default: new Date(), name: "created_at" })
+  @Column({ default: new Date(), name: "created_at", update: false })
   createdAt: Date;
   @Column({ default: new Date(), name: "updated_at" })
   updatedAt: Date;

@@ -20,7 +20,7 @@ export default class Category {
   @JoinColumn({ name: "user_id" })
   @RelationId((category: Category) => category.user)
   user: User;
-  @Column({ default: new Date(), name: "created_at" })
+  @Column({ default: new Date(), name: "created_at", update: false })
   createdAt: Date;
   @Column({ default: new Date(), name: "updated_at" })
   updatedAt: Date;

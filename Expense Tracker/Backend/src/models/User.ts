@@ -10,7 +10,7 @@ export default class User {
   email: string;
   @Column()
   password: string;
-  @Column({ default: new Date(), name: "created_at" })
+  @Column({ default: new Date(), name: "created_at", update: false })
   createdAt: Date;
   @Column({ default: new Date(), name: "updated_at" })
   updatedAt: Date;
