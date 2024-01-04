@@ -1,5 +1,5 @@
 import { DataSource } from "typeorm";
-import config from "../configs";
+import config from "../configs/Index";
 const db = config.database;
 
 const database = new DataSource({
