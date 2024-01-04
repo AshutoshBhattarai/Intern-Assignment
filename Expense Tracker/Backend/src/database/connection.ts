@@ -1,11 +1,12 @@
 import dbConfig from "./config";
-const connection = async()=>{
-    try {
-        await dbConfig.initialize();
-        console.log("Database is connected !!");
-    } catch (error) {
-        console.error("Database connection error !!");
-        console.error(error);
-    }
-}
+import logger from "../utils/logger";
+const connection = async () => {
+  try {
+    await dbConfig.initialize();
+    logger.info("Database is connected !!");
+  } catch (error) {
+    logger.error("Database connection error !!");
+    logger.error(error);
+  }
+};
 export default connection;
