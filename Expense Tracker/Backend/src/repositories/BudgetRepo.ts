@@ -7,7 +7,8 @@ const repo: Repository<Budget> = database.getRepository("budgets");
 
 export const getBudget = async (user: User) => {
   return await repo.find({
-    where: { user },
+    where: { user: { id: user.id } },
+    relations: ["user", "category"],
   });
 };
 
@@ -20,4 +21,10 @@ export const deleteBudget = async (id: string) => {
 };
 export const updateBudget = async (id: string, budget: Budget) => {
   return await repo.update({ id }, budget);
+};
+
+export const getTotalBudget = async (user: User) => {
+  return await repo.sum("amount", {
+    user: {id: user.id},
+  });
 };
