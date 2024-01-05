@@ -1,6 +1,7 @@
 import { NotFoundError } from "../errors/NotFoundError";
 import * as todoRepo from "../Repositories/TodoRepo";
 import { Todo } from "../model/TodoModel";
+import { getPaginationOptions } from "../utils/pagination";
 
 export const getAllTodos = () => {
   return todoRepo.getAllTodos();
@@ -17,8 +18,14 @@ export const addTodo = (todo: Todo) => {
   return todos;
 };
 
-export const getTodoById = (id: number, userid: number) :any => {
-  const todos = todoRepo.getTodoById(id, userid);
+export const getTodosBy = async (params: any, userid: number) => {
+  const { page, size } = params;
+  const pageDetails = getPaginationOptions({ page, size });
+  const todos = await todoRepo.getTodosBy(
+    { ...pageDetails, ...params },
+    userid
+  );
+
   if (!todos) throw new NotFoundError("Todo not found");
   return todos;
 };

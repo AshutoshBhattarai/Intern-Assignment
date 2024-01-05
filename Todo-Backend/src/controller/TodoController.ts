@@ -26,10 +26,10 @@ export const updateTodo = (req: Request, res: Response) => {
   const todo = todoService.updateTodo(id, data);
   return res.json({ todo });
 };
-export const getTodoById = (req: Request, res: Response) => {
-  const todoId = parseInt(req.params.id);
+export const getTodosBy = async (req: Request, res: Response) => {
+  const params = req.query;
   const userId = (req as CustomRequest).user.id;
-  const todo = responseTodo(todoService.getTodoById(todoId, userId));
+  const todo = responseTodo(await todoService.getTodosBy(params, userId));
   return res.json(todo);
 };
 
@@ -44,7 +44,7 @@ const createData = (req: Request) => {
   return { ...req.body, userid: user.id };
 };
 
-const responseTodo = (todo: Todo | undefined) => {
+const responseTodo = (todo: Todo | undefined | any) => {
   if (!todo) return null;
   return {
     title: todo.title,
