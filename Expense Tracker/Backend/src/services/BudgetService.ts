@@ -16,7 +16,6 @@ export const createBudget = async (user: User, budget: Budget) => {
 };
 
 export const getAllBudgets = async (user: User) => {
-  console.log(await budgetRepo.getTotalBudget(user));
   const budgets = await budgetRepo.getBudget(user);
   return budgets;
 };
