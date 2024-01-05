@@ -1,7 +1,12 @@
 import { NextFunction, Request, Response } from "express";
-import jwt from "jsonwebtoken";
+import jwt, {
+  JsonWebTokenError,
+  NotBeforeError,
+  TokenExpiredError,
+} from "jsonwebtoken";
 import config from "../configs/Index";
 import ForbiddenError from "../errors/Forbidden";
+import UnauthorizedError from "../errors/Unauthorized";
 
 export const jwtAuth = (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -14,6 +19,15 @@ export const jwtAuth = (req: Request, res: Response, next: NextFunction) => {
       next();
     }
   } catch (error) {
-    throw error;
+    if (error instanceof TokenExpiredError) {
+      throw new UnauthorizedError("Access Token has expired!");
+    }
+    if (error instanceof NotBeforeError) {
+      throw new UnauthorizedError("JWT is not active");
+    }
+    if (error instanceof JsonWebTokenError) {
+      throw new UnauthorizedError("JWT is malformed");
+    }
+    next(error);
   }
 };
