@@ -19,7 +19,7 @@ export const deleteExpense = async (expense: Expense) => {
 
 export const getExpenses = async (user: User) => {
   return await repo.find({
-    where: { user },
+    where: { user: { id: user.id } },
   });
 };
 
@@ -32,5 +32,5 @@ export const getExpenseByDate = (
   endDate: Date,
   user: User
 ) => {
-//Todo Add the return Logic
+  //Todo Add the return Logic
 };
