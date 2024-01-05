@@ -1,8 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import * as budgetService from "../services/BudgetService";
 import HttpStatus from "http-status-codes";
-import User from "../models/User";
-import { extractUserFromJwt } from "../utils/extractUser";
 
 export const createBudget = async (
   req: Request,
@@ -11,7 +9,7 @@ export const createBudget = async (
 ) => {
   try {
     const budget = req.body;
-    const user = extractUserFromJwt(req);
+    const user = res.locals.user;
     const response = await budgetService.createBudget(user, budget);
     res.status(HttpStatus.ACCEPTED).json({
       message: "Budget created successfully",
@@ -28,7 +26,7 @@ export const getAllBudgets = async (
   next: NextFunction
 ) => {
   try {
-    const user = (new User().id = (req as any).user);
+    const user = res.locals.user;
     const budgets = await budgetService.getAllBudgets(user);
     res.status(HttpStatus.OK).json({
       message: "Budgets fetched successfully",
@@ -45,7 +43,7 @@ export const getBudgetById = (
   next: NextFunction
 ) => {
   try {
-    const user = (new User().id = (req as any).user);
+    const user = res.locals.user;
     const budget = budgetService.getBudgetById(user, req.params.id);
     res.status(HttpStatus.OK).json({
       message: "Budget fetched successfully",

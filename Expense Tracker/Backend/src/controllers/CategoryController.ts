@@ -2,8 +2,6 @@ import { NextFunction, Request, Response } from "express";
 import * as categoryService from "../services/CategoryService";
 import HttpStatus from "http-status-codes";
 import Category from "../models/Category";
-import User from "../models/User";
-import { extractUserFromJwt } from "../utils/extractUser";
 export const createCategory = async (
   req: Request,
   res: Response,
@@ -11,7 +9,7 @@ export const createCategory = async (
 ) => {
   try {
     const category: Category = req.body;
-    category.user = extractUserFromJwt(req);
+    category.user = res.locals.user;
     const response = await categoryService.createCategory(category);
     res.status(HttpStatus.ACCEPTED).json({
       message: "Category created successfully",
@@ -28,7 +26,7 @@ export const getAllCategories = async (
   next: NextFunction
 ) => {
   try {
-    const user = extractUserFromJwt(req);
+    const user = res.locals.user;
     const response = await categoryService.getAllCategories(user);
     res.status(HttpStatus.OK).json({
       message: "Categories fetched successfully",
@@ -64,7 +62,7 @@ export const updateCategory = async (
     const category: Category = req.body;
     const { id } = req.params;
     category.id = id;
-    const user = extractUserFromJwt(req);
+    const user = res.locals.user;;
     const response = await categoryService.updateCategory(
       user,
       category
@@ -85,7 +83,7 @@ export const deleteCategory = async (
 ) => {
   try {
     const { id } = req.params;
-    const user = extractUserFromJwt(req);
+    const user = res.locals.user;;
     const response = await categoryService.deleteCategory(user, id);
     res.status(HttpStatus.OK).json({
       message: "Category deleted successfully",
