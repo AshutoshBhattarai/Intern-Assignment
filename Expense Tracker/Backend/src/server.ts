@@ -6,6 +6,7 @@ import routes from "./routes/Index";
 import databaseConnection from "./database/connection";
 import logHandler from "./middlewares/LogHandler";
 import errorHandler from "./middlewares/ErrorHandler";
+import pathNotFound from "./middlewares/PathNotFound";
 
 /* -------------------------- Server initialization ------------------------- */
 const app: Express = express();
@@ -21,6 +22,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(logHandler);
 // Middleware to handle routes
 app.use(routes);
+// Middleware to handle 404 routes responses
+app.use(pathNotFound);
 // Middleware to handle errors
 app.use(errorHandler);
 /* --------------------------- Running the server --------------------------- */
