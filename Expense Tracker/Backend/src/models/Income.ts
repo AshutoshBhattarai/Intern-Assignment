@@ -2,6 +2,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
   RelationId,
@@ -19,6 +20,7 @@ export default class Income {
   amount: number;
   @ManyToOne(() => User, { onDelete: "CASCADE" })
   @RelationId((income: Income) => income.user)
+  @JoinColumn({name : "user_id"})
   user: User;
   @CreateDateColumn({ default: new Date(), name: "created_at", update: false })
   createdAt: Date;
