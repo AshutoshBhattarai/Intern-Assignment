@@ -20,4 +20,5 @@ export type ExpenseQuery = {
   amount?: number;
   date?: Date;
   description?: string;
+  category?: string;
 };
