@@ -6,9 +6,22 @@ import {
   updateCategory,
   deleteCategory,
 } from "../controllers/CategoryController";
+import {
+  validateRequestBody,
+  validateRequestQuery,
+} from "../middlewares/Validator";
+import {
+  categoryBodySchema,
+  categoryQuerySchema,
+} from "../validations/ValidationSchema";
 const router = Router();
 
-router.route("/").get(getAllCategories).post(createCategory);
-router.route("/:id").get(getCategory).put(updateCategory).delete(deleteCategory);
+router
+  .route("/")
+  .get(getAllCategories)
+  .post(validateRequestBody(categoryBodySchema), createCategory)
+  .put(updateCategory)
+  .delete(deleteCategory);
+router.get("/filter", validateRequestQuery(categoryQuerySchema), getCategory);
 
 export default router;

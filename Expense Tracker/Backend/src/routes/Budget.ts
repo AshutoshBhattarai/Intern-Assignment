@@ -1,8 +1,25 @@
 import { Router } from "express";
 const router = Router();
-import { createBudget,getAllBudgets,getBudgetById } from "../controllers/BudgetController";
+import {
+  createBudget,
+  getAllBudgets,
+  getBudgetById,
+} from "../controllers/BudgetController";
+import {
+  validateRequestBody,
+  validateRequestQuery,
+} from "../middlewares/Validator";
+import {
+  budgetBodySchema,
+  budgetQuerySchema,
+} from "../validations/ValidationSchema";
 
-router.route("/").get(getAllBudgets).post(createBudget);
-router.route("/:id").get(getBudgetById).patch().delete();
+router
+  .route("/")
+  .get(getAllBudgets)
+  .post(validateRequestBody(budgetBodySchema), createBudget)
+  .patch()
+  .delete();
+router.get("/filter", validateRequestQuery(budgetQuerySchema), getBudgetById);
 
 export default router;
