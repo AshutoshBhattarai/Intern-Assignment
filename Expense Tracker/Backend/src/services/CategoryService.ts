@@ -13,11 +13,14 @@ export const createCategory = async (category: Category) => {
 };
 
 export const getAllCategories = async (user: User) => {
-  return await categoryRepo.getAllCategories(user);
+  const categories = await categoryRepo.getAllCategories(user);
+  return categories.filter((category) => categoryResponse(category));
 };
 
 export const getCategory = async (id: string) => {
-  return await categoryRepo.getCategory(id);
+  const category = await categoryRepo.getCategory(id);
+  if (!category) throw new NotFoundError("Category not found");
+  return categoryResponse(category);
 };
 
 export const updateCategory = async (user: User, category: Category) => {
@@ -34,4 +37,12 @@ export const deleteCategory = async (user: User, categoryId: string) => {
   if (user.id != (exists.user as any))
     throw new ForbiddenError("You are not authorized to delete this category");
   return categoryRepo.deleteCategory(categoryId);
+};
+
+const categoryResponse = (category: Category) => {
+  const responseCategory = new Category();
+  responseCategory.id = category.id;
+  responseCategory.title = category.title;
+  responseCategory.description = category.description;
+  return responseCategory;
 };

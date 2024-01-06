@@ -32,3 +32,13 @@ export const getFilteredExpenses = async (
   user: User,
   params: ExpenseQuery
 ) => {};
+
+const expenseResponse = (expense: Expense) => {
+  const resExpense = new Expense();
+  resExpense.id = expense.id;
+  resExpense.amount = expense.amount;
+  resExpense.date = expense.date;
+  resExpense.description = expense.description;
+  resExpense.image = `http://localhost:5000/images/${expense.user}/${expense.image || "no-image"}`;
+  return resExpense;
+};

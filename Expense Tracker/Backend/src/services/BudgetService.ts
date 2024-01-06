@@ -24,7 +24,7 @@ export const createBudget = async (user: User, budget: Budget) => {
 
 export const getAllBudgets = async (user: User) => {
   const budgets = await budgetRepo.getBudget(user);
-  return budgets;
+  return budgets.map((budget) => budgetResponse(budget));
 };
 
 export const getBudgetById = async (user: User, id: string) => {};
@@ -34,3 +34,14 @@ export const getBudgetByTime = async (startTime: Date, endTime: Date) => {};
 export const updateBudget = async (id: string, budget: Budget) => {};
 
 export const deleteBudget = async (id: string) => {};
+
+const budgetResponse = (budget: Budget) => {
+  const responseBudget = new Budget();
+  responseBudget.id = budget.id;
+  responseBudget.amount = budget.amount;
+  responseBudget.category = budget.category;
+  responseBudget.startTime = budget.startTime;
+  responseBudget.endTime = budget.endTime;
+  responseBudget.title = budget.title;
+  return responseBudget;
+};
