@@ -7,7 +7,8 @@ export const validateRequestBody =
     try {
       const { error } = schema.validate(req.body);
       if (error) {
-        throw new ValidationError(error.message);
+        const errorMessage = error.message.replace(new RegExp(/\"/g), "");
+        throw new ValidationError(errorMessage);
       }
       next();
     } catch (error) {
@@ -16,11 +17,12 @@ export const validateRequestBody =
   };
 
 export const validateRequestQuery =
-  (schema: Schema) => (req: Request, res: Response, next: NextFunction) => {
+  (schema: Schema) => (req: Request, _res: Response, next: NextFunction) => {
     try {
       const { error } = schema.validate(req.query);
       if (error) {
-        throw new ValidationError(error.message);
+        const errorMessage = error.message.replace(new RegExp(/\"/g), "");
+        throw new ValidationError(errorMessage);
       }
       next();
     } catch (error) {
