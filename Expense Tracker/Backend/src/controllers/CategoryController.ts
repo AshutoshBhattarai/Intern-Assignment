@@ -60,13 +60,8 @@ export const updateCategory = async (
 ) => {
   try {
     const category: Category = req.body;
-    const { id } = req.params;
-    category.id = id;
-    const user = res.locals.user;;
-    const response = await categoryService.updateCategory(
-      user,
-      category
-    );
+    const user = res.locals.user;
+    const response = await categoryService.updateCategory(user, category);
     res.status(HttpStatus.ACCEPTED).json({
       message: "Category updated successfully",
       result: response,
@@ -83,7 +78,7 @@ export const deleteCategory = async (
 ) => {
   try {
     const { id } = req.params;
-    const user = res.locals.user;;
+    const user = res.locals.user;
     const response = await categoryService.deleteCategory(user, id);
     res.status(HttpStatus.OK).json({
       message: "Category deleted successfully",
