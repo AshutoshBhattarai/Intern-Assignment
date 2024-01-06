@@ -1,4 +1,4 @@
-import { Repository } from "typeorm";
+import { ILike, Repository } from "typeorm";
 import Income from "../models/Income";
 import database from "../database/config";
 import User from "../models/User";
@@ -21,4 +21,14 @@ export const updateIncome = async (income: Income) => {
 
 export const deleteIncome = async (income: Income) => {
   return await repo.delete({ id: income.id });
+};
+
+export const totalIncome = async (user: User) => {
+  return await repo.sum("amount", { user: { id: user.id }, active: true });
+};
+
+export const getIncomeSource = async (user: User) => {
+  return await repo.findOne({
+    where: { user: { id: user.id }, active: true, source: ILike("Salary") },
+  });
 };
