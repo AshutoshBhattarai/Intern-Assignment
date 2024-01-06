@@ -18,9 +18,11 @@ export default class Income {
   source: string;
   @Column("float")
   amount: number;
+  @Column({ default: true })
+  active: boolean;
   @ManyToOne(() => User, { onDelete: "CASCADE" })
   @RelationId((income: Income) => income.user)
-  @JoinColumn({name : "user_id"})
+  @JoinColumn({ name: "user_id" })
   user: User;
   @CreateDateColumn({ default: new Date(), name: "created_at", update: false })
   createdAt: Date;
