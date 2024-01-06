@@ -2,6 +2,7 @@ import { Repository } from "typeorm";
 import Budget from "../models/Budget";
 import database from "../database/config";
 import User from "../models/User";
+import Category from "../models/Category";
 
 const repo: Repository<Budget> = database.getRepository("budgets");
 
@@ -25,6 +26,16 @@ export const updateBudget = async (id: string, budget: Budget) => {
 
 export const getTotalBudget = async (user: User) => {
   return await repo.sum("amount", {
-    user: {id: user.id},
+    user: { id: user.id },
+  });
+};
+
+export const getCategoryTotalBudget = async (
+  user: User,
+  category: Category
+) => {
+  return await repo.sum("amount", {
+    user: { id: user.id },
+    category: { id: category.id },
   });
 };
