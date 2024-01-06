@@ -1,3 +1,5 @@
+#Build
+dist/
 # Logs
 logs
 *.log
