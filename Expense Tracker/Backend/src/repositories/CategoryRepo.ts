@@ -1,4 +1,4 @@
-import { Repository } from "typeorm";
+import { ILike, Repository } from "typeorm";
 import Category from "../models/Category";
 import database from "../database/config";
 import User from "../models/User";
@@ -11,8 +11,7 @@ export const createCategory = (category: Category) => {
 
 export const getAllCategories = async (user: User) => {
   return await repo.find({
-    where: { user },
-    relations: { user: true },
+    where: { user: { id: user.id } },
   });
 };
 
@@ -27,4 +26,12 @@ export const updateCategory = async (id: string, category: Category) => {
 
 export const deleteCategory = async (id: string) => {
   await repo.delete({ id });
+};
+
+export const getCategoryTitle = async (user: User, title: string) => {
+  const result = await repo.findOne({
+    where: { user: { id: user.id }, title: ILike(`%${title}%`) },
+  });
+  if (!result) return false;
+  return result.title ? true : false;
 };
