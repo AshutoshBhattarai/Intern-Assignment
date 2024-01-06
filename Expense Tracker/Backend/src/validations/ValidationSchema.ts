@@ -47,4 +47,5 @@ export const expenseQuerySchema = Joi.object({
     date : Joi.date(),
     category : Joi.string(),
     amount : Joi.number(),
+    description: Joi.string(),
 })
