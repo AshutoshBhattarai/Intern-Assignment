@@ -12,7 +12,6 @@ export const createIncome = async (
   try {
     const incomeDetails: Income = req.body;
     const user: User = res.locals.user;
-    console.log(user);
     await incomeService.createIncome(user, incomeDetails);
     res.status(HttpStatus.ACCEPTED).send({
       message: "Income created successfully",
