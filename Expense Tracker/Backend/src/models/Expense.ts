@@ -17,7 +17,7 @@ export default class Expense {
   id: string;
   @Column("float")
   amount: number;
-  @Column()
+  @Column({ type: "date" })
   date: Date;
   @Column()
   description: string;
