@@ -7,6 +7,8 @@ import * as userRepo from "../repositories/UserRepo";
 export const createCategory = async (category: Category) => {
   const user = await userRepo.getUserById(category.user.id);
   if (!user) throw new NotFoundError("User not found");
+  const exists = await categoryRepo.getCategoryTitle(user, category.title);
+  if (exists) throw new ForbiddenError("Category already exists");
   return categoryRepo.createCategory(category);
 };
 
