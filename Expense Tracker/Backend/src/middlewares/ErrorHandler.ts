@@ -7,6 +7,7 @@ import NotFoundError from "../errors/NotFound";
 import NotAcceptableError from "../errors/NotAcceptable";
 
 import logger from "../utils/logger";
+import ValidationError from "../errors/Validation";
 const errorHandler = async (
   err: Error,
   _req: Request,
@@ -26,6 +27,8 @@ const errorHandler = async (
     res.status(Status.NOT_FOUND).json({ message: err.message });
   } else if (err instanceof NotAcceptableError) {
     res.status(Status.NOT_ACCEPTABLE).json({ message: err.message });
+  } else if (err instanceof ValidationError) {
+    res.status(Status.BAD_REQUEST).json({ message: err.message });
   } else
     res.status(Status.INTERNAL_SERVER_ERROR).json({ message: err.message });
 };
