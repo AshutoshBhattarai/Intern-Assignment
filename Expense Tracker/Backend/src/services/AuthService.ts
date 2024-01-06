@@ -1,5 +1,6 @@
 import User from "../models/User";
 import * as userRepo from "../repositories/UserRepo";
+import fs from "fs";
 import argon2 from "argon2";
 import jwt from "jsonwebtoken";
 import config from "../configs/Index";
@@ -21,8 +22,8 @@ export const register = async (user: User) => {
     newUser.username = user.username;
     newUser.email = user.email;
     newUser.password = hashedPassword;
-    await userRepo.addUser(newUser);
-    return newUser;
+    const savedUser = await userRepo.addUser(newUser);
+    fs.mkdirSync("./uploads/" + savedUser.id, { recursive: true });
   } catch (error) {
     throw error;
   }
