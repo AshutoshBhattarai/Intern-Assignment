@@ -1,5 +1,6 @@
 /* --------------------------------- Imports -------------------------------- */
 import express, { Express } from "express";
+import cors from "cors";
 import "reflect-metadata";
 import config from "./configs/Index";
 import routes from "./routes/Index";
@@ -14,6 +15,14 @@ const PORT = config.serverPort;
 /* --------------------------- Database connection -------------------------- */
 databaseConnection();
 /* ------------------------------- Middlewares ------------------------------ */
+// Middleware to handle cors
+app.use(
+  cors({
+    origin: ["http://localhost:3000"],
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE"],
+  })
+);
 // Middleware to parse request body
 app.use(express.json());
 // Middleware to parse url encoded request body
