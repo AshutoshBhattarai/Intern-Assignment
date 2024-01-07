@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import * as budgetService from "../services/BudgetService";
 import HttpStatus from "http-status-codes";
+import Budget from "../models/Budget";
 
 export const createBudget = async (
   req: Request,
@@ -53,3 +54,28 @@ export const getBudgetById = (
     next(error);
   }
 };
+
+export const updateBudget = async (req : Request, res: Response, next: NextFunction) => {
+  try {
+    const budget : Budget = req.body;
+    const user = res.locals.user;
+    await budgetService.updateBudget(user, budget);
+    res.status(HttpStatus.ACCEPTED).json({
+      message: "Budget updated successfully",
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
+export const deleteBudget = async (req : Request, res: Response, next: NextFunction) => {
+  try {
+    const user = res.locals.user;
+    await budgetService.deleteBudget(user, req.params.id);
+    res.status(HttpStatus.ACCEPTED).json({
+      message: "Budget deleted successfully",
+    });
+  } catch (error) {
+    next(error);
+  }
+}
