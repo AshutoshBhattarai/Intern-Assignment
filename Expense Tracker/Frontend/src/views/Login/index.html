@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login</title>
+  </head>
+  <body>
+    <div
+      class="container justify-content-center align-content-center w-50 m-auto"
+    >
+      <div class="row justify-content-center">
+        <div class="col-md-12 text-center p-5 align-baseline">
+          <h1 class="heading-section text-primary">Login</h1>
+          <!-- <figure>
+            <img src="../../assets/images/logos/logo-no-background.svg" alt="Logo" class="w-100 ">
+          </figure> -->
+        </div>
+      </div>
+
+      <form id="form-login">
+        <div id="error-message" class="d-none alert alert-info"></div>
+        <!-- Email input -->
+        <div class="form-outline mb-4">
+          <label class="form-label" for="login-email">Email address</label>
+          <input type="email" id="login-email" class="form-control" />
+          <div class="invalid-feedback" id="login-email-error"></div>
+        </div>
+
+        <!-- Password input -->
+        <div class="form-outline mb-4">
+          <label class="form-label" for="login-password">Password</label>
+          <input type="password" id="login-password" class="form-control" />
+          <div class="invalid-feedback" id="login-password-error"></div>
+        </div>
+        <!-- Submit button -->
+        <div class="text-center">
+          <button
+            type="submit"
+            class="btn btn-outline-primary btn-block mb-4 w-100"
+            id="btn-login"
+          >
+            Login
+          </button>
+        </div>
+
+        <!-- Register buttons -->
+        <div class="text-center">
+          <p>
+            Don't have an account?
+            <a
+              href="./views/register/"
+              class="text-primary text-decoration-none"
+              >Register</a
+            >
+          </p>
+        </div>
+      </form>
+    </div>
+    <script type="module" src="./script.ts"></script>
+  </body>
+</html>
