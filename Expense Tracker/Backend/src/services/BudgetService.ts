@@ -1,4 +1,5 @@
 import NotFoundError from "../errors/NotFound";
+import UnauthorizedError from "../errors/Unauthorized";
 import WarningError from "../errors/Warning";
 import Budget from "../models/Budget";
 import User from "../models/User";
@@ -26,14 +27,31 @@ export const getAllBudgets = async (user: User) => {
   const budgets = await budgetRepo.getBudget(user);
   return budgets.map((budget) => budgetResponse(budget));
 };
+//Todo
+export const getBudgetById = async (user: User, id: string) => {
+  const budget = await budgetRepo.getBudgetById(user, id);
+  if (!budget) throw new NotFoundError("Budget not found");
+  return budgetResponse(budget);
+};
 
-export const getBudgetById = async (user: User, id: string) => {};
-
+//Todo
 export const getBudgetByTime = async (startTime: Date, endTime: Date) => {};
 
-export const updateBudget = async (id: string, budget: Budget) => {};
+export const updateBudget = async (user: User, budget: Budget) => {
+  if (!(await userRepo.getUserById(user.id)))
+    throw new NotFoundError("User not found");
+  const foundBudget = await budgetRepo.getBudgetById(user, budget.id);
+  if (!foundBudget) throw new NotFoundError("Budget not found");
+  if (foundBudget.user != user)
+    throw new UnauthorizedError("Unauthorized to update budget");
+  await budgetRepo.updateBudget(budget);
+};
 
-export const deleteBudget = async (id: string) => {};
+export const deleteBudget = async (user: User, id: string) => {
+  if (!(await userRepo.getUserById(user.id)))
+    throw new NotFoundError("User not found");
+  await budgetRepo.deleteBudget(id);
+};
 
 const budgetResponse = (budget: Budget) => {
   const responseBudget = new Budget();
