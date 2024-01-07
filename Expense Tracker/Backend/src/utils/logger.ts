@@ -11,7 +11,16 @@ const logger = winston.createLogger({
     align(),
     printf((info) => `[${info.timestamp}] ${info.level}: ${info.message}`)
   ),
-  transports: [new winston.transports.Console()],
+  transports: [
+    new winston.transports.Console(),
+    new winston.transports.File({
+      filename: "./logs/combined.log",
+    }),
+    new winston.transports.File({
+      filename: "./logs/app-error.log",
+      level: "error",
+    }),
+  ],
 });
 
 export default logger;
