@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import * as authService from "../services/AuthService";
 import HttpStatus from "http-status-codes";
+import User from "../models/User";
 
 export const login = async (
   req: Request,
@@ -8,8 +9,7 @@ export const login = async (
   next: NextFunction
 ) => {
   try {
-    const user: any = req.body;
-    console.log(user);
+    const user: User = req.body;
     const response = await authService.login(user);
     res.status(HttpStatus.ACCEPTED).json({
       message: "User Logged in sccessfully",
