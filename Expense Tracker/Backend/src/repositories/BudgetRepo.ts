@@ -13,6 +13,10 @@ export const getBudget = async (user: User) => {
   });
 };
 
+export const getBudgetById = async (user: User, id: string) => {
+  return await repo.findOne({ where: { id, user: { id: user.id } } });
+};
+
 export const createBudget = async (budget: Budget) => {
   return await repo.save(budget);
 };
@@ -20,8 +24,8 @@ export const createBudget = async (budget: Budget) => {
 export const deleteBudget = async (id: string) => {
   return await repo.delete({ id });
 };
-export const updateBudget = async (id: string, budget: Budget) => {
-  return await repo.update({ id }, budget);
+export const updateBudget = async (budget: Budget) => {
+  return await repo.update({ id: budget.id }, budget);
 };
 
 export const getTotalBudget = async (user: User) => {
