@@ -1,0 +1,18 @@
+// $my-primary-color: #07936e;
+// @font-face {
+//   font-family: "YourFont";
+//   src: url("../fonts/Advent\ Pro\ Regular.ttf") format("truetype");
+//   font-weight: 700;
+//   font-size: x-large;
+// }
+// Setting Bootstrap's $font-family-base to Custom Font
+// $font-family-base: "YourFont", sans-serif;
+// $theme-colors: (
+//   primary: $my-primary-color,
+// );
+// $body-color: $my-primary-color;
+// $btn-primary-color: #fff;
+// $link-color: $my-primary-color;
+// $link-hover-color: $my-primary-color;
+
+@import "~bootstrap/scss/bootstrap";
