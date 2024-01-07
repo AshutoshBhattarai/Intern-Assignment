@@ -37,3 +37,37 @@ export const getIncome = async (
     next(error);
   }
 };
+
+export const updateIncome = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const user: User = res.locals.user;
+    const income: Income = req.body;
+    await incomeService.updateIncome(user, income);
+    res.status(HttpStatus.ACCEPTED).json({
+      message: "Income updated successfully",
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const deleteIncome = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const user: User = res.locals.user;
+    const { id } = req.params;
+    await incomeService.deleteIncome(user, id);
+    res.status(HttpStatus.ACCEPTED).json({
+      message: "Income deleted successfully",
+    });
+  } catch (error) {
+    next(error);
+  }
+};

@@ -5,6 +5,7 @@ import User from "../models/User";
 import * as incomeRepo from "../repositories/IncomeRepo";
 import { getUserById } from "../repositories/UserRepo";
 
+//* -------------------------- Add new Income source ------------------------- */
 /**
  * Creates a new income for a user.
  *
@@ -48,6 +49,7 @@ export const createIncome = async (user: User, income: Income) => {
   return incomeRepo.createIncome(income);
 };
 
+//* -------------------------- Get User Income ------------------------- */
 /**
  * Retrieves the income of a user.
  *
@@ -68,6 +70,19 @@ export const getUserIncome = async (user: User) => {
   return income.map((income) => incomeResponse(income));
 };
 
+export const updateIncome = async (user: User, income: Income) => {
+  if (!(await getUserById(user.id))) throw new NotFoundError("User not found");
+  const existingIncome = await incomeRepo.getIncomeById(income.id);
+  if (!existingIncome) throw new NotFoundError("Income not found");
+  await incomeRepo.updateIncome(income);
+};
+export const deleteIncome = async (user: User, id: string) => {
+  if (!(await getUserById(user.id))) throw new NotFoundError("User not found");
+  const income = await incomeRepo.getIncomeById(parseInt(id));
+  if (!income) throw new NotFoundError("Income not found");
+  await incomeRepo.deleteIncome(income.id);
+};
+//* -------------------------- Helper Functions ------------------------- */
 /**
  * Creates a new instance of the Income class and copies some of the properties from the input income object.
  *

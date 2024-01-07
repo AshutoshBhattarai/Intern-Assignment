@@ -57,3 +57,31 @@ export const getFilteredExpenses = async (
     next(error);
   }
 };
+
+export const updateExpense = async (req: Request, res: Response, next: NextFunction) =>{
+  try {
+    const user: User = res.locals.user;
+    const expense: Expense = req.body;
+    await expenseService.updateExpense(user, expense);
+    res.status(HttpStatus.ACCEPTED).json({
+      message: "Expense updated successfully",
+    })
+  } catch (error) {
+    next(error)
+  }
+
+}
+
+export const deleteExpense = async (req: Request, res: Response, next: NextFunction) =>{
+  try {
+    const user : User = res.locals.user;
+    const {id} = req.params;
+    await expenseService.deleteExpense(user, id);
+    res.status(HttpStatus.ACCEPTED).json({
+      message: "Expense deleted successfully",
+    })
+    
+  } catch (error) {
+    next(error)
+  }
+}

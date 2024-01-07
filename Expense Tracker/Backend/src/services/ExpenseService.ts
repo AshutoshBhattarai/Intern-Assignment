@@ -79,6 +79,12 @@ export const getFilteredExpenses = async (user: User, params: ExpenseQuery) => {
 };
 /* ----------------------------------- -- ----------------------------------- */
 
+export const deleteExpense = async (user: User, id: string) => {
+  if (!(await getUserById(user.id))) throw new NotFoundError("User not found");
+  const expense = await expenseRepo.getExpensesById(id);
+  if (!expense) throw new NotFoundError("Expense not found");
+  expenseRepo.deleteExpense(expense.id);
+};
 /* --------------------------------- Extras --------------------------------- */
 // This function takes the expense object and returns a new expense object suitable for response.
 const expenseResponse = (expense: Expense) => {

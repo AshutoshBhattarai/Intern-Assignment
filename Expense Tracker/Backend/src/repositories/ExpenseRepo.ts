@@ -16,8 +16,8 @@ export const updateExpense = async (expense: Expense) => {
   return await repo.update({ id: expense.id }, expense);
 };
 
-export const deleteExpense = async (expense: Expense) => {
-  return await repo.delete({ id: expense.id });
+export const deleteExpense = async (id: string) => {
+  return await repo.delete({ id });
 };
 
 export const getExpenses = async (user: User) => {

@@ -19,8 +19,12 @@ export const updateIncome = async (income: Income) => {
   return await repo.update({ id: income.id }, income);
 };
 
-export const deleteIncome = async (income: Income) => {
-  return await repo.delete({ id: income.id });
+export const deleteIncome = async (id: number) => {
+  return await repo.delete({ id });
+};
+
+export const getIncomeById = async (id: number) => {
+  return await repo.findOneBy({ id });
 };
 
 export const totalIncome = async (user: User) => {
