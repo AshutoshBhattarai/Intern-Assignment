@@ -10,12 +10,13 @@ import {
 } from "../constants/Index";
 import NotFoundError from "../errors/NotFound";
 import ForbiddenError from "../errors/Forbidden";
+import BadRequestError from "../errors/BadRequest";
 
 export const register = async (user: User) => {
   try {
     const userExists = await userRepo.getUserByEmail(user.email);
     if (userExists) {
-      throw new NotFoundError(`User with email ${user.email} already exists`);
+      throw new BadRequestError(`User with email ${user.email} already exists`);
     }
     const hashedPassword = await argon2.hash(user.password);
     const newUser = new User();
