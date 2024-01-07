@@ -3,6 +3,6 @@ import { getAllUsers, getUserById } from "../controllers/UserController";
 const router = Router();
 
 router.get("/", getAllUsers);
-router.route("/:id").get(getUserById);
+router.route("/:id").get(getUserById).delete().patch();
 
 export default router;
