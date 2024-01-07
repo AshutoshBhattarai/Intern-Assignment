@@ -1,6 +1,11 @@
 import { Router } from "express";
 const router = Router();
-import { getIncome, createIncome } from "../controllers/IncomeController";
+import {
+  getIncome,
+  createIncome,
+  updateIncome,
+  deleteIncome,
+} from "../controllers/IncomeController";
 import {
   validateRequestBody,
   validateRequestQuery,
@@ -14,8 +19,8 @@ router
   .route("/")
   .get(getIncome)
   .post(validateRequestBody(incomeBodySchema), createIncome)
-  .patch()
-  .delete();
+  .patch(updateIncome);
+router.delete("/:id", deleteIncome);
 router.get("/filter", validateRequestQuery(incomeQuerySchema));
 
 export default router;

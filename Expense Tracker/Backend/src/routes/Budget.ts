@@ -2,8 +2,10 @@ import { Router } from "express";
 const router = Router();
 import {
   createBudget,
+  deleteBudget,
   getAllBudgets,
   getBudgetById,
+  updateBudget,
 } from "../controllers/BudgetController";
 import {
   validateRequestBody,
@@ -18,8 +20,8 @@ router
   .route("/")
   .get(getAllBudgets)
   .post(validateRequestBody(budgetBodySchema), createBudget)
-  .patch()
-  .delete();
+  .patch(updateBudget);
+router.delete("/:id", deleteBudget);
 router.get("/filter", validateRequestQuery(budgetQuerySchema), getBudgetById);
 
 export default router;

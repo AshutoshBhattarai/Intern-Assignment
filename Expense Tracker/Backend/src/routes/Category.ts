@@ -20,8 +20,8 @@ router
   .route("/")
   .get(getAllCategories)
   .post(validateRequestBody(categoryBodySchema), createCategory)
-  .put(updateCategory)
-  .delete(deleteCategory);
+  .put(updateCategory);
+router.delete("/:id", deleteCategory);
 router.get("/filter", validateRequestQuery(categoryQuerySchema), getCategory);
 
 export default router;

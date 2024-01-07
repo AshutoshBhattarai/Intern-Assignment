@@ -4,6 +4,8 @@ import {
   createExpense,
   getAllExpenses,
   getFilteredExpenses,
+  updateExpense,
+  deleteExpense
 } from "../controllers/ExpenseController";
 import {
   validateRequestBody,
@@ -18,8 +20,8 @@ router
   .route("/")
   .get(getAllExpenses)
   .post(validateRequestBody(expenseBodySchema), createExpense)
-  .patch()
-  .delete();
+  .patch(updateExpense);
+router.delete("/:id", deleteExpense);
 router.get(
   "/filter",
   validateRequestQuery(expenseQuerySchema),
