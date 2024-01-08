@@ -1,8 +1,9 @@
 import { Router } from "express";
-import { getAllUsers, getUserById } from "../controllers/UserController";
+import { getUserById,getUserSummary } from "../controllers/UserController";
 const router = Router();
 
-router.get("/", getAllUsers);
-router.route("/:id").get(getUserById).delete().patch();
+router.get("/", getUserById);
+router.route("/:id").delete().patch();
+router.get("/summary", getUserSummary);
 
 export default router;
