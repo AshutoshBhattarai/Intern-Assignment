@@ -62,7 +62,7 @@ const sendAuthRequest = async (email: string, password: string) => {
     if (response.status === HttpStatusCode.Accepted) {
       console.log(response);
       localStorage.setItem("jwt", response.data.tokens.accessToken);
-      window.location.href = "./views/Dashboard/";
+      window.location.href = "/views/Dashboard/";
     }
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
