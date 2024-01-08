@@ -58,9 +58,7 @@ const sendAuthRequest = async (email: string, password: string) => {
       email,
       password,
     });
-    console.log(response);
     if (response.status === HttpStatusCode.Accepted) {
-      console.log(response);
       localStorage.setItem("jwt", response.data.tokens.accessToken);
       window.location.href = "/views/Dashboard/";
     }
