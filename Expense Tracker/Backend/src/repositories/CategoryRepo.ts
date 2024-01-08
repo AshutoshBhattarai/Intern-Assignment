@@ -27,7 +27,9 @@ export const updateCategory = async (id: string, category: Category) => {
 export const deleteCategory = async (id: string) => {
   await repo.delete({ id });
 };
-
+export const getUserCategotyCount = async (id: string) => {
+  return await repo.findAndCountBy({ user: { id: id } });
+};
 export const getCategoryTitle = async (user: User, title: string) => {
   const result = await repo.findOne({
     where: { user: { id: user.id }, title: ILike(`%${title}%`) },

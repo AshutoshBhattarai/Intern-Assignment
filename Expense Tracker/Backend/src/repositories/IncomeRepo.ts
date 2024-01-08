@@ -22,7 +22,9 @@ export const updateIncome = async (income: Income) => {
 export const deleteIncome = async (id: number) => {
   return await repo.delete({ id });
 };
-
+export const getUserTotalIncome = async (id: string) => {
+  return await repo.sum("amount", { user: { id: id } });
+};
 export const getIncomeById = async (id: number) => {
   return await repo.findOneBy({ id });
 };

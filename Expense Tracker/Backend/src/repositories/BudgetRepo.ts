@@ -20,7 +20,9 @@ export const getBudgetById = async (user: User, id: string) => {
 export const createBudget = async (budget: Budget) => {
   return await repo.save(budget);
 };
-
+export const getUserTotalBudget = async (id: string) => {
+  return await repo.sum("amount", { user: { id: id } });
+};
 export const deleteBudget = async (id: string) => {
   return await repo.delete({ id });
 };

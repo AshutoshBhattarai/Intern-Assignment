@@ -29,7 +29,12 @@ export const getExpenses = async (user: User) => {
 export const getExpensesById = async (id: string) => {
   return await repo.findOneBy({ id });
 };
-
+export const getUserTotalExpense = async (id: string) => {
+  return await repo.sum("amount", { user: { id: id } });
+};
+export const getUserExpenseCount = async (id: string) => {
+  return await repo.findAndCountBy({ user: { id } });
+};
 // Todo Fix the code
 //! Date range is not working
 export const getTotalExpenseByDate = async (
