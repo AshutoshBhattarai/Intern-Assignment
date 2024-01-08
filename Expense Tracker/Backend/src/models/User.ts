@@ -1,5 +1,16 @@
 import { randomUUID } from "crypto";
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from "typeorm";
+import Income from "./Income";
+import Category from "./Category";
+import Budget from "./Budget";
+import Expense from "./Expense";
 @Entity("users")
 export default class User {
   @PrimaryGeneratedColumn("uuid")
@@ -18,4 +29,13 @@ export default class User {
   refreshToken?: string;
   @Column({ name: "reset_code", default: randomUUID() })
   resetCode: string;
+
+  @OneToMany(() => Income, (income) => income.user)
+  income: Income[];
+  @OneToMany(() => Category, (category) => category.user)
+  category: Category[];
+  @OneToMany(() => Budget, (budget) => budget.user)
+  budget: Budget[];
+  @OneToMany(() => Expense, (expense) => expense.user)
+  expense: Expense[];
 }
