@@ -11,7 +11,7 @@ export const getAllUsers = async (
     const data: User[] = await userService.getAllUsers();
     res.status(HttpStatus.ACCEPTED).json({
       message: "User Fetch Success",
-      result: data,
+      data,
     });
   } catch (error) {
     next(error);
@@ -27,7 +27,24 @@ export const getUserById = async (
     const user: User | null = await userService.getUserById(req.params.id);
     res.status(HttpStatus.ACCEPTED).json({
       message: "User Fetch Success",
-      result: user,
+      data: user,
+    });
+  } catch (error: any) {
+    next(error);
+  }
+};
+
+export const getUserSummary = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const user: User = res.locals.user;
+    const summary = await userService.getUserSummary(user);
+    res.status(HttpStatus.OK).json({
+      message: "User Summary Fetch Success",
+      data: summary,
     });
   } catch (error: any) {
     next(error);
