@@ -24,5 +24,5 @@ export const updateRefreshToken = async (id: string, refreshToken: string) => {
 };
 
 export const deleteUser = async (user: User) => {
-  return await userRepo.delete(user);
+  return await userRepo.delete(user.id);
 };
