@@ -14,6 +14,7 @@ export const createBudget = async (user: User, budget: Budget) => {
   if (!(await categoryRepo.getCategory(budget.category as any)))
     throw new NotFoundError("Category not found");
   budget.user = user;
+  budget.remainingAmount = budget.amount;
 
   const availableBudget = (await totalIncome(user)) || 0;
   const allocatedBudget = (await budgetRepo.getTotalBudget(user)) || 0;
@@ -42,8 +43,9 @@ export const updateBudget = async (user: User, budget: Budget) => {
     throw new NotFoundError("User not found");
   const foundBudget = await budgetRepo.getBudgetById(user, budget.id);
   if (!foundBudget) throw new NotFoundError("Budget not found");
-  if (foundBudget.user != user)
+  if (foundBudget.user != user){
     throw new UnauthorizedError("Unauthorized to update budget");
+  }
   await budgetRepo.updateBudget(budget);
 };
 
@@ -61,5 +63,8 @@ const budgetResponse = (budget: Budget) => {
   responseBudget.startTime = budget.startTime;
   responseBudget.endTime = budget.endTime;
   responseBudget.title = budget.title;
+  responseBudget.user = budget.user;
+  responseBudget.spentAmount = budget.spentAmount;
+  responseBudget.remainingAmount = budget.remainingAmount;
   return responseBudget;
 };
