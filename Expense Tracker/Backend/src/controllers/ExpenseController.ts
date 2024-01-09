@@ -1,9 +1,10 @@
-import { Request, Response, NextFunction } from "express";
-import * as expenseService from "../services/ExpenseService";
+import { NextFunction, Request, Response } from "express";
 import HttpStatus from "http-status-codes";
 import NotFoundError from "../errors/NotFound";
 import Expense from "../models/Expense";
 import User from "../models/User";
+import * as expenseService from "../services/ExpenseService";
+import UploadHandler from "../middlewares/UploadHandler";
 
 export const getAllExpenses = async (
   req: Request,
@@ -31,9 +32,17 @@ export const createExpense = async (
   try {
     const user: User = res.locals.user;
     const expense: Expense = req.body;
-    await expenseService.createExpense(user, expense);
-    res.status(HttpStatus.ACCEPTED).json({
-      message: "Expense Added successfully",
+    UploadHandler(user.id)(req, res, async (err) => {
+      if (err) {
+        next(err);
+      }
+      if ((req as any).file) {
+        expense.image = (req as any).file.filename;
+      }
+      await expenseService.createExpense(user, expense);
+      res.status(HttpStatus.ACCEPTED).json({
+        message: "Expense Added successfully",
+      });
     });
   } catch (error) {
     next(error);
@@ -58,30 +67,36 @@ export const getFilteredExpenses = async (
   }
 };
 
-export const updateExpense = async (req: Request, res: Response, next: NextFunction) =>{
+export const updateExpense = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const user: User = res.locals.user;
     const expense: Expense = req.body;
     await expenseService.updateExpense(user, expense);
     res.status(HttpStatus.ACCEPTED).json({
       message: "Expense updated successfully",
-    })
+    });
   } catch (error) {
-    next(error)
+    next(error);
   }
+};
 
-}
-
-export const deleteExpense = async (req: Request, res: Response, next: NextFunction) =>{
+export const deleteExpense = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
-    const user : User = res.locals.user;
-    const {id} = req.params;
+    const user: User = res.locals.user;
+    const { id } = req.params;
     await expenseService.deleteExpense(user, id);
     res.status(HttpStatus.ACCEPTED).json({
       message: "Expense deleted successfully",
-    })
-    
+    });
   } catch (error) {
-    next(error)
+    next(error);
   }
-}
+};
