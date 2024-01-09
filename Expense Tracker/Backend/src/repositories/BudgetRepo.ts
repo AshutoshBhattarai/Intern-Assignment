@@ -1,4 +1,4 @@
-import { Repository } from "typeorm";
+import { LessThan, MoreThan, Repository } from "typeorm";
 import Budget from "../models/Budget";
 import database from "../database/config";
 import User from "../models/User";
@@ -43,5 +43,26 @@ export const getCategoryTotalBudget = async (
   return await repo.sum("amount", {
     user: { id: user.id },
     category: { id: category.id },
+  });
+};
+
+export const getBudgetByCategory = async (user: User, category: Category) => {
+  return await repo.find({
+    where: { user: { id: user.id }, category: { id: category.id } },
+  });
+};
+
+export const getCategoryBudgetByDate = async (
+  date: Date,
+  user: User,
+  category: Category
+) => {
+  return await repo.find({
+    where: {
+      user: { id: user.id },
+      category: { id: category.id },
+      startTime: MoreThan(date),
+      endTime : LessThan(date),
+    },
   });
 };
