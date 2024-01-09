@@ -1,10 +1,9 @@
-import { Between, FindOptionsWhere, ILike, Raw, Repository } from "typeorm";
+import { Between, FindOptionsWhere, ILike, Repository } from "typeorm";
 import database from "../database/config";
+import Category from "../models/Category";
 import Expense from "../models/Expense";
 import User from "../models/User";
 import { ExpenseQuery } from "../types/QueryType";
-import Category from "../models/Category";
-import date from "date-fns";
 
 const repo: Repository<Expense> = database.getRepository("expenses");
 
@@ -42,32 +41,38 @@ export const getTotalExpenseByDate = async (
   endDate: Date,
   user: User,
   category: Category
-) => {
-  const firstDate = date.format(startDate, "yyyy-MM-dd");
-  const lastDate = date.format(endDate, "yyyy-MM-dd");
-  const test = await repo.find({
-    where: {
-      // user: { id: user.id },
-      date: Between(lastDate as any, firstDate as any),
-      // category: { id: category.id },
-    },
-  });
-  console.log(test);
-  // return repo.sum("amount", {
-  //   user: { id: user.id },
-  //   date: Between(startDate, endDate),
-  //   category: { id: category.id },
-  // });
-  return 0;
-};
+) => {};
 
 export const getFilteredExpenses = (user: User, params: ExpenseQuery) => {
   const whereConditions: FindOptionsWhere<Expense> = { user: { id: user.id } };
   if (params.id) whereConditions.id = params.id;
   if (params.amount) whereConditions.amount = params.amount;
-  if (params.date) whereConditions.date = params.date;
+  if (params.startDate && params.endDate)
+    whereConditions.date = Between(params.startDate, params.endDate);
   if (params.description)
     whereConditions.description = ILike(`%${params.description}%`);
   if (params.category) whereConditions.category = { id: params.category };
   return repo.find({ where: whereConditions });
+};
+
+export const getExpenseWithCategory = async (user: User,params:ExpenseQuery) => {
+  const whereConditions: FindOptionsWhere<Expense> = { user: { id: user.id } };
+  if (params.id) whereConditions.id = params.id;
+  if (params.amount) whereConditions.amount = params.amount;
+  if (params.startDate && params.endDate)
+    whereConditions.date = Between(params.startDate, params.endDate);
+  if (params.description)
+    whereConditions.description = ILike(`%${params.description}%`);
+  if (params.category) whereConditions.category = { id: params.category };
+  return await repo
+    .createQueryBuilder("expense")
+    .select([
+      "expense.id",
+      "expense.amount",
+      "expense.date",
+      "expense.description",
+    ])
+    .where(whereConditions)
+    .leftJoinAndSelect("expense.category", "category")
+    .getMany();
 };
