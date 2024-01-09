@@ -1,7 +1,8 @@
 export type BudgetQuery = {
   id?: string;
   title?: string;
-  date?: Date;
+  startDate?: Date;
+  endDate?: Date;
 };
 
 export type CategoryQuery = {
@@ -18,7 +19,8 @@ export type IncomeQuery = {
 export type ExpenseQuery = {
   id?: string;
   amount?: number;
-  date?: Date;
+  startDate?: Date;
+  endDate?: Date;
   description?: string;
   category?: string;
 };
