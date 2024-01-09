@@ -13,8 +13,7 @@
   <body>
     <nav id="nav-placeholder"></nav>
     <main class="container">
-      <h1>Your Expenses</h1>
-      <section class="row mt-4">
+      <section class="row mt-3">
         <div class="input-group d-flex col-12 justify-content-center">
           <div class="form-outline w-75" data-mdb-input-init>
             <input type="search" id="search-bar" class="form-control" />
@@ -33,12 +32,10 @@
           </a>
         </div>
       </section>
-      <section
-        class="container border border-secondary bg-secondary-subtle p-3 mt-5 rounded-3"
-        id="expense-container"
-      >
-        <h1 class="text-center h-75 p-5 ">Sorry No Data Found!</h1>
+      <section class="container p-5 row rounded-3" id="expense-container">
+        <h1 class="text-center h-75 p-5">Sorry No Data Found!</h1>
       </section>
+
       <!-- Add Expense Dialog Box -->
       <section>
         <div
@@ -49,12 +46,13 @@
           aria-labelledby="customModalLabel"
           aria-hidden="true"
         >
-          <div class="modal-dialog modal-dialog-centered" role="document">
+          <div
+            class="modal-dialog modal-lg modal-dialog-centered"
+            role="document"
+          >
             <div class="modal-content">
               <div class="modal-header">
-                <h5 class="modal-title" id="customModalLabel">
-                  Add New Expense
-                </h5>
+                <h5 class="modal-title" id="customModalLabel">Expense</h5>
               </div>
               <div class="modal-body gap-4 d-flex flex-column">
                 <div class="form-group">
@@ -112,6 +110,7 @@
           </div>
         </div>
       </section>
+      <!-- End Add Expense Dialog Box -->
     </main>
     <script type="module" src="./script.ts"></script>
   </body>
