@@ -1,11 +1,10 @@
 import { Router } from "express";
-const router = Router();
 import {
   createExpense,
+  deleteExpense,
   getAllExpenses,
   getFilteredExpenses,
   updateExpense,
-  deleteExpense
 } from "../controllers/ExpenseController";
 import {
   validateRequestBody,
@@ -15,12 +14,13 @@ import {
   expenseBodySchema,
   expenseQuerySchema,
 } from "../validations/ValidationSchema";
+const router = Router();
 
 router
   .route("/")
   .get(getAllExpenses)
   .post(validateRequestBody(expenseBodySchema), createExpense)
-  .patch(updateExpense);
+  .put(updateExpense);
 router.delete("/:id", deleteExpense);
 router.get(
   "/filter",
