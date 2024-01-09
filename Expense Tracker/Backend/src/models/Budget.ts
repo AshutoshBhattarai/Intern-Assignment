@@ -27,7 +27,7 @@ export default class Budget {
   @RelationId((budget: Budget) => budget.user)
   @JoinColumn({ name: "user_id" })
   user: User;
-  @ManyToOne(() => Category,{ onDelete: "CASCADE" })
+  @ManyToOne(() => Category, { onDelete: "CASCADE" })
   @RelationId((budget: Budget) => budget.category)
   @JoinColumn({ name: "category_id" })
   category: Category;
@@ -35,4 +35,8 @@ export default class Budget {
   createdAt: Date;
   @UpdateDateColumn({ default: new Date(), name: "updated_at" })
   updatedAt: Date;
+  @Column({ name: "remaining_amount", default: 0 })
+  remainingAmount: number;
+  @Column({ name: "spent_amount", default: 0 })
+  spentAmount: number;
 }
