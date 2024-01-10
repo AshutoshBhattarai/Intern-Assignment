@@ -1,25 +1,38 @@
+import ForbiddenError from "../errors/Forbidden";
 import NotFoundError from "../errors/NotFound";
 import UnauthorizedError from "../errors/Unauthorized";
-import WarningError from "../errors/Warning";
 import Budget from "../models/Budget";
 import User from "../models/User";
 import * as budgetRepo from "../repositories/BudgetRepo";
 import * as categoryRepo from "../repositories/CategoryRepo";
-import { totalIncome } from "../repositories/IncomeRepo";
 import * as userRepo from "../repositories/UserRepo";
 
 export const createBudget = async (user: User, budget: Budget) => {
-  if (!(await userRepo.getUserById(user.id)))
+  if (!(await userRepo.getUserById(user.id))) {
     throw new NotFoundError("User not found");
-  if (!(await categoryRepo.getCategory(budget.category as any)))
+  }
+  const category = await categoryRepo.getCategory(budget.category as any);
+  if (!category) {
     throw new NotFoundError("Category not found");
+  }
+  console.log(budget);
+  const budgetsExists: Budget[] = await budgetRepo.getBudgetByCategory(
+    user,
+    category
+  );
+  // if (budgetsExists.length <= 0) {
+  //   return;
+  // }
+  if (
+    budgetsExists.length > 0 &&
+    budgetsExists.some(
+      (b) => b.startTime === budget.startTime && b.endTime === budget.endTime
+    )
+  ) {
+    throw new ForbiddenError("Budget already exists");
+  }
   budget.user = user;
   budget.remainingAmount = budget.amount;
-
-  const availableBudget = (await totalIncome(user)) || 0;
-  const allocatedBudget = (await budgetRepo.getTotalBudget(user)) || 0;
-  if (availableBudget < budget.amount + allocatedBudget)
-    throw new WarningError("Amount Exceeds Your Total Budget");
   const newBudget = await budgetRepo.createBudget(budget);
   return newBudget;
 };
@@ -43,7 +56,7 @@ export const updateBudget = async (user: User, budget: Budget) => {
     throw new NotFoundError("User not found");
   const foundBudget = await budgetRepo.getBudgetById(user, budget.id);
   if (!foundBudget) throw new NotFoundError("Budget not found");
-  if (foundBudget.user != user){
+  if (foundBudget.user != user) {
     throw new UnauthorizedError("Unauthorized to update budget");
   }
   await budgetRepo.updateBudget(budget);
