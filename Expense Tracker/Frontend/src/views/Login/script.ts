@@ -1,8 +1,6 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import "../../assets/scss/style.scss";
-import * as bootstrap from "bootstrap";
-import http from "../../service/HttpClient";
 import { HttpStatusCode } from "axios";
+import "../../assets/scss/style.scss";
+import http from "../../service/HttpClient";
 
 const loginForm = document.getElementById("form-login") as HTMLFormElement;
 const validationError = document.getElementById("error-message") as HTMLElement;
