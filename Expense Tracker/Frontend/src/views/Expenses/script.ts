@@ -5,6 +5,9 @@ import "../../assets/scss/style.scss";
 import renderNavBar from "../../components/Navbar/navbar";
 import http from "../../service/HttpClient";
 import * as bootstrap from "bootstrap";
+import Expense from "../../interfaces/Expense";
+import Category from "../../interfaces/Category";
+import createCategoryOptions from "../../utils/CategoryOptions";
 /* ------------------------ Getting elements from DOM ----------------------- */
 const navBar = document.getElementById("nav-placeholder") as HTMLElement;
 const searchInput = document.getElementById("search-bar") as HTMLInputElement;
@@ -32,13 +35,13 @@ const expensesContainer = document.getElementById(
 ) as HTMLElement;
 
 let expenseModal: bootstrap.Modal;
-let dialogAction: "add" | "edit";
+let dialogExpenseId: string = "";
 /* ----------------------------------- -- ----------------------------------- */
 window.onload = async () => {
   renderNavBar(navBar, "nav-expenses");
   renderExpenseCards("");
   expenseModal = new bootstrap.Modal(addDialogBox);
-  createCategoryOptions();
+  createCategoryOptions(categoryInput);
 };
 
 searchBtn.addEventListener("click", () => {
@@ -47,7 +50,7 @@ searchBtn.addEventListener("click", () => {
 });
 
 expenseAddBtn.addEventListener("click", () => {
-  showDialog("add");
+  showDialog();
 });
 
 btnCloseDialog.addEventListener("click", () => {
@@ -55,7 +58,7 @@ btnCloseDialog.addEventListener("click", () => {
 });
 
 btnSaveExpense.addEventListener("click", () => {
-  saveExpense(dialogAction);
+  saveExpense();
   closeDialog();
 });
 const closeDialog = () => {
@@ -66,31 +69,38 @@ const closeDialog = () => {
   categoryInput.value = "";
   dateInput.value = "";
 };
-const saveExpense = async (action: "add" | "edit", id?: string) => {
+const saveExpense = async () => {
   const remarks = remarksInput.value;
   const amount = amountInput.value;
   const category = categoryInput.value;
+
   const date = dateInput.value || new Date();
 
-  if (action === "add") {
-    createExpense(parseFloat(amount), remarks, category, date);
-  } else if (action === "edit") {
-    // Assuming you have the expense ID stored somewhere (e.g., in a variable)
-    const expenseId = id!;
-    updateExpense(expenseId, parseFloat(amount), remarks, category, date);
+  if (dialogExpenseId === "") {
+    createExpense({
+      amount: parseFloat(amount),
+      description: remarks,
+      category,
+      date,
+    });
+  } else if (dialogExpenseId != "") {
+    const expenseId = dialogExpenseId!;
+    const expense: Expense = {
+      id: expenseId,
+      amount: parseFloat(amount),
+      description: remarks,
+      category: category,
+      date: date.toString(),
+    };
+    updateExpense(expense);
   }
 };
-const showDialog = (
-  action: "add" | "edit",
-  data?: {
-    id?: string;
-    remarks: string;
-    amount: number;
-    category: string;
-    date: string;
-  }
-) => {
-  dialogAction = action;
+const showDialog = (data?: {
+  remarks: string;
+  amount: number;
+  category: string;
+  date: string;
+}) => {
   expenseModal.show();
   receiptInput.value = "";
   remarksInput.value = data?.remarks || "";
@@ -98,7 +108,7 @@ const showDialog = (
   categoryInput.value = data?.category || "";
   dateInput.value = data?.date.toString() || "";
 };
-const createExpenseCard = (data: any) => {
+const createExpenseCard = (data: Expense) => {
   // Create the expense card element
   const expenseCard = document.createElement("div");
   expenseCard.classList.add("card", "mb-2", "col-md-6", "gx-3");
@@ -120,7 +130,7 @@ const createExpenseCard = (data: any) => {
 
   const cardCategory = document.createElement("p");
   cardCategory.classList.add("card-text", "m-0");
-  cardCategory.textContent = "Category: " + data.category.title;
+  cardCategory.textContent = "Category: " + (data.category as Category).title;
 
   // Create the card date element and assign the date from the data
   const cardDate = document.createElement("p");
@@ -142,7 +152,7 @@ const createExpenseCard = (data: any) => {
   btnDelete.setAttribute("data-bs-title", "Delete Expense");
   const btnDeletetooltip = new bootstrap.Tooltip(btnDelete);
   btnDelete.addEventListener("click", () => {
-    deleteExpense(data.id);
+    deleteExpense(data.id!);
     btnDeletetooltip.dispose();
   });
 
@@ -160,12 +170,12 @@ const createExpenseCard = (data: any) => {
   btnEdit.classList.add("btn", "btn-outline-primary");
   btnEdit.innerHTML = "<i class='fas fa-edit'></i>";
   btnEdit.addEventListener("click", () => {
-    return showDialog("edit", {
-      id: data.id,
+    dialogExpenseId = data.id!;
+    return showDialog({
       remarks: data.description,
-      amount: data.amount,
-      date: data.date,
-      category: data.category.id,
+      amount: data.amount!,
+      date: data.date as string,
+      category: (data.category as Category).id,
     });
   });
   btnEdit.setAttribute("data-bs-toggle", "tooltip");
@@ -178,7 +188,7 @@ const createExpenseCard = (data: any) => {
   const viewImage = document.createElement("a");
   viewImage.classList.add("btn", "btn-primary");
   viewImage.textContent = "View Receipt";
-  viewImage.href = data.image;
+  viewImage.href = data.image || "#";
   viewImage.target = "_blank";
 
   // Append the card date, description, amount, delete button container, edit button, and view image link to the card body
@@ -219,20 +229,14 @@ const renderExpenseCards = async (filter: any) => {
   }
 };
 
-const createExpense = async (
-  amount: number,
-  description: string,
-  category: string,
-  date: string
-  // image: File
-) => {
+const createExpense = async (expense: Expense) => {
   const response = await http.post(
     "/expenses",
     {
-      amount,
-      description,
-      category,
-      date,
+      amount: expense.amount,
+      description: expense.description,
+      category: expense.category,
+      date: expense.date,
     },
     {
       headers: {
@@ -257,49 +261,31 @@ const deleteExpense = async (id: string) => {
     renderExpenseCards("");
   }
 };
-const createCategoryOptions = async () => {
-  const userCategories = await http.get("/categories", {
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem("jwt")}`,
-    },
-  });
 
-  if (userCategories.status == HttpStatusCode.Ok) {
-    const data = userCategories.data.result;
-    categoryInput.innerHTML = "";
-    data.forEach((category: any) => {
-      const option = document.createElement("option");
-      option.value = category.id;
-      option.text = category.title;
-      categoryInput.appendChild(option);
-    });
-  }
-};
-const updateExpense = async (
-  expenseId: string,
-  amount: number,
-  description: string,
-  category: string,
-  date: string
-) => {
-  console.log("Expense ID" + expenseId);
-  const response = await http.put(
-    "/expenses/",
-    {
-      id: expenseId,
-      amount,
-      description,
-      category,
-      date,
-    },
-    {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("jwt")}`,
+const updateExpense = async (expense: Expense) => {
+  try {
+    const response = await http.put(
+      "/expenses/",
+      {
+        id: expense.id,
+        amount: expense.amount,
+        description: expense.description,
+        category: expense.category,
+        date: expense.date,
       },
-    }
-  );
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("jwt")}`,
+        },
+      }
+    );
 
-  if (response.status == HttpStatusCode.Accepted) {
-    renderExpenseCards("");
+    if (response.status == HttpStatusCode.Accepted) {
+      renderExpenseCards("");
+      dialogExpenseId = "";
+    }
+  } catch (error) {
+    dialogExpenseId = "";
+    console.log(error);
   }
 };
