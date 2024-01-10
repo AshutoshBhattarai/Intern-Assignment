@@ -12,14 +12,14 @@ import User from "./User";
 
 @Entity("income")
 export default class Income {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn("uuid")
+  id: string;
   @Column()
   source: string;
   @Column("float")
   amount: number;
-  @Column({ default: true })
-  active: boolean;
+  @Column({ type: "date", default: new Date() })
+  date: Date;
   @ManyToOne(() => User, { onDelete: "CASCADE" })
   @RelationId((income: Income) => income.user)
   @JoinColumn({ name: "user_id" })
