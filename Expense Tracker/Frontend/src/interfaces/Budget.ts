@@ -1,10 +1,14 @@
+import Category from "./Category";
+
 interface Budget {
-  id: string;
+  id?: string;
   title: string;
   amount: number;
   startTime: Date;
   endTime: Date;
-  remainingAmount: number;
-  spentAmount: number;
+  category?: Category;
+  remainingAmount?: number;
+  spentAmount?: number;
+
 }
 export default Budget;
