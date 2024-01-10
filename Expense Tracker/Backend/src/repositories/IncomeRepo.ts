@@ -19,22 +19,22 @@ export const updateIncome = async (income: Income) => {
   return await repo.update({ id: income.id }, income);
 };
 
-export const deleteIncome = async (id: number) => {
+export const deleteIncome = async (id: string) => {
   return await repo.delete({ id });
 };
 export const getUserTotalIncome = async (id: string) => {
   return await repo.sum("amount", { user: { id: id } });
 };
-export const getIncomeById = async (id: number) => {
+export const getIncomeById = async (id: string) => {
   return await repo.findOneBy({ id });
 };
 
 export const totalIncome = async (user: User) => {
-  return await repo.sum("amount", { user: { id: user.id }, active: true });
+  return await repo.sum("amount", { user: { id: user.id } });
 };
 
 export const getIncomeSource = async (user: User) => {
   return await repo.findOne({
-    where: { user: { id: user.id }, active: true, source: ILike("Salary") },
+    where: { user: { id: user.id }, source: ILike("Salary") },
   });
 };
