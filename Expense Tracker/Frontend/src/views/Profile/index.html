@@ -13,51 +13,15 @@
   <body>
     <nav id="nav-placeholder"></nav>
     <main class="container">
-        <section class="row my-5 ">
-          <div>
-            <h4 class="text-primary">Budgets</h4>
-          </div>
-          <div
-            id="carouselExample"
-            class="carousel slide"
-            data-bs-ride="carousel"
-          >
-            <div class="carousel-inner" id="budget-carousel"></div>
-            <button
-              class="carousel-control-prev"
-              type="button"
-              data-bs-target="#carouselExample"
-              data-bs-slide="prev"
-            >
-              <span
-                class="carousel-control-prev-icon"
-                aria-hidden="true"
-              ></span>
-              <span class="visually-hidden">Previous</span>
-            </button>
-            <button
-              class="carousel-control-next"
-              type="button"
-              data-bs-target="#carouselExample"
-              data-bs-slide="next"
-            >
-              <span
-                class="carousel-control-next-icon"
-                aria-hidden="true"
-              ></span>
-              <span class="visually-hidden">Next</span>
-            </button>
-          </div>
-        </section>
-      </section>
-      <section class="container row h-50">
+      <section class="container row h-50 mt-3">
         <section class="header row">
           <h3 class="col-10 text-primary">Categories</h3>
-          <button class="btn btn-primary col" id="btn-add-category" >
+          <button class="btn btn-primary col" id="btn-add-category">
             <i class="fa-solid fa-plus"></i>
-            Add Category</button>
+            Add Category
+          </button>
         </section>
-        <table class="table text-primary ">
+        <table class="table text-primary">
           <thead>
             <tr>
               <th scope="col">Title</th>
@@ -65,62 +29,68 @@
               <th scope="col">Actions</th>
             </tr>
           </thead>
-          <tbody class="table-group-divider" id="category-container">
-          </tbody>
+          <tbody class="table-group-divider" id="category-container"></tbody>
         </table>
-      <!-- Category Adding Dialog -->
-        <section>
+      </section>
+      <!-- Add Category Dialog Box -->
+      <section>
+        <div
+          class="modal fade"
+          id="add-category-dialog"
+          tabindex="-1"
+          role="dialog"
+          aria-labelledby="customModalLabel"
+          aria-hidden="true"
+        >
           <div
-            class="modal fade"
-            id="add-category-dialog"
-            tabindex="-1"
-            role="dialog"
-            aria-labelledby="customModalLabel"
-            aria-hidden="true"
+            class="modal-dialog modal-lg modal-dialog-centered"
+            role="document"
           >
-            <div
-              class="modal-dialog modal-lg modal-dialog-centered"
-              role="document"
-            >
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="customModalLabel">Add Category</h5>
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">Category</h5>
+              </div>
+              <div class="modal-body gap-4 d-flex flex-column">
+                <div class="form-group">
+                  <label for="amount">Title</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="add-category-title"
+                    placeholder="Enter Title"
+                  />
                 </div>
-                  <div class="form-group">
-                    <label for="remarks">Title</label>
-                    <text
-                      class="form-control"
-                      id="add-category-title"
-                      placeholder="Enter Title"
-                    ></text>
-                  </div>
-                  <div class="form-group">
-                    <label for="category">Description</label>
-                    <textarea class="form-control" id="add-category-description"></textarea>
-                  </div>
-                <div class="modal-footer">
-                  <button
-                    type="button"
-                    id="btn-save-category"
-                    class="btn btn-primary"
-                  >
-                    Save Category
-                  </button>
-  
-                  <button
-                    type="button"
-                    class="btn btn-secondary"
-                    id="btn-close-category-dialog"
-                  >
-                    Close
-                  </button>
+                <div class="form-group">
+                  <label for="remarks">Description</label>
+                  <textarea
+                    class="form-control"
+                    id="add-category-description"
+                    placeholder="Enter Description"
+                  ></textarea>
                 </div>
+              </div>
+              <div class="modal-footer">
+                <button
+                  type="button"
+                  id="btn-save-category"
+                  class="btn btn-primary"
+                >
+                  Save Category
+                </button>
+
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  id="btn-close-category-dialog"
+                >
+                  Close
+                </button>
               </div>
             </div>
           </div>
-        </section>
-
         </div>
+      </section>
+      <!-- End Add Category Dialog Box -->
     </main>
     <script type="module" src="./script.ts"></script>
   </body>
