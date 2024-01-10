@@ -19,7 +19,7 @@ router
   .route("/")
   .get(getIncome)
   .post(validateRequestBody(incomeBodySchema), createIncome)
-  .patch(updateIncome);
+  .put(updateIncome);
 router.delete("/:id", deleteIncome);
 router.get("/filter", validateRequestQuery(incomeQuerySchema));
 

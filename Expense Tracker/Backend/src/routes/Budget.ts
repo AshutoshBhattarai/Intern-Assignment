@@ -20,7 +20,7 @@ router
   .route("/")
   .get(getAllBudgets)
   .post(validateRequestBody(budgetBodySchema), createBudget)
-  .patch(updateBudget);
+  .put(updateBudget);
 router.delete("/:id", deleteBudget);
 router.get("/filter", validateRequestQuery(budgetQuerySchema), getBudgetById);
 
