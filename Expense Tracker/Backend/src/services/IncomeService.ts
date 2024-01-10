@@ -20,10 +20,8 @@ export const createIncome = async (user: User, income: Income) => {
   if (!(await getUserById(user.id))) {
     throw new NotFoundError("User not found");
   }
-
   // Set the user for the income object
   income.user = user;
-
   // Check if the income source is "salary"
   if (income.source.toLowerCase() == "salary") {
     // Get the current salary for the user
@@ -37,10 +35,6 @@ export const createIncome = async (user: User, income: Income) => {
         currentDate.getFullYear() == currentSalary.createdAt.getFullYear()
       ) {
         throw new ValidationError("Salary already added for this month");
-      } else {
-        // Deactivate the current salary
-        currentSalary.active = false;
-        await incomeRepo.updateIncome(currentSalary);
       }
     }
   }
@@ -74,11 +68,12 @@ export const updateIncome = async (user: User, income: Income) => {
   if (!(await getUserById(user.id))) throw new NotFoundError("User not found");
   const existingIncome = await incomeRepo.getIncomeById(income.id);
   if (!existingIncome) throw new NotFoundError("Income not found");
+  console.log(income);
   await incomeRepo.updateIncome(income);
 };
 export const deleteIncome = async (user: User, id: string) => {
   if (!(await getUserById(user.id))) throw new NotFoundError("User not found");
-  const income = await incomeRepo.getIncomeById(parseInt(id));
+  const income = await incomeRepo.getIncomeById(id);
   if (!income) throw new NotFoundError("Income not found");
   await incomeRepo.deleteIncome(income.id);
 };
@@ -97,7 +92,7 @@ const incomeResponse = (income: Income) => {
   responseIncome.id = income.id;
   responseIncome.source = income.source;
   responseIncome.amount = income.amount;
-  responseIncome.active = income.active;
+  responseIncome.date = income.date;
 
   // Return the new responseIncome object
   return responseIncome;
