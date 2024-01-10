@@ -1,5 +1,4 @@
 import NotFoundError from "../errors/NotFound";
-import WarningError from "../errors/Warning";
 import Budget from "../models/Budget";
 import Category from "../models/Category";
 import Expense from "../models/Expense";
@@ -23,23 +22,7 @@ export const createExpense = async (user: User, expense: Expense) => {
   if (!category) {
     throw new NotFoundError("Category not found");
   }
-
-  const [budget]: Budget[] = await budgetRepo.getBudgetByCategory(
-    user,
-    category
-  );
-
-  if (!budget) {
-    throw new NotFoundError("Budget for this category doesn't exist found");
-  }
-  if (budget.remainingAmount < expense.amount) {
-    throw new WarningError("Amount Exceeds Your Remaining Budget");
-  }
-  const updateBudget = new Budget();
-  updateBudget.id = budget.id;
-  updateBudget.spentAmount = budget.spentAmount + expense.amount;
-  updateBudget.remainingAmount = budget.amount - updateBudget.spentAmount;
-  await budgetRepo.updateBudget(updateBudget);
+  await updateBudget(user, expense, "add");
 
   expense.user = user;
 
@@ -61,6 +44,12 @@ export const updateExpense = async (user: User, expense: Expense) => {
   if (!(await getUserById(user.id))) {
     throw new NotFoundError("User not found");
   }
+  const expenseExists = await expenseRepo.getExpensesById(expense.id);
+  if (!expenseExists) {
+    throw new NotFoundError("Expense not found");
+  }
+  await updateBudget(user, expenseExists, "remove");
+  await updateBudget(user, expense, "add");
   expense.user = user;
   expenseRepo.updateExpense(expense);
 };
@@ -80,7 +69,10 @@ export const deleteExpense = async (user: User, id: string) => {
     throw new NotFoundError("User not found");
   }
   const expense = await expenseRepo.getExpensesById(id);
-  if (!expense) throw new NotFoundError("Expense not found");
+  if (!expense) {
+    throw new NotFoundError("Expense not found");
+  }
+  await updateBudget(user, expense, "remove");
   expenseRepo.deleteExpense(expense.id);
 };
 /* --------------------------------- Extras --------------------------------- */
@@ -99,4 +91,31 @@ const expenseResponse = (expense: Expense) => {
   category.title = expense.category.title;
   resExpense.category = category;
   return resExpense;
+};
+
+const updateBudget = async (
+  user: User,
+  expense: Expense,
+  type: "add" | "remove"
+) => {
+  const budgets: Budget[] = await budgetRepo.getBudgetByCategory(
+    user,
+    expense.category
+  );
+  if (!budgets) {
+    throw new NotFoundError("Budget for this category doesn't exist found");
+  }
+  if (type === "add") {
+    budgets.forEach(async (budget) => {
+      budget.spentAmount = budget.spentAmount + expense.amount;
+      budget.remainingAmount = budget.amount - budget.spentAmount;
+      await budgetRepo.updateBudget(budget);
+    });
+  } else {
+    budgets.forEach(async (budget) => {
+      budget.spentAmount = budget.spentAmount - expense.amount;
+      budget.remainingAmount = budget.amount - budget.spentAmount;
+      await budgetRepo.updateBudget(budget);
+    });
+  }
 };
