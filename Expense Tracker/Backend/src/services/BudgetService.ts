@@ -21,15 +21,8 @@ export const createBudget = async (user: User, budget: Budget) => {
     user,
     category
   );
-  budgetsExists.map((b: Budget) => {
-    const existingStartDate = new Date(b.startTime).setHours(0, 0, 0, 0);
-    const newStartDate = new Date(budget.startTime).setHours(0, 0, 0, 0);
-    const existingEndDate = new Date(b.endTime).setHours(0, 0, 0, 0);
-    const newEndDate = new Date(budget.endTime).setHours(0, 0, 0, 0);
-    if (existingStartDate == newStartDate && existingEndDate == newEndDate) {
-      throw new ForbiddenError("Budget already exists");
-    }
-  });
+  checkBudgetExists(budgetsExists, budget);
+
   budget.category = category;
   budget.user = user;
   budget.remainingAmount = budget.amount;
@@ -57,9 +50,15 @@ export const updateBudget = async (user: User, budget: Budget) => {
   if (!foundBudget) {
     throw new NotFoundError("Budget not found");
   }
+  const category = await categoryRepo.getCategory(budget.category as any);
   if (foundBudget.user != (user.id as any)) {
     throw new UnauthorizedError("Unauthorized to update budget");
   }
+  const budgetsExists: Budget[] = await budgetRepo.getBudgetByCategory(
+    user,
+    category!
+  );
+  checkBudgetExists(budgetsExists, budget);
   await budgetRepo.updateBudget(budget);
 };
 
@@ -88,4 +87,16 @@ const budgetResponse = (budget: Budget) => {
   category.title = budget.category.title;
   responseBudget.category = category;
   return responseBudget;
+};
+
+const checkBudgetExists = (existingBudget: Budget[], budget: Budget) => {
+  existingBudget.map((b: Budget) => {
+    const existingStartDate = new Date(b.startTime).setHours(0, 0, 0, 0);
+    const newStartDate = new Date(budget.startTime).setHours(0, 0, 0, 0);
+    const existingEndDate = new Date(b.endTime).setHours(0, 0, 0, 0);
+    const newEndDate = new Date(budget.endTime).setHours(0, 0, 0, 0);
+    if (existingStartDate == newStartDate && existingEndDate == newEndDate) {
+      throw new ForbiddenError("Budget already exists");
+    }
+  });
 };
