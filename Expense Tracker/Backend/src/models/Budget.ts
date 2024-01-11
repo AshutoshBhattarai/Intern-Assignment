@@ -6,7 +6,7 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
   RelationId,
-  UpdateDateColumn
+  UpdateDateColumn,
 } from "typeorm";
 import Category from "./Category";
 import User from "./User";
@@ -19,9 +19,9 @@ export default class Budget {
   title: string;
   @Column("float")
   amount: number;
-  @Column({ name: "start_time" })
+  @Column({ name: "start_time", type: "date" })
   startTime: Date;
-  @Column({ name: "end_time" })
+  @Column({ name: "end_time", type: "date" })
   endTime: Date;
   @ManyToOne(() => User, { onDelete: "CASCADE" })
   @RelationId((budget: Budget) => budget.user)
