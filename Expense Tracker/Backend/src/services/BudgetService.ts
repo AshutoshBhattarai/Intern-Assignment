@@ -2,10 +2,12 @@ import ForbiddenError from "../errors/Forbidden";
 import NotFoundError from "../errors/NotFound";
 import UnauthorizedError from "../errors/Unauthorized";
 import Budget from "../models/Budget";
+import Category from "../models/Category";
 import User from "../models/User";
 import * as budgetRepo from "../repositories/BudgetRepo";
 import * as categoryRepo from "../repositories/CategoryRepo";
 import * as userRepo from "../repositories/UserRepo";
+import { BudgetQuery } from "../types/QueryType";
 
 export const createBudget = async (user: User, budget: Budget) => {
   if (!(await userRepo.getUserById(user.id))) {
@@ -15,16 +17,11 @@ export const createBudget = async (user: User, budget: Budget) => {
   if (!category) {
     throw new NotFoundError("Category not found");
   }
-  console.log(budget);
   const budgetsExists: Budget[] = await budgetRepo.getBudgetByCategory(
     user,
     category
   );
-  // if (budgetsExists.length <= 0) {
-  //   return;
-  // }
   if (
-    budgetsExists.length > 0 &&
     budgetsExists.some(
       (b) => b.startTime === budget.startTime && b.endTime === budget.endTime
     )
@@ -41,15 +38,11 @@ export const getAllBudgets = async (user: User) => {
   const budgets = await budgetRepo.getBudget(user);
   return budgets.map((budget) => budgetResponse(budget));
 };
-//Todo
 export const getBudgetById = async (user: User, id: string) => {
   const budget = await budgetRepo.getBudgetById(user, id);
   if (!budget) throw new NotFoundError("Budget not found");
   return budgetResponse(budget);
 };
-
-//Todo
-export const getBudgetByTime = async (startTime: Date, endTime: Date) => {};
 
 export const updateBudget = async (user: User, budget: Budget) => {
   if (!(await userRepo.getUserById(user.id)))
@@ -68,16 +61,23 @@ export const deleteBudget = async (user: User, id: string) => {
   await budgetRepo.deleteBudget(id);
 };
 
+export const getFilteredBudget = (user: User, params: BudgetQuery) => {
+  return budgetRepo.getFilteredBudget(user, params);
+};
+
 const budgetResponse = (budget: Budget) => {
   const responseBudget = new Budget();
   responseBudget.id = budget.id;
   responseBudget.amount = budget.amount;
-  responseBudget.category = budget.category;
   responseBudget.startTime = budget.startTime;
   responseBudget.endTime = budget.endTime;
   responseBudget.title = budget.title;
   responseBudget.user = budget.user;
   responseBudget.spentAmount = budget.spentAmount;
   responseBudget.remainingAmount = budget.remainingAmount;
+  const category = new Category();
+  category.id = budget.category.id;
+  category.title = budget.category.title;
+  responseBudget.category = category;
   return responseBudget;
 };
