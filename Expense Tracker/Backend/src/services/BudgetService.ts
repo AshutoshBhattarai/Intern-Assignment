@@ -21,13 +21,16 @@ export const createBudget = async (user: User, budget: Budget) => {
     user,
     category
   );
-  if (
-    budgetsExists.some(
-      (b) => b.startTime === budget.startTime && b.endTime === budget.endTime
-    )
-  ) {
-    throw new ForbiddenError("Budget already exists");
-  }
+  budgetsExists.map((b: Budget) => {
+    const existingStartDate = new Date(b.startTime).setHours(0, 0, 0, 0);
+    const newStartDate = new Date(budget.startTime).setHours(0, 0, 0, 0);
+    const existingEndDate = new Date(b.endTime).setHours(0, 0, 0, 0);
+    const newEndDate = new Date(budget.endTime).setHours(0, 0, 0, 0);
+    if (existingStartDate == newStartDate && existingEndDate == newEndDate) {
+      throw new ForbiddenError("Budget already exists");
+    }
+  });
+  budget.category = category;
   budget.user = user;
   budget.remainingAmount = budget.amount;
   const newBudget = await budgetRepo.createBudget(budget);
@@ -40,16 +43,21 @@ export const getAllBudgets = async (user: User) => {
 };
 export const getBudgetById = async (user: User, id: string) => {
   const budget = await budgetRepo.getBudgetById(user, id);
-  if (!budget) throw new NotFoundError("Budget not found");
+  if (!budget) {
+    throw new NotFoundError("Budget not found");
+  }
   return budgetResponse(budget);
 };
 
 export const updateBudget = async (user: User, budget: Budget) => {
-  if (!(await userRepo.getUserById(user.id)))
+  if (!(await userRepo.getUserById(user.id))) {
     throw new NotFoundError("User not found");
+  }
   const foundBudget = await budgetRepo.getBudgetById(user, budget.id);
-  if (!foundBudget) throw new NotFoundError("Budget not found");
-  if (foundBudget.user != user) {
+  if (!foundBudget) {
+    throw new NotFoundError("Budget not found");
+  }
+  if (foundBudget.user != (user.id as any)) {
     throw new UnauthorizedError("Unauthorized to update budget");
   }
   await budgetRepo.updateBudget(budget);
