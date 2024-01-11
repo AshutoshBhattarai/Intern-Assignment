@@ -55,7 +55,10 @@ export const getFilteredExpenses = (user: User, params: ExpenseQuery) => {
   return repo.find({ where: whereConditions });
 };
 
-export const getExpenseWithCategory = async (user: User,params:ExpenseQuery) => {
+export const getExpenseWithCategory = async (
+  user: User,
+  params: ExpenseQuery
+) => {
   const whereConditions: FindOptionsWhere<Expense> = { user: { id: user.id } };
   if (params.id) whereConditions.id = params.id;
   if (params.amount) whereConditions.amount = params.amount;
@@ -75,4 +78,16 @@ export const getExpenseWithCategory = async (user: User,params:ExpenseQuery) => 
     .where(whereConditions)
     .leftJoinAndSelect("expense.category", "category")
     .getMany();
+};
+
+export const getAllExpenseByCategory = (user: User) => {
+  return repo
+    .createQueryBuilder("expense")
+    .select("sum(expense.amount) as categoryTotal")
+    .addSelect("category.title as category")
+    .groupBy("expense.category_id")
+    .addGroupBy("category.title")
+    .where({ user: { id: user.id } })
+    .leftJoin("expense.category", "category")
+    .getRawMany();
 };
