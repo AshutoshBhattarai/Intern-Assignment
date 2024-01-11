@@ -74,6 +74,7 @@ export const getExpenseWithCategory = async (
       "expense.amount",
       "expense.date",
       "expense.description",
+      "expense.image"
     ])
     .where(whereConditions)
     .leftJoinAndSelect("expense.category", "category")
