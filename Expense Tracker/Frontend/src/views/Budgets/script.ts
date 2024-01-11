@@ -1,11 +1,15 @@
 /* --------------------------------- Imports -------------------------------- */
-import renderNavBar from "../../components/Navbar/navbar";
-import "../../assets/scss/style.scss";
 import { HttpStatusCode } from "axios";
-import http from "../../service/HttpClient";
 import * as bootstrap from "bootstrap";
+import "../../assets/scss/style.scss";
+import renderNavBar from "../../components/Navbar/navbar";
 import Budget from "../../interfaces/Budget";
+import Category from "../../interfaces/Category";
+import createGetRequest from "../../service/GetRequest";
+import createPostRequest from "../../service/PostRequest";
+import createPutRequest from "../../service/PutRequest";
 import createCategoryOptions from "../../utils/CategoryOptions";
+import createDeleteRequest from "../../service/DeleteRequest";
 
 /* -------------------------------------------------------------------------- */
 /*                          Getting elements from DOM                         */
@@ -25,47 +29,81 @@ const btnCloseBudgetDialog = document.getElementById(
 const budgetDialogBox = document.getElementById(
   "add-budget-dialog"
 ) as HTMLElement;
-
+const budgetTitleInput = document.getElementById(
+  "add-budget-title"
+) as HTMLInputElement;
+const budgetAmountInput = document.getElementById(
+  "add-budget-amount"
+) as HTMLInputElement;
+const budgetTimeInput = document.getElementById(
+  "add-budget-time"
+) as HTMLInputElement;
+const btnDeleteBudget = document.getElementById(
+  "btn-delete-budget"
+) as HTMLElement;
 /* ------------------------- Initializing Variables ------------------------- */
 let budgetModal: bootstrap.Modal;
-
+let dialogBudgetId: string = "";
 /* -------------------------------------------------------------------------- */
 /*                       Initial tasks when page loads                        */
 /* -------------------------------------------------------------------------- */
 window.onload = async () => {
   renderNavBar(navBar, "nav-budget");
-  const userBudgets = await getUserBudgets();
+  const userBudgets = await getUserBudgets("");
   createCategoryOptions(addBudgetCategory);
   budgetModal = new bootstrap.Modal(budgetDialogBox);
   renderUserBudgets(userBudgets);
 };
 
+
 /* -------------------------------------------------------------------------- */
 /*                           Button Event Listeners                           */
 /* -------------------------------------------------------------------------- */
 btnSaveBudget.addEventListener("click", async () => {
-  const title = document.getElementById("add-budget-title") as HTMLInputElement;
-  const amount = document.getElementById(
-    "add-budget-amount"
-  ) as HTMLInputElement;
-  const time = document.getElementById("add-budget-time") as HTMLInputElement;
-  await saveBudget(
-    title.value,
-    amount.value,
-    addBudgetCategory.value,
-    time.value
-  );
+  const { startTime, endTime } = getTimeRange(budgetTimeInput.value);
+  const budget = {
+    title: budgetTitleInput.value,
+    amount: parseFloat(budgetAmountInput.value),
+    category: addBudgetCategory.value,
+    startTime: startTime,
+    endTime: endTime,
+  };
+  if (dialogBudgetId === "") {
+    await saveBudget(budget);
+  } else if (dialogBudgetId !== "") {
+    await updateBudget(budget);
+    dialogBudgetId = "";
+  }
 });
 addBudgetBtn.addEventListener("click", () => {
-  budgetModal.show();
+  showDialog();
 });
 
 btnCloseBudgetDialog.addEventListener("click", () => {
-  budgetModal.hide();
+  closeDialog();
 });
 
+const showDialog = () => {
+  budgetModal.show();
+};
+const closeDialog = () => {
+  budgetModal.hide();
+  dialogBudgetId = "";
+  budgetTitleInput.value = "";
+  budgetAmountInput.value = "";
+  budgetTimeInput.value = "";
+  addBudgetCategory.value = "";
+  if (!btnDeleteBudget.classList.contains("d-none")) {
+    btnDeleteBudget.classList.add("d-none");
+  }
+};
 const renderUserBudgets = (budgets: Budget[]) => {
   budgetContainer.innerHTML = "";
+  if (!budgets.length) {
+    budgetContainer.innerHTML =
+      "<h5 class='text-center text-primary'>No Budgets found</h5>";
+    return;
+  }
   budgets.forEach((budget: Budget) => {
     budgetContainer.appendChild(createBudgetCard(budget));
   });
@@ -77,8 +115,8 @@ const renderUserBudgets = (budgets: Budget[]) => {
 const createBudgetCard = (budget: Budget) => {
   const spentPercent = (budget.spentAmount! / budget.amount) * 100;
   const progressColor = spentPercent < 80 ? "success" : "danger";
-  const startDate = new Date(budget.startTime).toUTCString().substring(5, 16);
-  const endDate = new Date(budget.endTime).toUTCString().substring(5, 16);
+  const startDate = new Date(budget.startTime!).toUTCString().substring(5, 16);
+  const endDate = new Date(budget.endTime!).toUTCString().substring(5, 16);
   const card = document.createElement("div");
   card.classList.add("card", "mb-2", "mx-3", "col-3");
   const cardTitle = document.createElement("h5");
@@ -91,6 +129,9 @@ const createBudgetCard = (budget: Budget) => {
     "fw-bold"
   );
   cardTitle.textContent = budget.title;
+  const cardCategory = document.createElement("small");
+  cardCategory.classList.add("card-text", "m-0");
+  cardCategory.textContent = (budget.category as Category).title;
 
   const cardBody = document.createElement("div");
   cardBody.classList.add("card-body", "mr-3", "mt-0", "col-12");
@@ -139,19 +180,91 @@ const createBudgetCard = (budget: Budget) => {
   cardBody.appendChild(progressPercentIndicator);
   cardBody.appendChild(dateContainer);
   card.appendChild(cardTitle);
+  card.appendChild(cardCategory);
   card.appendChild(cardBody);
+
+  card.addEventListener("click", () => {
+    budgetTitleInput.value = budget.title;
+    budgetAmountInput.value = budget.amount.toString();
+    budgetTimeInput.value =
+      getTimeType(budget.startTime!, budget.endTime!) || "";
+    dialogBudgetId = budget.id!;
+    console.log(getTimeType(budget.startTime!, budget.endTime!));
+    addBudgetCategory.value = (budget.category as Category).id!;
+    if (dialogBudgetId) {
+      btnDeleteBudget.classList.remove("d-none");
+    }
+
+    btnDeleteBudget.addEventListener("click", () => {
+      deleteBudget(dialogBudgetId);
+    });
+    showDialog();
+  });
+
+  card.addEventListener("mouseover", () => {
+    card.style.backgroundColor = "#f8f9fa";
+    card.style.cursor = "pointer";
+  });
+
+  card.addEventListener("mouseout", () => {
+    card.style.backgroundColor = "";
+  });
   return card;
 };
 
 /* -------------------------------------------------------------------------- */
 /*                                  API Calls                                 */
 /* -------------------------------------------------------------------------- */
-const saveBudget = async (
-  title: string,
-  amount: string,
-  category: string,
-  time: string
-) => {
+const saveBudget = async (budget: Budget) => {
+  try {
+    const response = await createPostRequest("/budgets/", budget);
+    if (response.status === HttpStatusCode.Accepted) {
+      closeDialog();
+      renderUserBudgets(await getUserBudgets(""));
+    }
+  } catch (error) {
+    //Todo show Toast
+  }
+};
+
+const getUserBudgets = async (filter: string) => {
+  try {
+    const budgets = await createGetRequest(`/budgets/filter?${filter}`);
+    return budgets;
+  } catch (error) {
+    //Todo Remove
+    console.log(error);
+  }
+};
+const updateBudget = async (budget: Budget) => {
+  try {
+    budget.id = dialogBudgetId;
+    const response = await createPutRequest("/budgets/", budget);
+    if (response.status === HttpStatusCode.Accepted) {
+      closeDialog();
+      renderUserBudgets(await getUserBudgets(""));
+    }
+  } catch (error) {
+    //Todo show Toast
+  }
+};
+
+const deleteBudget = async (id: string) => {
+  try {
+    const response = await createDeleteRequest(`/budgets/${id}`);
+    if (response.status === HttpStatusCode.Accepted) {
+      renderUserBudgets(await getUserBudgets(""));
+      closeDialog();
+    }
+  } catch (error) {
+    //Todo show Toast
+  }
+};
+
+/* -------------------------------------------------------------------------- */
+/*                                   Helpers                                  */
+/* -------------------------------------------------------------------------- */
+const getTimeRange = (time: string) => {
   let startTime = new Date();
   let endTime = new Date();
   if (time === "weekly") {
@@ -164,41 +277,25 @@ const saveBudget = async (
     startTime = new Date(startTime.getFullYear(), 0, 1);
     endTime = new Date(startTime.getFullYear(), 11, 31);
   }
-  try {
-    const response = await http.post(
-      "/budgets/",
-      {
-        title,
-        category,
-        amount,
-        startTime,
-        endTime,
-      },
-      {
-        headers: { Authorization: `Bearer ${localStorage.getItem("jwt")}` },
-      }
-    );
-
-    if (response.status === HttpStatusCode.Accepted) {
-      budgetModal.hide();
-      renderUserBudgets(await getUserBudgets());
-    }
-  } catch (error) {
-    //Todo show Toast
-  }
+  return {
+    startTime,
+    endTime,
+  };
 };
-
-const getUserBudgets = async () => {
-  try {
-    const budgets = await http.get("/budgets/", {
-      headers: { Authorization: `Bearer ${localStorage.getItem("jwt")}` },
-    });
-    if (budgets.status == HttpStatusCode.Ok) {
-      const data = budgets.data.result;
-      return data;
-    }
-  } catch (error) {
-    //Todo Remove
-    console.log(error);
+const getTimeType = (startTime: Date, endTime: Date): string | null => {
+  const startDate = new Date(startTime);
+  const endDate = new Date(endTime);
+  const diffInDays = Math.floor(
+    (endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)
+  );
+  console.log(diffInDays);
+  if (diffInDays <= 7) {
+    return "weekly";
   }
+  if (diffInDays <= 30 && diffInDays > 7) {
+    return "monthly";
+  } else if (diffInDays <= 365 && diffInDays > 30) {
+    return "yearly";
+  }
+  return null;
 };
