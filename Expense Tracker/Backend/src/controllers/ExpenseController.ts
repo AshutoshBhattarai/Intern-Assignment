@@ -32,17 +32,17 @@ export const createExpense = async (
   try {
     const user: User = res.locals.user;
     const expense: Expense = req.body;
-    UploadHandler(user.id)(req, res, async (err) => {
-      if (err) {
-        next(err);
-      }
-      if ((req as any).file) {
-        expense.image = (req as any).file.filename;
-      }
-      await expenseService.createExpense(user, expense);
-      res.status(HttpStatus.ACCEPTED).json({
-        message: "Expense Added successfully",
-      });
+    // UploadHandler(user.id)(req, res, async (err) => {
+    //   if (err) {
+    //     next(err);
+    //   }
+    //   if ((req as any).file) {
+    //     expense.image = (req as any).file.filename;
+    //   }
+    // });
+    await expenseService.createExpense(user, expense);
+    res.status(HttpStatus.ACCEPTED).json({
+      message: "Expense Added successfully",
     });
   } catch (error) {
     next(error);
@@ -60,7 +60,7 @@ export const getFilteredExpenses = async (
     const data = await expenseService.getFilteredExpenses(user, params);
     res.status(HttpStatus.OK).json({
       message: "Expenses were successfully retrieved",
-      data,
+      result : data,
     });
   } catch (error) {
     next(error);

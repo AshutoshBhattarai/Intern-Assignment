@@ -31,7 +31,7 @@ export const getIncome = async (
     const data = await incomeService.getUserIncome(user);
     res.status(HttpStatus.OK).json({
       message: "Income returned successfully",
-      data,
+      result : data,
     });
   } catch (error) {
     next(error);
