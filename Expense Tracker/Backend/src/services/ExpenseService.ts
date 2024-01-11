@@ -92,9 +92,7 @@ const expenseResponse = (expense: Expense) => {
   resExpense.amount = expense.amount;
   resExpense.date = expense.date;
   resExpense.description = expense.description;
-  resExpense.image = `http://localhost:5000/images/${expense.user}/${
-    expense.image || "no-image"
-  }`;
+  resExpense.image = `http://localhost:5000/images/${expense.category.user}/${expense.image || "noimage"}`;
   const category = new Category();
   category.id = expense.category.id;
   category.title = expense.category.title;
