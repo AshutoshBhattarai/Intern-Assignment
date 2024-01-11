@@ -3,6 +3,7 @@ export type BudgetQuery = {
   title?: string;
   startDate?: Date;
   endDate?: Date;
+  category?: string;
 };
 
 export type CategoryQuery = {
