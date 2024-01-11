@@ -50,9 +50,8 @@ addCategoryBtn.addEventListener("click", () => {
   categoryModal.show();
 });
 btnCloseCategoryDialog.addEventListener("click", () => {
-  categoryModal.hide();
+  closeDialog();
 });
-
 btnSaveCategory.addEventListener("click", async () => {
   const title = categoryTitleInput.value;
   const description = categoryDescriptionInput.value;
@@ -69,10 +68,15 @@ btnSaveCategory.addEventListener("click", async () => {
     categoryId = "";
   }
   renderUserCategories(await getUserCategories());
+  closeDialog();
+});
+
+const closeDialog = () => {
   categoryTitleInput.value = "";
   categoryDescriptionInput.value = "";
   categoryModal.hide();
-});
+  categoryId = "";
+};
 
 const renderUserCategories = (categories: Category[]) => {
   categoryContainer.innerHTML = "";
@@ -154,7 +158,7 @@ const deleteCategory = async (id: string) => {
   }
 };
 
-const updateCategory = async (category : Category) => {
+const updateCategory = async (category: Category) => {
   try {
     const response = await createPutRequest("/categories/", category);
     if (response.status == HttpStatusCode.Accepted) {
