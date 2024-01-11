@@ -42,6 +42,7 @@ export const expenseBodySchema = Joi.object({
     date : Joi.date().required(),
     description : Joi.string().default(""),
     category : Joi.string().required(),
+    image : Joi.string(),
 })
 
 export const expenseQuerySchema = Joi.object({
