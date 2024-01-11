@@ -92,7 +92,9 @@ const expenseResponse = (expense: Expense) => {
   resExpense.amount = expense.amount;
   resExpense.date = expense.date;
   resExpense.description = expense.description;
-  resExpense.image = `http://localhost:5000/images/${expense.category.user}/${expense.image || "noimage"}`;
+  resExpense.image = `http://localhost:5000/images/${expense.category.user}/${
+    expense.image || "noimage"
+  }`;
   const category = new Category();
   category.id = expense.category.id;
   category.title = expense.category.title;
@@ -113,7 +115,8 @@ const updateBudget = async (
   if (budgets) {
     if (task === "add") {
       await budgets.forEach(async (budget) => {
-        const newSpentAmount = budget.spentAmount + expense.amount;
+        const newSpentAmount =
+          parseFloat(budget.spentAmount.toString()) + parseFloat(expense.amount.toString());
         budget.spentAmount = newSpentAmount;
         budget.remainingAmount = budget.amount - newSpentAmount;
         if (budget.remainingAmount <= 0) {
@@ -123,7 +126,7 @@ const updateBudget = async (
       });
     } else if (task === "remove") {
       await budgets.forEach(async (budget) => {
-        const newSpentAmount = budget.spentAmount - expense.amount;
+        const newSpentAmount = parseFloat(budget.spentAmount.toString()) - parseFloat(expense.amount.toString());
         budget.spentAmount = newSpentAmount;
         budget.remainingAmount = budget.amount - newSpentAmount;
         if (budget.remainingAmount >= budget.amount) {
