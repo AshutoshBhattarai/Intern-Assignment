@@ -22,6 +22,7 @@ export const jwtAuth = async (
     else {
       const userid = (tokenUser as any).userid;
       res.locals.user = await getUserById(userid);
+      (req as any).user = res.locals.user.id;
       next();
     }
   } catch (error) {
