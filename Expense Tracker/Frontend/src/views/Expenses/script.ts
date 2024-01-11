@@ -8,7 +8,7 @@ import Category from "../../interfaces/Category";
 import Expense from "../../interfaces/Expense";
 import createDeleteRequest from "../../service/DeleteRequest";
 import createGetRequest from "../../service/GetRequest";
-import createPostRequest from "../../service/PostRequest";
+import http from "../../service/HttpClient";
 import createPutRequest from "../../service/PutRequest";
 import createCategoryOptions from "../../utils/CategoryOptions";
 /* ------------------------ Getting elements from DOM ----------------------- */
@@ -71,21 +71,23 @@ const closeDialog = () => {
   amountInput.value = "";
   categoryInput.value = "";
   dateInput.value = "";
+  dialogExpenseId = "";
 };
 const saveExpense = async () => {
   const remarks = remarksInput.value;
   const amount = amountInput.value;
   const category = categoryInput.value;
-
-  const date = dateInput.value || new Date();
+  const receipt = receiptInput.files?.[0];
+  const date = (dateInput.value && new Date(dateInput.value)) || new Date();
+  const formData = new FormData();
+  formData.append("description", remarks);
+  formData.append("amount", amount);
+  formData.append("category", category);
+  receipt && formData.append("image", receipt);
+  formData.append("date", date.toISOString());
 
   if (dialogExpenseId === "") {
-    createExpense({
-      amount: parseFloat(amount),
-      description: remarks,
-      category,
-      date,
-    });
+    createExpense(formData);
     dialogExpenseId = "";
   } else if (dialogExpenseId != "") {
     const expenseId = dialogExpenseId!;
@@ -226,11 +228,15 @@ const renderExpenseCards = async (filter: any) => {
   });
 };
 
-const createExpense = async (expense: Expense) => {
-  const response = await createPostRequest("/expenses/", expense);
+const createExpense = async (expense: Expense | FormData) => {
+  console.log(expense);
+  const response = await http.post("/expenses/", expense, {
+    headers: { Authorization: `Bearer ${localStorage.getItem("jwt")}` },
+  });
   if (response.status == HttpStatusCode.Accepted) {
     closeDialog();
     renderExpenseCards("");
+    dialogExpenseId = "";
   }
 };
 
