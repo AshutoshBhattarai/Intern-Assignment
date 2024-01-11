@@ -7,6 +7,8 @@ import createDeleteRequest from "../../service/DeleteRequest";
 import createGetRequest from "../../service/GetRequest";
 import createPostRequest from "../../service/PostRequest";
 import createPutRequest from "../../service/PutRequest";
+import showErrorResponse from "../../service/ErrorResponse";
+import { showToast } from "../../components/Toast";
 
 const navBar = document.getElementById("nav-placeholder") as HTMLElement;
 const searchInput = document.getElementById("search-bar") as HTMLInputElement;
@@ -26,7 +28,7 @@ const dateInput = document.getElementById("add-date") as HTMLInputElement;
 const incomeContainer = document.getElementById(
   "income-container"
 ) as HTMLElement;
-
+const toastContainer = document.getElementById("toast-message") as HTMLElement;
 let incomeModal: bootstrap.Modal;
 let dialogIncomeId: string = "";
 window.onload = () => {
@@ -56,7 +58,7 @@ const saveIncome = () => {
   const source = sourceInput.value;
   const amount = amountInput.value;
   const date = dateInput.value || new Date();
-  const income : Income = {
+  const income: Income = {
     source,
     amount: parseFloat(amount),
     date,
@@ -193,23 +195,48 @@ const renderIncomeCards = async (filter: any) => {
 };
 
 const createIncome = async (income: Income) => {
-  const response = await createPostRequest("/incomes/", income);
-  if (response.status == HttpStatusCode.Accepted) {
-    renderIncomeCards("");
+  try {
+    const response = await createPostRequest("/incomes/", income);
+    if (response.status == HttpStatusCode.Accepted) {
+      renderIncomeCards("");
+      showToast(response.data.message, toastContainer, "success");
+      closeDialog();
+    }
+  } catch (error) {
+    showErrorToast(error);
+    closeDialog();
   }
 };
 
 const deleteIncome = async (id: string) => {
-  const response = await createDeleteRequest(`/incomes/${id}`);
-  if (response.status == HttpStatusCode.Accepted) {
-    renderIncomeCards("");
+  try {
+    const response = await createDeleteRequest(`/incomes/${id}`);
+    if (response.status == HttpStatusCode.Accepted) {
+      renderIncomeCards("");
+      showToast(response.data.message, toastContainer, "success");
+    }
+  } catch (error) {
+    showErrorToast(error);
   }
 };
 
 const updateIncome = async (income: Income) => {
-  const response = await createPutRequest("/incomes/", income);
-  if (response.status == HttpStatusCode.Accepted) {
-    renderIncomeCards("");
-    dialogIncomeId = "";
+  try {
+    const response = await createPutRequest("/incomes/", income);
+    if (response.status == HttpStatusCode.Accepted) {
+      renderIncomeCards("");
+      dialogIncomeId = "";
+      showToast(response.data.message, toastContainer, "success");
+      closeDialog();
+    }
+  } catch (error) {
+    showErrorToast(error);
+    closeDialog();
   }
+};
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const showErrorToast = (error: any) => {
+  const message = showErrorResponse(error) || error;
+  showToast(message, toastContainer, "error");
 };

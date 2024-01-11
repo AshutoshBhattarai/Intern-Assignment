@@ -7,6 +7,8 @@ import createDeleteRequest from "../../service/DeleteRequest";
 import createGetRequest from "../../service/GetRequest";
 import createPostRequest from "../../service/PostRequest";
 import createPutRequest from "../../service/PutRequest";
+import { showToast } from "../../components/Toast";
+import showErrorResponse from "../../service/ErrorResponse";
 // --------------------- Getting elements from DOM -----------------------
 const navBar = document.getElementById("nav-placeholder") as HTMLElement;
 
@@ -34,6 +36,7 @@ const categoryTitleInput = document.getElementById(
 const categoryDescriptionInput = document.getElementById(
   "add-category-description"
 ) as HTMLInputElement;
+const toastContainer = document.getElementById("toast-message") as HTMLElement;
 // --------------------- Initializing Modals -----------------------
 
 let categoryModal: bootstrap.Modal;
@@ -139,10 +142,12 @@ const saveCategory = async (category: Category) => {
   try {
     const response = await createPostRequest("/categories/", category);
     if (response.status == HttpStatusCode.Accepted) {
-      //Todo
+      showToast(response.data.message, toastContainer, "success");
+      closeDialog();
     }
   } catch (error) {
-    //Todo show Toast
+    showErrorToast(error);
+    closeDialog();
   }
 };
 
@@ -152,9 +157,10 @@ const deleteCategory = async (id: string) => {
     const response = await createDeleteRequest(`/categories/${id}`);
     if (response.status === HttpStatusCode.Ok) {
       renderUserCategories(await getUserCategories());
+      showToast(response.data.message, toastContainer, "success");
     }
   } catch (error) {
-    //Todo show Toast
+    showErrorToast(error);
   }
 };
 
@@ -162,9 +168,16 @@ const updateCategory = async (category: Category) => {
   try {
     const response = await createPutRequest("/categories/", category);
     if (response.status == HttpStatusCode.Accepted) {
-      //todo add toast
+      showToast(response.data.message, toastContainer, "success");
+      closeDialog();
     }
   } catch (error) {
-    //Todo Add Toast
+    closeDialog();
+    showErrorToast(error);
   }
+};
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const showErrorToast = (error: any) => {
+  const message = showErrorResponse(error) || error;
+  showToast(message, toastContainer, "error");
 };

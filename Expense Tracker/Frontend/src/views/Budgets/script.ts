@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* --------------------------------- Imports -------------------------------- */
 import { HttpStatusCode } from "axios";
 import * as bootstrap from "bootstrap";
@@ -10,6 +11,8 @@ import createPostRequest from "../../service/PostRequest";
 import createPutRequest from "../../service/PutRequest";
 import createCategoryOptions from "../../utils/CategoryOptions";
 import createDeleteRequest from "../../service/DeleteRequest";
+import { showToast } from "../../components/Toast";
+import showErrorResponse from "../../service/ErrorResponse";
 
 /* -------------------------------------------------------------------------- */
 /*                          Getting elements from DOM                         */
@@ -41,6 +44,7 @@ const budgetTimeInput = document.getElementById(
 const btnDeleteBudget = document.getElementById(
   "btn-delete-budget"
 ) as HTMLElement;
+const toastContainer = document.getElementById("toast-message") as HTMLElement;
 /* ------------------------- Initializing Variables ------------------------- */
 let budgetModal: bootstrap.Modal;
 let dialogBudgetId: string = "";
@@ -54,7 +58,6 @@ window.onload = async () => {
   budgetModal = new bootstrap.Modal(budgetDialogBox);
   renderUserBudgets(userBudgets);
 };
-
 
 /* -------------------------------------------------------------------------- */
 /*                           Button Event Listeners                           */
@@ -221,9 +224,10 @@ const saveBudget = async (budget: Budget) => {
     if (response.status === HttpStatusCode.Accepted) {
       closeDialog();
       renderUserBudgets(await getUserBudgets(""));
+      showToast(response.data.message, toastContainer, "success");
     }
   } catch (error) {
-    //Todo show Toast
+    showErrorToast(error);
   }
 };
 
@@ -232,8 +236,7 @@ const getUserBudgets = async (filter: string) => {
     const budgets = await createGetRequest(`/budgets/filter?${filter}`);
     return budgets;
   } catch (error) {
-    //Todo Remove
-    console.log(error);
+    showErrorToast(error);
   }
 };
 const updateBudget = async (budget: Budget) => {
@@ -242,10 +245,11 @@ const updateBudget = async (budget: Budget) => {
     const response = await createPutRequest("/budgets/", budget);
     if (response.status === HttpStatusCode.Accepted) {
       closeDialog();
+      showToast(response.data.message, toastContainer, "success");
       renderUserBudgets(await getUserBudgets(""));
     }
   } catch (error) {
-    //Todo show Toast
+    showErrorToast(error);
   }
 };
 
@@ -254,10 +258,11 @@ const deleteBudget = async (id: string) => {
     const response = await createDeleteRequest(`/budgets/${id}`);
     if (response.status === HttpStatusCode.Accepted) {
       renderUserBudgets(await getUserBudgets(""));
+      showToast(response.data.message, toastContainer, "success");
       closeDialog();
     }
   } catch (error) {
-    //Todo show Toast
+    showErrorToast(error);
   }
 };
 
@@ -298,4 +303,10 @@ const getTimeType = (startTime: Date, endTime: Date): string | null => {
     return "yearly";
   }
   return null;
+};
+
+const showErrorToast = (error: any) => {
+  const message = showErrorResponse(error) || error.message;
+  showToast(message, toastContainer, "error");
+  closeDialog();
 };

@@ -53,22 +53,24 @@
                   </div>
                   <div class="form-group">
                     <label for="remarks">Amount</label>
-                    <textarea
+                    <input
                       class="form-control"
+                      type="text"
+                      inputmode="numeric"
                       id="add-budget-amount"
                       placeholder="Enter Amount"
-                    ></textarea>
+                    ></input>
                   </div>
                   <div class="form-group">
                     <label for="add-budget-category">Category</label>
                     <select
-                      class="form-control"
+                      class="form-select"
                       id="add-budget-category"
                     ></select>
                   </div>
                   <div class="form-group">
                     <label for="add-budget-time">Time</label>
-                    <select class="form-control" id="add-budget-time">
+                    <select class="form-select" id="add-budget-time">
                       <option value="weekly">Weekly</option>
                       <option value="monthly">Monthly</option>
                       <option value="yearly">Yearly</option>
@@ -105,6 +107,7 @@
         </section>
         <!-- End Add Budget Dialog Box -->
       </section>
+      <div id="toast-message"></div>
     </main>
     <script type="module" src="./script.ts"></script>
   </body>

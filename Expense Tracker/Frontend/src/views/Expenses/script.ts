@@ -11,6 +11,8 @@ import createGetRequest from "../../service/GetRequest";
 import http from "../../service/HttpClient";
 import createPutRequest from "../../service/PutRequest";
 import createCategoryOptions from "../../utils/CategoryOptions";
+import { showToast } from "../../components/Toast";
+import showErrorResponse from "../../service/ErrorResponse";
 /* ------------------------ Getting elements from DOM ----------------------- */
 const navBar = document.getElementById("nav-placeholder") as HTMLElement;
 const searchInput = document.getElementById("search-bar") as HTMLInputElement;
@@ -36,6 +38,8 @@ const dateInput = document.getElementById("add-date") as HTMLInputElement;
 const expensesContainer = document.getElementById(
   "expense-container"
 ) as HTMLElement;
+
+const toastContainer = document.getElementById("toast-message") as HTMLElement;
 
 let expenseModal: bootstrap.Modal;
 let dialogExpenseId: string = "";
@@ -65,13 +69,13 @@ btnSaveExpense.addEventListener("click", () => {
   closeDialog();
 });
 const closeDialog = () => {
+  dialogExpenseId = "";
   expenseModal.hide();
   receiptInput.value = "";
   remarksInput.value = "";
   amountInput.value = "";
   categoryInput.value = "";
   dateInput.value = "";
-  dialogExpenseId = "";
 };
 const saveExpense = async () => {
   const remarks = remarksInput.value;
@@ -85,6 +89,7 @@ const saveExpense = async () => {
   formData.append("category", category);
   receipt && formData.append("image", receipt);
   formData.append("date", date.toISOString());
+  
 
   if (dialogExpenseId === "") {
     createExpense(formData);
@@ -96,7 +101,7 @@ const saveExpense = async () => {
       amount: parseFloat(amount),
       description: remarks,
       category: category,
-      date: date.toString(),
+      date: date.toISOString(),
     };
     await updateExpense(expense);
     dialogExpenseId = "";
@@ -116,9 +121,10 @@ const showDialog = (data?: {
   dateInput.value = data?.date.toString() || "";
 };
 const createExpenseCard = (data: Expense) => {
+  console.log(dialogExpenseId);
   // Create the expense card element
   const expenseCard = document.createElement("div");
-  expenseCard.classList.add("card", "mb-2", "col-md-6", "gx-3");
+  expenseCard.classList.add("card", "mb-2", "col-md-8", "gx-3");
   expenseCard.style.position = "relative"; // Set position relative for absolute positioning
 
   // Create the card body element
@@ -126,23 +132,25 @@ const createExpenseCard = (data: Expense) => {
   cardBody.classList.add("card-body", "mr-3");
 
   // Create the card description element and assign the remarks from the data
-  const cardDescription = document.createElement("h4");
+  const cardDescription = document.createElement("p");
   cardDescription.classList.add("card-title", "text-primary", "m-0");
   cardDescription.textContent = data.description;
 
   // Create the card amount element and assign the amount from the data
-  const cardAmount = document.createElement("p");
+  const cardAmount = document.createElement("h4");
   cardAmount.classList.add("card-text", "text-danger", "m-0");
-  cardAmount.textContent = "Rs. " + data.amount;
+  cardAmount.innerHTML = "<i class='fas fa-indian-rupee-sign'></i> " + data.amount;
 
   const cardCategory = document.createElement("p");
   cardCategory.classList.add("card-text", "m-0");
-  cardCategory.textContent = "Category: " + (data.category as Category).title;
+  cardCategory.textContent = (data.category as Category).title;
 
   // Create the card date element and assign the date from the data
   const cardDate = document.createElement("p");
   cardDate.classList.add("card-text");
-  cardDate.textContent = "Date: " + data.date;
+  cardDate.textContent = new Date(data.date as Date)
+    .toUTCString()
+    .substring(5, 16);
 
   // Create the delete button container with absolute positioning
   const btnDeleteContainer = document.createElement("div");
@@ -199,8 +207,8 @@ const createExpenseCard = (data: Expense) => {
   viewImage.target = "_blank";
 
   // Append the card date, description, amount, delete button container, edit button, and view image link to the card body
-  cardBody.appendChild(cardDescription);
   cardBody.appendChild(cardAmount);
+  cardBody.appendChild(cardDescription);
   cardBody.appendChild(cardCategory);
   cardBody.appendChild(cardDate);
   cardBody.appendChild(btnDeleteContainer);
@@ -229,21 +237,31 @@ const renderExpenseCards = async (filter: any) => {
 };
 
 const createExpense = async (expense: Expense | FormData) => {
-  console.log(expense);
-  const response = await http.post("/expenses/", expense, {
-    headers: { Authorization: `Bearer ${localStorage.getItem("jwt")}` },
-  });
-  if (response.status == HttpStatusCode.Accepted) {
+  try {
+    const response = await http.post("/expenses/", expense, {
+      headers: { Authorization: `Bearer ${localStorage.getItem("jwt")}` },
+    });
+    if (response.status == HttpStatusCode.Accepted) {
+      closeDialog();
+      renderExpenseCards("");
+      showToast("Expense Added Successfully", toastContainer, "success");
+    }
+  } catch (error) {
+    showErrorToast(error);
     closeDialog();
-    renderExpenseCards("");
-    dialogExpenseId = "";
   }
 };
 
 const deleteExpense = async (id: string) => {
-  const response = await createDeleteRequest(`/expenses/${id}`);
-  if (response.status == HttpStatusCode.Accepted) {
-    renderExpenseCards("");
+  try {
+    const response = await createDeleteRequest(`/expenses/${id}`);
+    if (response.status == HttpStatusCode.Accepted) {
+      renderExpenseCards("");
+      dialogExpenseId = "";
+      showToast(response.data.message, toastContainer, "success");
+    }
+  } catch (error) {
+    showErrorToast(error);
   }
 };
 
@@ -252,10 +270,16 @@ const updateExpense = async (expense: Expense) => {
     const response = await createPutRequest("/expenses/", expense);
     if (response.status == HttpStatusCode.Accepted) {
       renderExpenseCards("");
-      dialogExpenseId = "";
+      closeDialog();
+      showToast(response.data.message, toastContainer, "success");
     }
   } catch (error) {
-    dialogExpenseId = "";
-    console.log(error);
+    showErrorToast(error);
+    closeDialog();
   }
+};
+
+const showErrorToast = (error: any) => {
+  const message = showErrorResponse(error) || error;
+  showToast(message, toastContainer, "error");
 };
