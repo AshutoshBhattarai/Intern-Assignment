@@ -1,6 +1,7 @@
 import { HttpStatusCode } from "axios";
 import "../../assets/scss/style.scss";
-import http from "../../service/HttpClient";
+import User from "../../interfaces/User";
+import createPostRequest from "../../service/PostRequest";
 
 const loginForm = document.getElementById("form-login") as HTMLFormElement;
 const validationError = document.getElementById("error-message") as HTMLElement;
@@ -52,10 +53,8 @@ const validateInput = (email: string, password: string): boolean => {
 const sendAuthRequest = async (email: string, password: string) => {
   // Send request
   try {
-    const response = await http.post("/login", {
-      email,
-      password,
-    });
+    const user: User = { email, password };
+    const response = await createPostRequest("/login", user);
     if (response.status === HttpStatusCode.Accepted) {
       localStorage.setItem("jwt", response.data.tokens.accessToken);
       window.location.href = "/views/Dashboard/";

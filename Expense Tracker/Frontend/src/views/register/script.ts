@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import "../../assets/scss/style.scss";
-import * as bootstrap from "bootstrap";
-import http from "../../service/HttpClient";
 import { HttpStatusCode } from "axios";
+import "../../assets/scss/style.scss";
+import http from "../../service/HttpClient";
+import User from "../../interfaces/User";
+import createPostRequest from "../../service/PostRequest";
 
 const registerForm = document.getElementById(
   "form-register"
@@ -51,7 +52,8 @@ registerForm.addEventListener("submit", async (e) => {
   }
   // Submit form
   else {
-    await sendPostRequest(username, email, password);
+    const user: User = { username, email, password };
+    await sendPostRequest(user);
   }
 });
 const validateInput = (
@@ -89,17 +91,9 @@ const validateInput = (
   return true;
 };
 
-const sendPostRequest = async (
-  username: string,
-  email: string,
-  password: string
-) => {
+const sendPostRequest = async (user: User) => {
   try {
-    const response = await http.post("/register", {
-      username,
-      email,
-      password,
-    });
+    const response = await createPostRequest("/register", user);
 
     if (response.status === HttpStatusCode.Accepted) {
       successMessage.classList.remove("d-none");

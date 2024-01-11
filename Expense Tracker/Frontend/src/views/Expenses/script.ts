@@ -1,12 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { HttpStatusCode } from "axios";
+import * as bootstrap from "bootstrap";
 import "../../assets/scss/style.scss";
 import renderNavBar from "../../components/Navbar/navbar";
-import http from "../../service/HttpClient";
-import * as bootstrap from "bootstrap";
-import Expense from "../../interfaces/Expense";
 import Category from "../../interfaces/Category";
+import Expense from "../../interfaces/Expense";
+import createDeleteRequest from "../../service/DeleteRequest";
+import createGetRequest from "../../service/GetRequest";
+import createPostRequest from "../../service/PostRequest";
+import createPutRequest from "../../service/PutRequest";
 import createCategoryOptions from "../../utils/CategoryOptions";
 /* ------------------------ Getting elements from DOM ----------------------- */
 const navBar = document.getElementById("nav-placeholder") as HTMLElement;
@@ -83,6 +86,7 @@ const saveExpense = async () => {
       category,
       date,
     });
+    dialogExpenseId = "";
   } else if (dialogExpenseId != "") {
     const expenseId = dialogExpenseId!;
     const expense: Expense = {
@@ -92,7 +96,8 @@ const saveExpense = async () => {
       category: category,
       date: date.toString(),
     };
-    updateExpense(expense);
+    await updateExpense(expense);
+    dialogExpenseId = "";
   }
 };
 const showDialog = (data?: {
@@ -175,7 +180,7 @@ const createExpenseCard = (data: Expense) => {
       remarks: data.description,
       amount: data.amount!,
       date: data.date as string,
-      category: (data.category as Category).id,
+      category: (data.category as Category).id!,
     });
   });
   btnEdit.setAttribute("data-bs-toggle", "tooltip");
@@ -208,43 +213,21 @@ const createExpenseCard = (data: Expense) => {
 };
 
 const renderExpenseCards = async (filter: any) => {
-  const userExpenses = await http.get(`/expenses/filter?${filter}`, {
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem("jwt")}`,
-    },
-  });
-  if (userExpenses.status == HttpStatusCode.Ok) {
-    const data = userExpenses.data.data;
-    console.log(data);
-    if (data.length == 0) {
-      expensesContainer.innerHTML =
-        // eslint-disable-next-line quotes
-        '<h1 class="text-center h-75 p-5 ">Sorry No Data Found!</h1>';
-      return;
-    }
-    expensesContainer.innerHTML = "";
-    data.forEach((expense: any) => {
-      expensesContainer.appendChild(createExpenseCard(expense));
-    });
+  const userExpenses = await createGetRequest(`/expenses/filter?${filter}`);
+  if (userExpenses.length == 0) {
+    expensesContainer.innerHTML =
+      // eslint-disable-next-line quotes
+      '<h1 class="text-center h-75 p-5 ">Sorry No Data Found!</h1>';
+    return;
   }
+  expensesContainer.innerHTML = "";
+  userExpenses.forEach((expense: any) => {
+    expensesContainer.appendChild(createExpenseCard(expense));
+  });
 };
 
 const createExpense = async (expense: Expense) => {
-  const response = await http.post(
-    "/expenses",
-    {
-      amount: expense.amount,
-      description: expense.description,
-      category: expense.category,
-      date: expense.date,
-    },
-    {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("jwt")}`,
-      },
-    }
-  );
-
+  const response = await createPostRequest("/expenses/", expense);
   if (response.status == HttpStatusCode.Accepted) {
     closeDialog();
     renderExpenseCards("");
@@ -252,11 +235,7 @@ const createExpense = async (expense: Expense) => {
 };
 
 const deleteExpense = async (id: string) => {
-  const response = await http.delete(`/expenses/${id}`, {
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem("jwt")}`,
-    },
-  });
+  const response = await createDeleteRequest(`/expenses/${id}`);
   if (response.status == HttpStatusCode.Accepted) {
     renderExpenseCards("");
   }
@@ -264,22 +243,7 @@ const deleteExpense = async (id: string) => {
 
 const updateExpense = async (expense: Expense) => {
   try {
-    const response = await http.put(
-      "/expenses/",
-      {
-        id: expense.id,
-        amount: expense.amount,
-        description: expense.description,
-        category: expense.category,
-        date: expense.date,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("jwt")}`,
-        },
-      }
-    );
-
+    const response = await createPutRequest("/expenses/", expense);
     if (response.status == HttpStatusCode.Accepted) {
       renderExpenseCards("");
       dialogExpenseId = "";

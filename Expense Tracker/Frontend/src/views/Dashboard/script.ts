@@ -4,6 +4,7 @@ import { HttpStatusCode } from "axios";
 import "../../assets/scss/style.scss";
 import renderNavBar from "../../components/Navbar/navbar";
 import http from "../../service/HttpClient";
+import createGetRequest from "../../service/GetRequest";
 const navBar = document.getElementById("navbar-placeholder") as HTMLElement;
 const displayName = document.getElementById("display-username") as HTMLElement;
 const displayIncome = document.getElementById("summary-income") as HTMLElement;
@@ -19,13 +20,8 @@ const expenseContext = expenseChart.getContext(
 ) as CanvasRenderingContext2D;
 window.onload = async () => {
   renderNavBar(navBar, "nav-dashboard");
-  const userResponse = await http.get("/users/summary", {
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem("jwt")}`,
-    },
-  });
-  const userSummary = userResponse.data.data;
-  if (userResponse.status === HttpStatusCode.Ok) {
+  const userSummary = await createGetRequest("/users/summary");
+  if (userSummary) {
     displayName.innerHTML = userSummary.username;
     displayIncome.innerHTML = `Rs.${userSummary.totalIncome}`;
     displayExpense.innerHTML = `Rs.${userSummary.totalExpense}`;

@@ -1,9 +1,12 @@
+import { HttpStatusCode } from "axios";
 import * as bootstrap from "bootstrap";
 import "../../assets/scss/style.scss";
 import renderNavBar from "../../components/Navbar/navbar";
 import Income from "../../interfaces/Income";
-import { HttpStatusCode } from "axios";
-import http from "../../service/HttpClient";
+import createDeleteRequest from "../../service/DeleteRequest";
+import createGetRequest from "../../service/GetRequest";
+import createPostRequest from "../../service/PostRequest";
+import createPutRequest from "../../service/PutRequest";
 
 const navBar = document.getElementById("nav-placeholder") as HTMLElement;
 const searchInput = document.getElementById("search-bar") as HTMLInputElement;
@@ -53,8 +56,7 @@ const saveIncome = () => {
   const source = sourceInput.value;
   const amount = amountInput.value;
   const date = dateInput.value || new Date();
-  const income = {
-    id: "",
+  const income : Income = {
     source,
     amount: parseFloat(amount),
     date,
@@ -177,72 +179,35 @@ const createExpenseCard = (data: Income) => {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const renderIncomeCards = async (filter: any) => {
   console.log(filter);
-  const userIncomes = await http.get("/incomes/", {
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem("jwt")}`,
-    },
-  });
-  if (userIncomes.status == HttpStatusCode.Ok) {
-    const data = userIncomes.data.data;
-    console.log(data);
-    if (data.length == 0) {
-      incomeContainer.innerHTML =
-        // eslint-disable-next-line quotes
-        '<h1 class="text-center h-75 p-5 ">Sorry No Data Found!</h1>';
-      return;
-    }
-    incomeContainer.innerHTML = "";
-    data.forEach((income: Income) => {
-      incomeContainer.appendChild(createExpenseCard(income));
-    });
+  const userIncomes = await createGetRequest("/incomes/");
+  if (userIncomes.length == 0) {
+    incomeContainer.innerHTML =
+      // eslint-disable-next-line quotes
+      '<h1 class="text-center h-75 p-5 ">Sorry No Data Found!</h1>';
+    return;
   }
+  incomeContainer.innerHTML = "";
+  userIncomes.forEach((income: Income) => {
+    incomeContainer.appendChild(createExpenseCard(income));
+  });
 };
 
 const createIncome = async (income: Income) => {
-  const response = await http.post(
-    "/incomes",
-    {
-      source: income.source,
-      amount: income.amount,
-      date: income.date,
-    },
-    {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("jwt")}`,
-      },
-    }
-  );
+  const response = await createPostRequest("/incomes/", income);
   if (response.status == HttpStatusCode.Accepted) {
     renderIncomeCards("");
   }
 };
 
 const deleteIncome = async (id: string) => {
-  const response = await http.delete(`/incomes/${id}`, {
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem("jwt")}`,
-    },
-  });
+  const response = await createDeleteRequest(`/incomes/${id}`);
   if (response.status == HttpStatusCode.Accepted) {
     renderIncomeCards("");
   }
 };
 
 const updateIncome = async (income: Income) => {
-  const response = await http.put(
-    "/incomes/",
-    {
-      id: income.id,
-      source: income.source,
-      amount: income.amount,
-      date: income.date,
-    },
-    {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("jwt")}`,
-      },
-    }
-  );
+  const response = await createPutRequest("/incomes/", income);
   if (response.status == HttpStatusCode.Accepted) {
     renderIncomeCards("");
     dialogIncomeId = "";

@@ -3,7 +3,10 @@ import * as bootstrap from "bootstrap";
 import "../../assets/scss/style.scss";
 import renderNavBar from "../../components/Navbar/navbar";
 import Category from "../../interfaces/Category";
-import http from "../../service/HttpClient";
+import createDeleteRequest from "../../service/DeleteRequest";
+import createGetRequest from "../../service/GetRequest";
+import createPostRequest from "../../service/PostRequest";
+import createPutRequest from "../../service/PutRequest";
 // --------------------- Getting elements from DOM -----------------------
 const navBar = document.getElementById("nav-placeholder") as HTMLElement;
 
@@ -53,11 +56,16 @@ btnCloseCategoryDialog.addEventListener("click", () => {
 btnSaveCategory.addEventListener("click", async () => {
   const title = categoryTitleInput.value;
   const description = categoryDescriptionInput.value;
+  const category: Category = {
+    title: title,
+    description: description,
+  };
   if (categoryId === "") {
-    await saveCategory(title, description);
+    await saveCategory(category);
   }
   if (categoryId !== "") {
-    await updateCategory(title, description, categoryId);
+    category.id = categoryId;
+    await updateCategory(category);
     categoryId = "";
   }
   renderUserCategories(await getUserCategories());
@@ -88,7 +96,7 @@ const createCategoryCard = (category: Category) => {
   editButton.innerHTML = "<i class='fa-solid fa-pen-to-square'></i>";
   editButton.classList.add("btn", "btn-primary");
   editButton.addEventListener("click", () => {
-    categoryId = category.id;
+    categoryId = category.id!;
     categoryModal.show();
     categoryTitleInput.value = category.title;
     categoryDescriptionInput.value = category.description;
@@ -97,7 +105,7 @@ const createCategoryCard = (category: Category) => {
   deleteButton.innerHTML = "<i class='fa-solid fa-trash'></i>";
   deleteButton.classList.add("btn", "btn-danger", "mx-2");
   deleteButton.addEventListener("click", () => {
-    deleteCategory(category.id);
+    deleteCategory(category.id!);
   });
   actions.appendChild(editButton);
   actions.appendChild(deleteButton);
@@ -114,13 +122,8 @@ const createCategoryCard = (category: Category) => {
 /* ------------------------- Getting user categories ------------------------ */
 const getUserCategories = async () => {
   try {
-    const categories = await http.get("/categories/", {
-      headers: { Authorization: `Bearer ${localStorage.getItem("jwt")}` },
-    });
-    if (categories.status == HttpStatusCode.Ok) {
-      const data = categories.data.result;
-      return data;
-    }
+    const categories = await createGetRequest("/categories/");
+    return categories;
   } catch (error) {
     // Todo remove
     console.log(error);
@@ -128,18 +131,9 @@ const getUserCategories = async () => {
 };
 
 /* --------------------------- Adding new category -------------------------- */
-const saveCategory = async (title: string, description: string) => {
+const saveCategory = async (category: Category) => {
   try {
-    const response = await http.post(
-      "/categories/",
-      {
-        title,
-        description,
-      },
-      {
-        headers: { Authorization: `Bearer ${localStorage.getItem("jwt")}` },
-      }
-    );
+    const response = await createPostRequest("/categories/", category);
     if (response.status == HttpStatusCode.Accepted) {
       //Todo
     }
@@ -151,9 +145,7 @@ const saveCategory = async (title: string, description: string) => {
 /* --------------------------- Deleting a category -------------------------- */
 const deleteCategory = async (id: string) => {
   try {
-    const response = await http.delete(`/categories/${id}`, {
-      headers: { Authorization: `Bearer ${localStorage.getItem("jwt")}` },
-    });
+    const response = await createDeleteRequest(`/categories/${id}`);
     if (response.status === HttpStatusCode.Ok) {
       renderUserCategories(await getUserCategories());
     }
@@ -162,23 +154,9 @@ const deleteCategory = async (id: string) => {
   }
 };
 
-const updateCategory = async (
-  title: string,
-  description: string,
-  id: string
-) => {
+const updateCategory = async (category : Category) => {
   try {
-    const response = await http.put(
-      "/categories/",
-      {
-        id,
-        title,
-        description,
-      },
-      {
-        headers: { Authorization: `Bearer ${localStorage.getItem("jwt")}` },
-      }
-    );
+    const response = await createPutRequest("/categories/", category);
     if (response.status == HttpStatusCode.Accepted) {
       //todo add toast
     }
