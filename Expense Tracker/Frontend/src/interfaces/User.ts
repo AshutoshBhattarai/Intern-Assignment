@@ -1,10 +1,10 @@
 interface User {
-  id: string;
-  username: string;
+  id?: string;
+  username?: string;
   email: string;
   password: string;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export default User;

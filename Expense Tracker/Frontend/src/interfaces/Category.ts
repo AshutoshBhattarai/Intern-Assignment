@@ -1,9 +1,9 @@
 interface Category {
-    id: string;
+    id?: string;
     title: string;
     description: string;
-    color: string;
-    createdAt: Date;
-    updatedAt: Date;
+    color?: string;
+    createdAt?: Date;
+    updatedAt?: Date;
 }
 export default Category;
