@@ -2,6 +2,8 @@ import { NextFunction, Request, Response } from "express";
 import * as budgetService from "../services/BudgetService";
 import HttpStatus from "http-status-codes";
 import Budget from "../models/Budget";
+import { BudgetQuery } from "../types/QueryType";
+import User from "../models/User";
 
 export const createBudget = async (
   req: Request,
@@ -55,9 +57,13 @@ export const getBudgetById = (
   }
 };
 
-export const updateBudget = async (req : Request, res: Response, next: NextFunction) => {
+export const updateBudget = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
-    const budget : Budget = req.body;
+    const budget: Budget = req.body;
     const user = res.locals.user;
     await budgetService.updateBudget(user, budget);
     res.status(HttpStatus.ACCEPTED).json({
@@ -66,9 +72,13 @@ export const updateBudget = async (req : Request, res: Response, next: NextFunct
   } catch (error) {
     next(error);
   }
-}
+};
 
-export const deleteBudget = async (req : Request, res: Response, next: NextFunction) => {
+export const deleteBudget = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const user = res.locals.user;
     await budgetService.deleteBudget(user, req.params.id);
@@ -78,4 +88,22 @@ export const deleteBudget = async (req : Request, res: Response, next: NextFunct
   } catch (error) {
     next(error);
   }
-}
+};
+
+export const getAllFilteredBudgets = async(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const user: User = res.locals.user;
+    const queries: BudgetQuery = req.query;
+    const budgets = await budgetService.getFilteredBudget(user, queries);
+    res.status(HttpStatus.OK).json({
+      message: "Budgets fetched successfully",
+      result: budgets,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
