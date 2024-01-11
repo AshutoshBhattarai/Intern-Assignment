@@ -68,7 +68,6 @@ export const updateIncome = async (user: User, income: Income) => {
   if (!(await getUserById(user.id))) throw new NotFoundError("User not found");
   const existingIncome = await incomeRepo.getIncomeById(income.id);
   if (!existingIncome) throw new NotFoundError("Income not found");
-  console.log(income);
   await incomeRepo.updateIncome(income);
 };
 export const deleteIncome = async (user: User, id: string) => {
