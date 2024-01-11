@@ -6,6 +6,7 @@ import {
   getFilteredExpenses,
   updateExpense,
 } from "../controllers/ExpenseController";
+import UploadHandler from "../middlewares/UploadHandler";
 import {
   validateRequestBody,
   validateRequestQuery,
@@ -19,7 +20,11 @@ const router = Router();
 router
   .route("/")
   .get(getAllExpenses)
-  .post(validateRequestBody(expenseBodySchema), createExpense)
+  .post(
+    UploadHandler.single("image"),
+    validateRequestBody(expenseBodySchema),
+    createExpense
+  )
   .put(updateExpense);
 router.delete("/:id", deleteExpense);
 router.get(
