@@ -22,12 +22,12 @@ export const createExpense = async (user: User, expense: Expense) => {
   if (!category) {
     throw new NotFoundError("Category not found");
   }
-  await updateBudget(user, expense, "add");
+  await updateBudget(user, category, expense, "add");
 
   expense.user = user;
 
   // Create the expense
-  expenseRepo.createExpense(expense);
+  await expenseRepo.createExpense(expense);
 };
 //* ----------------------------------- -- ----------------------------------- */
 //* ------- Service that returns all the expenses of a particular user ------ */
@@ -48,10 +48,14 @@ export const updateExpense = async (user: User, expense: Expense) => {
   if (!expenseExists) {
     throw new NotFoundError("Expense not found");
   }
-  await updateBudget(user, expenseExists, "remove");
-  await updateBudget(user, expense, "add");
+  const category = await getCategory(expense.category as any);
+  if (!category) {
+    throw new NotFoundError("Category not found");
+  }
+  await updateBudget(user, category, expenseExists, "remove");
+  await updateBudget(user, category, expense, "add");
   expense.user = user;
-  expenseRepo.updateExpense(expense);
+  await expenseRepo.updateExpense(expense);
 };
 //* ----------------------------------- -- ----------------------------------- */
 //* -------------- Service filteres expenses by query parameters ------------- */
@@ -59,7 +63,8 @@ export const getFilteredExpenses = async (user: User, params: ExpenseQuery) => {
   if (!(await getUserById(user.id))) {
     throw new NotFoundError("User not found");
   }
-  // const expenses = await expenseRepo.getFilteredExpenses(user, params);
+  const expensesC = await expenseRepo.getAllExpenseByCategory(user);
+  console.log(expensesC);
   const expenses = await expenseRepo.getExpenseWithCategory(user, params);
   return expenses.map((expense) => expenseResponse(expense));
 };
@@ -72,8 +77,12 @@ export const deleteExpense = async (user: User, id: string) => {
   if (!expense) {
     throw new NotFoundError("Expense not found");
   }
-  await updateBudget(user, expense, "remove");
-  expenseRepo.deleteExpense(expense.id);
+  const category = await getCategory(expense.category as any);
+  if (!category) {
+    throw new NotFoundError("Category not found");
+  }
+  await updateBudget(user, category, expense, "remove");
+  await expenseRepo.deleteExpense(expense.id);
 };
 /* --------------------------------- Extras --------------------------------- */
 // This function takes the expense object and returns a new expense object suitable for response.
@@ -95,27 +104,38 @@ const expenseResponse = (expense: Expense) => {
 
 const updateBudget = async (
   user: User,
+  category: Category,
   expense: Expense,
-  type: "add" | "remove"
+  task: "add" | "remove"
 ) => {
   const budgets: Budget[] = await budgetRepo.getBudgetByCategory(
     user,
-    expense.category
+    category
   );
-  if (!budgets) {
-    throw new NotFoundError("Budget for this category doesn't exist found");
-  }
-  if (type === "add") {
-    budgets.forEach(async (budget) => {
-      budget.spentAmount = budget.spentAmount + expense.amount;
-      budget.remainingAmount = budget.amount - budget.spentAmount;
-      await budgetRepo.updateBudget(budget);
-    });
-  } else {
-    budgets.forEach(async (budget) => {
-      budget.spentAmount = budget.spentAmount - expense.amount;
-      budget.remainingAmount = budget.amount - budget.spentAmount;
-      await budgetRepo.updateBudget(budget);
-    });
+  if (budgets) {
+    if (task === "add") {
+      await budgets.forEach(async (budget) => {
+        const newSpentAmount = budget.spentAmount + expense.amount;
+        budget.spentAmount = newSpentAmount;
+        budget.remainingAmount = budget.amount - newSpentAmount;
+        if (budget.remainingAmount <= 0) {
+          budget.remainingAmount = 0;
+        }
+        await budgetRepo.updateBudget(budget);
+      });
+    } else if (task === "remove") {
+      await budgets.forEach(async (budget) => {
+        const newSpentAmount = budget.spentAmount - expense.amount;
+        budget.spentAmount = newSpentAmount;
+        budget.remainingAmount = budget.amount - newSpentAmount;
+        if (budget.remainingAmount >= budget.amount) {
+          budget.remainingAmount = budget.amount;
+        }
+        if (budget.spentAmount <= 0) {
+          budget.spentAmount = 0;
+        }
+        await budgetRepo.updateBudget(budget);
+      });
+    }
   }
 };
