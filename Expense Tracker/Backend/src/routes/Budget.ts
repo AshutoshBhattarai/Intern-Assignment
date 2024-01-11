@@ -1,11 +1,10 @@
 import { Router } from "express";
-const router = Router();
 import {
   createBudget,
   deleteBudget,
   getAllBudgets,
-  getBudgetById,
-  updateBudget,
+  getAllFilteredBudgets,
+  updateBudget
 } from "../controllers/BudgetController";
 import {
   validateRequestBody,
@@ -15,6 +14,7 @@ import {
   budgetBodySchema,
   budgetQuerySchema,
 } from "../validations/ValidationSchema";
+const router = Router();
 
 router
   .route("/")
@@ -22,6 +22,6 @@ router
   .post(validateRequestBody(budgetBodySchema), createBudget)
   .put(updateBudget);
 router.delete("/:id", deleteBudget);
-router.get("/filter", validateRequestQuery(budgetQuerySchema), getBudgetById);
+router.get("/filter", validateRequestQuery(budgetQuerySchema), getAllFilteredBudgets);
 
 export default router;
