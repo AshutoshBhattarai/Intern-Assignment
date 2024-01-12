@@ -9,6 +9,7 @@ import createPostRequest from "../../service/PostRequest";
 import createPutRequest from "../../service/PutRequest";
 import showErrorResponse from "../../service/ErrorResponse";
 import { showToast } from "../../components/Toast";
+import generateIncomeCard from "./card";
 
 const navBar = document.getElementById("nav-placeholder") as HTMLElement;
 const searchInput = document.getElementById("search-bar") as HTMLInputElement;
@@ -88,90 +89,23 @@ const showDialog = (data?: {
   dateInput.value = data?.date.toString() || "";
 };
 
-const createExpenseCard = (data: Income) => {
-  // Create the expense card element
-  const expenseCard = document.createElement("div");
-  expenseCard.classList.add("card", "mb-2", "col-md-6", "gx-3");
-  expenseCard.style.position = "relative"; // Set position relative for absolute positioning
-
-  // Create the card body element
-  const cardBody = document.createElement("div");
-  cardBody.classList.add("card-body", "mr-3");
-
-  // Create the card description element and assign the remarks from the data
-  const cardSource = document.createElement("h4");
-  cardSource.classList.add("card-title", "text-primary", "m-0");
-  cardSource.textContent = data.source;
-
-  // Create the card amount element and assign the amount from the data
-  const cardAmount = document.createElement("p");
-  cardAmount.classList.add("card-text", "text-danger", "m-0");
-  cardAmount.textContent = "Rs. " + data.amount;
-
-  // Create the card date element and assign the date from the data
-  const cardDate = document.createElement("p");
-  cardDate.classList.add("card-text");
-  cardDate.textContent = "Date: " + data.date;
-
-  // Create the delete button container with absolute positioning
-  const btnDeleteContainer = document.createElement("div");
-  btnDeleteContainer.style.position = "absolute";
-  btnDeleteContainer.style.top = "5px";
-  btnDeleteContainer.style.right = "20px";
-
-  // Create the delete button element and add a click event listener
-  const btnDelete = document.createElement("button");
-  btnDelete.classList.add("btn", "btn-outline-danger", "round");
-  btnDelete.innerHTML = "<i class='fas fa-trash'></i>";
-  btnDelete.setAttribute("data-bs-toggle", "tooltip");
-  btnDelete.setAttribute("data-bs-placement", "top");
-  btnDelete.setAttribute("data-bs-title", "Delete Expense");
-  const btnDeletetooltip = new bootstrap.Tooltip(btnDelete);
-  btnDelete.addEventListener("click", () => {
-    deleteIncome(data.id!);
-    btnDeletetooltip.dispose();
-  });
-
-  // Append the delete button to its container
-  btnDeleteContainer.appendChild(btnDelete);
-
-  // Create the edit button container with absolute positioning
-  const btnEditContainer = document.createElement("div");
-  btnEditContainer.style.position = "absolute";
-  btnEditContainer.style.top = "5px";
-  btnEditContainer.style.right = "70px"; // Adjust the right value as needed
-
-  // Create the edit button element and add a click event listener
-  const btnEdit = document.createElement("button");
-  btnEdit.classList.add("btn", "btn-outline-primary");
-  btnEdit.innerHTML = "<i class='fas fa-edit'></i>";
-  btnEdit.addEventListener("click", () => {
+const createIncomeCard = (data: Income) => {
+  const editIncomeFunc = () => {
     dialogIncomeId = data.id!;
     return showDialog({
       source: data.source,
       amount: data.amount!,
       date: data.date as string,
     });
-  });
-  btnEdit.setAttribute("data-bs-toggle", "tooltip");
-  btnEdit.setAttribute("data-bs-placement", "top");
-  btnEdit.setAttribute("data-bs-title", "Edit Expense");
-  new bootstrap.Tooltip(btnEdit);
-  // Append the edit button to its container
-  btnEditContainer.appendChild(btnEdit);
-  // Create the view image link element and set the href and target
-
-  // Append the card date, description, amount, delete button container, edit button, and view image link to the card body
-  cardBody.appendChild(cardSource);
-  cardBody.appendChild(cardAmount);
-  cardBody.appendChild(cardDate);
-  cardBody.appendChild(btnDeleteContainer);
-  cardBody.appendChild(btnEditContainer);
-
-  // Append the card body to the expense card
-  expenseCard.appendChild(cardBody);
-
-  // Return the created expense card element
+  };
+  const deleteIncomeFunc = () => {
+    deleteIncome(data.id!);
+  };
+  const expenseCard = generateIncomeCard(
+    data,
+    editIncomeFunc,
+    deleteIncomeFunc
+  );
   return expenseCard;
 };
 
@@ -190,7 +124,7 @@ const renderIncomeCards = async (filter: any) => {
   }
   incomeContainer.innerHTML = "";
   userIncomes.forEach((income: Income) => {
-    incomeContainer.appendChild(createExpenseCard(income));
+    incomeContainer.appendChild(createIncomeCard(income));
   });
 };
 
