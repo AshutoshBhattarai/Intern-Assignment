@@ -142,6 +142,7 @@ const saveCategory = async (category: Category) => {
   try {
     const response = await createPostRequest("/categories/", category);
     if (response.status == HttpStatusCode.Accepted) {
+      renderUserCategories(await getUserCategories());
       showToast(response.data.message, toastContainer, "success");
       closeDialog();
     }
@@ -168,6 +169,7 @@ const updateCategory = async (category: Category) => {
   try {
     const response = await createPutRequest("/categories/", category);
     if (response.status == HttpStatusCode.Accepted) {
+      renderUserCategories(await getUserCategories());
       showToast(response.data.message, toastContainer, "success");
       closeDialog();
     }
