@@ -14,7 +14,7 @@ const createCategoryOptions = async (select: HTMLElement) => {
     select.innerHTML = "";
     data.forEach((category: Category) => {
       const option = document.createElement("option");
-      option.value = category.id;
+      option.value = category.id!;
       option.text = category.title;
       select.appendChild(option);
     });
