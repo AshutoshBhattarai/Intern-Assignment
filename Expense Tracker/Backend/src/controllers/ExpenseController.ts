@@ -4,6 +4,8 @@ import NotFoundError from "../errors/NotFound";
 import Expense from "../models/Expense";
 import User from "../models/User";
 import * as expenseService from "../services/ExpenseService";
+import { getUserTotalExpenseCount } from "../repositories/ExpenseRepo";
+import createMetaData from "../utils/metadata";
 
 export const getAllExpenses = async (
   req: Request,
@@ -53,9 +55,12 @@ export const getFilteredExpenses = async (
     const user: User = res.locals.user;
     const params = req.query;
     const data = await expenseService.getFilteredExpenses(user, params);
+    const meta = createMetaData(await getUserTotalExpenseCount(user,params));
+
     res.status(HttpStatus.OK).json({
       message: "Expenses were successfully retrieved",
       result: data,
+      meta
     });
   } catch (error) {
     next(error);
@@ -70,6 +75,9 @@ export const updateExpense = async (
   try {
     const user: User = res.locals.user;
     const expense: Expense = req.body;
+    if ((req as any).file) {
+      expense.image = (req as any).file.filename;
+    }
     await expenseService.updateExpense(user, expense);
     res.status(HttpStatus.ACCEPTED).json({
       message: "Expense updated successfully",
