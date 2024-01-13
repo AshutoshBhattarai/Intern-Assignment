@@ -83,6 +83,11 @@ const closeDialog = () => {
 
 const renderUserCategories = (categories: Category[]) => {
   categoryContainer.innerHTML = "";
+  if (categories.length === 0) {
+    categoryContainer.innerHTML =
+      "<h5 class='text-center text-primary'>No Categories found</h5>";
+    return;
+  }
   categories.forEach((category: Category) => {
     categoryContainer.appendChild(createCategoryCard(category));
   });
@@ -130,10 +135,9 @@ const createCategoryCard = (category: Category) => {
 const getUserCategories = async () => {
   try {
     const categories = await createGetRequest("/categories/");
-    return categories;
+    return categories!.data;
   } catch (error) {
-    // Todo remove
-    console.log(error);
+    showErrorResponse(error);
   }
 };
 
