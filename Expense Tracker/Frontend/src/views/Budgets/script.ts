@@ -234,7 +234,7 @@ const saveBudget = async (budget: Budget) => {
 const getUserBudgets = async (filter: string) => {
   try {
     const budgets = await createGetRequest(`/budgets/filter?${filter}`);
-    return budgets;
+    return budgets!.data;
   } catch (error) {
     showErrorToast(error);
   }

@@ -1,7 +1,6 @@
 import { HttpStatusCode } from "axios";
 import http from "./HttpClient";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const createGetRequest = async (url: string) => {
   const response = await http.get(url, {
     headers: {
@@ -9,8 +8,12 @@ const createGetRequest = async (url: string) => {
     },
   });
   if (response.status === HttpStatusCode.Ok) {
-    const data = response.data.result;
-    return data;
+    const data = response.data;
+    
+    return {
+      data: data.result,
+      meta: data.meta,
+    };
   }
 };
 
