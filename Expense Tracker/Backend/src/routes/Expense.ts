@@ -25,7 +25,10 @@ router
     validateRequestBody(expenseBodySchema),
     createExpense
   )
-  .put(updateExpense);
+  .put(
+    UploadHandler.single("image"),
+    updateExpense
+  );
 router.delete("/:id", deleteExpense);
 router.get(
   "/filter",
