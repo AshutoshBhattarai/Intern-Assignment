@@ -1,14 +1,12 @@
-import { Request, Response, NextFunction } from "express";
-import BadRequestError from "../errors/BadRequest";
+import { NextFunction, Request, Response } from "express";
 import Status from "http-status-codes";
-import UnauthorizedError from "../errors/Unauthorized";
+import BadRequestError from "../errors/BadRequest";
 import ForbiddenError from "../errors/Forbidden";
-import NotFoundError from "../errors/NotFound";
 import NotAcceptableError from "../errors/NotAcceptable";
-
-import logger from "../utils/logger";
+import NotFoundError from "../errors/NotFound";
+import UnauthorizedError from "../errors/Unauthorized";
 import ValidationError from "../errors/Validation";
-import WarningError from "../errors/Warning";
+import logger from "../utils/logger";
 const errorHandler = async (
   err: Error,
   _req: Request,
@@ -30,8 +28,6 @@ const errorHandler = async (
     res.status(Status.NOT_ACCEPTABLE).json({ message: err.message });
   } else if (err instanceof ValidationError) {
     res.status(Status.BAD_REQUEST).json({ message: err.message });
-  } else if (err instanceof WarningError) {
-    res.status(Status.IM_A_TEAPOT).json({ message: err.message });
   } else
     res.status(Status.INTERNAL_SERVER_ERROR).json({ message: err.message });
 };
