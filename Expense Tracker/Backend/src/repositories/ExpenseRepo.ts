@@ -1,9 +1,9 @@
 import { Between, FindOptionsWhere, ILike, Repository } from "typeorm";
+import { DEFAULT_PAGE_SIZE } from "../constants";
 import database from "../database/config";
-import Category from "../models/Category";
+import { ExpenseQuery } from "../interface/QueryInterface";
 import Expense from "../models/Expense";
 import User from "../models/User";
-import { ExpenseQuery } from "../types/QueryType";
 
 const repo: Repository<Expense> = database.getRepository("expenses");
 
@@ -34,14 +34,6 @@ export const getUserTotalExpense = async (id: string) => {
 export const getUserExpenseCount = async (id: string) => {
   return await repo.findAndCountBy({ user: { id } });
 };
-// Todo Fix the code
-//! Date range is not working
-export const getTotalExpenseByDate = async (
-  startDate: Date,
-  endDate: Date,
-  user: User,
-  category: Category
-) => {};
 
 export const getFilteredExpenses = (user: User, params: ExpenseQuery) => {
   const whereConditions: FindOptionsWhere<Expense> = { user: { id: user.id } };
@@ -59,14 +51,11 @@ export const getExpenseWithCategory = async (
   user: User,
   params: ExpenseQuery
 ) => {
-  const whereConditions: FindOptionsWhere<Expense> = { user: { id: user.id } };
-  if (params.id) whereConditions.id = params.id;
-  if (params.amount) whereConditions.amount = params.amount;
-  if (params.startDate && params.endDate)
-    whereConditions.date = Between(params.startDate, params.endDate);
-  if (params.description)
-    whereConditions.description = ILike(`%${params.description}%`);
-  if (params.category) whereConditions.category = { id: params.category };
+  const page = params.page || 1;
+  const whereConditions: FindOptionsWhere<Expense> = getQueryWhereConditions(
+    user,
+    params
+  );
   return await repo
     .createQueryBuilder("expense")
     .select([
@@ -74,10 +63,13 @@ export const getExpenseWithCategory = async (
       "expense.amount",
       "expense.date",
       "expense.description",
-      "expense.image"
+      "expense.image",
     ])
     .where(whereConditions)
+    .skip(DEFAULT_PAGE_SIZE * (page - 1))
+    .take(DEFAULT_PAGE_SIZE)
     .leftJoinAndSelect("expense.category", "category")
+    .orderBy("expense.date", "DESC")
     .getMany();
 };
 
@@ -91,4 +83,27 @@ export const getAllExpenseByCategory = (user: User) => {
     .where({ user: { id: user.id } })
     .leftJoin("expense.category", "category")
     .getRawMany();
+};
+
+export const getUserTotalExpenseCount = async (
+  user: User,
+  params: ExpenseQuery
+) => {
+  const whereConditions: FindOptionsWhere<Expense> = getQueryWhereConditions(
+    user,
+    params
+  );
+  return await repo.countBy(whereConditions);
+};
+
+const getQueryWhereConditions = (user: User, params: ExpenseQuery) => {
+  const whereConditions: FindOptionsWhere<Expense> = { user: { id: user.id } };
+  if (params.id) whereConditions.id = params.id;
+  if (params.amount) whereConditions.amount = Between((params.amount < 10000 ? 0 : params.amount/2), params.amount);
+  if (params.startDate && params.endDate)
+    whereConditions.date = Between(params.startDate, params.endDate);
+  if (params.description)
+    whereConditions.description = ILike(`%${params.description}%`);
+  if (params.category) whereConditions.category = { id: params.category };
+  return whereConditions;
 };
