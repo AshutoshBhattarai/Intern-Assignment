@@ -13,9 +13,11 @@ export interface CategoryQuery extends Query {
   title?: string;
 };
 
-export interface IncomeQuery  {
+export interface IncomeQuery extends Query {
   source?: string;
   amount?: number;
+  startDate?: Date;
+  endDate?: Date;
 };
 
 export interface ExpenseQuery extends Query {
