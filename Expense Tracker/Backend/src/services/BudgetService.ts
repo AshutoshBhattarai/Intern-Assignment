@@ -8,6 +8,7 @@ import * as budgetRepo from "../repositories/BudgetRepo";
 import * as categoryRepo from "../repositories/CategoryRepo";
 import * as userRepo from "../repositories/UserRepo";
 import { BudgetQuery } from "../interface/QueryInterface";
+import { isSameDate } from "../utils/utils";
 
 export const createBudget = async (user: User, budget: Budget) => {
   if (!(await userRepo.getUserById(user.id))) {
@@ -91,11 +92,7 @@ const budgetResponse = (budget: Budget) => {
 
 const checkBudgetExists = (existingBudget: Budget[], budget: Budget) => {
   existingBudget.map((b: Budget) => {
-    const existingStartDate = new Date(b.startTime).setHours(0, 0, 0, 0);
-    const newStartDate = new Date(budget.startTime).setHours(0, 0, 0, 0);
-    const existingEndDate = new Date(b.endTime).setHours(0, 0, 0, 0);
-    const newEndDate = new Date(budget.endTime).setHours(0, 0, 0, 0);
-    if (existingStartDate == newStartDate && existingEndDate == newEndDate) {
+    if (isSameDate(b.startTime, budget.startTime) && isSameDate(b.endTime, budget.endTime)) {
       throw new ForbiddenError("Budget already exists");
     }
   });
