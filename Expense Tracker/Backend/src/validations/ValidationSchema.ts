@@ -8,6 +8,7 @@ export const categoryBodySchema = Joi.object({
 export const categoryQuerySchema = Joi.object({
     id : Joi.string(),
     title : Joi.string(),
+    page : Joi.number().default(1),
 })
 
 export const budgetBodySchema = Joi.object({
@@ -22,6 +23,7 @@ export const budgetQuerySchema = Joi.object({
     id : Joi.string(),
     title : Joi.string(),
     date : Joi.date(),
+    page : Joi.number().default(1),
 });
 
 export const incomeBodySchema = Joi.object({
@@ -35,6 +37,7 @@ export const incomeQuerySchema = Joi.object({
     source : Joi.string(),
     startDate : Joi.date(),
     endDate : Joi.date(),
+    page : Joi.number().default(1),
 })
 
 export const expenseBodySchema = Joi.object({
@@ -52,4 +55,5 @@ export const expenseQuerySchema = Joi.object({
     category : Joi.string(),
     amount : Joi.number(),
     description: Joi.string(),
+    page : Joi.number().default(1),
 })
