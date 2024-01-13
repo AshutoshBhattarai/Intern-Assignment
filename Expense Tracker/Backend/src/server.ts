@@ -2,8 +2,8 @@
 import express, { Express } from "express";
 import cors from "cors";
 import "reflect-metadata";
-import config from "./configs/Index";
-import routes from "./routes/Index";
+import config from "./configs";
+import routes from "./routes";
 import databaseConnection from "./database/connection";
 import logHandler from "./middlewares/LogHandler";
 import errorHandler from "./middlewares/ErrorHandler";
