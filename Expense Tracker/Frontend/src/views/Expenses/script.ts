@@ -6,17 +6,18 @@ import flatpickr from "flatpickr";
 import "flatpickr/dist/flatpickr.min.css";
 import moment from "moment";
 import "../../assets/scss/style.scss";
-import generateExpenseCard from "./card";
 import renderNavBar from "../../components/Navbar/navbar";
+import { showToast } from "../../components/Toast";
 import Category from "../../interfaces/Category";
 import Expense from "../../interfaces/Expense";
 import createDeleteRequest from "../../service/DeleteRequest";
+import showErrorResponse from "../../service/ErrorResponse";
 import createGetRequest from "../../service/GetRequest";
 import http from "../../service/HttpClient";
-import createPutRequest from "../../service/PutRequest";
 import createCategoryOptions from "../../utils/CategoryOptions";
-import { showToast } from "../../components/Toast";
-import showErrorResponse from "../../service/ErrorResponse";
+import generateExpenseCard from "./card";
+import createPagination from "../../components/Pagination";
+import MetaData from "../../interfaces/MetaData";
 /* ------------------------ Getting elements from DOM ----------------------- */
 const navBar = document.getElementById("nav-placeholder") as HTMLElement;
 const searchInput = document.getElementById(
@@ -47,14 +48,20 @@ const filterAmountSlider = document.getElementById(
   "filter-amount"
 ) as HTMLInputElement;
 const toastContainer = document.getElementById("toast-message") as HTMLElement;
-
+const paginationContainer = document.getElementById(
+  "pagination-placeholder"
+) as HTMLElement;
+const filterAmount = document.getElementById(
+  "filter-amount-display"
+) as HTMLElement;
 let expenseModal: bootstrap.Modal;
 let dialogExpenseId: string = "";
 let searchParams = "";
+let pagination: { currentPage: number; totalPages: number };
 /* ----------------------------------- -- ----------------------------------- */
 window.onload = async () => {
   renderNavBar(navBar, "nav-expenses");
-  renderExpenseCards("");
+  await renderExpenseCards("");
   expenseModal = new bootstrap.Modal(addDialogBox);
   createCategoryOptions(categoryInput);
   new bootstrap.Dropdown(
@@ -72,7 +79,7 @@ window.onload = async () => {
     renderExpenseCards(searchParams);
   });
   dropDownMenu.appendChild(btnAll);
-  categories.forEach((category: Category) => {
+  categories!.data.forEach((category: Category) => {
     const btn = document.createElement("button");
     btn.classList.add("dropdown-item");
     btn.textContent = category.title;
@@ -99,6 +106,21 @@ window.onload = async () => {
   });
 };
 
+const handlePageClicked = (buttonClicked: string | number) => {
+  if (buttonClicked === "previous") {
+    if (pagination.currentPage > 1) {
+      pagination.currentPage -= 1;
+    }
+  } else if (buttonClicked === "next") {
+    if (pagination.currentPage < pagination.totalPages) {
+      pagination.currentPage += 1;
+    }
+  } else {
+    pagination.currentPage = buttonClicked as number;
+  }
+  renderExpenseCards("&page=" + pagination.currentPage);
+};
+
 searchBtn.addEventListener("click", () => {
   const searchData = searchInput.value;
   searchData
@@ -111,7 +133,9 @@ expenseAddBtn.addEventListener("click", () => {
 });
 
 filterAmountSlider.addEventListener("change", () => {
-  console.log(filterAmountSlider.value);
+  filterAmount.textContent = "";
+  filterAmount.textContent = `Rs. ${filterAmountSlider.value}`;
+  renderExpenseCards(`&amount=${filterAmountSlider.value}`);
 });
 
 btnCloseDialog.addEventListener("click", () => {
@@ -149,14 +173,8 @@ const saveExpense = async () => {
     dialogExpenseId = "";
   } else if (dialogExpenseId != "") {
     const expenseId = dialogExpenseId!;
-    const expense: Expense = {
-      id: expenseId,
-      amount: parseFloat(amount),
-      description: remarks,
-      category: category,
-      date: date.toISOString(),
-    };
-    await updateExpense(expense);
+    formData.append("id", expenseId);
+    await updateExpense(formData);
     dialogExpenseId = "";
   }
 };
@@ -174,106 +192,6 @@ const showDialog = (data?: {
   dateInput.value = data?.date.toString() || "";
 };
 const createExpenseCard = (data: Expense) => {
-  // console.log(dialogExpenseId);
-  // // Create the expense card element
-  // const expenseCard = document.createElement("div");
-  // expenseCard.classList.add("card", "mb-2", "col-md-8", "gx-3");
-  // expenseCard.style.position = "relative"; // Set position relative for absolute positioning
-
-  // // Create the card body element
-  // const cardBody = document.createElement("div");
-  // cardBody.classList.add("card-body", "mr-3");
-
-  // // Create the card description element and assign the remarks from the data
-  // const cardDescription = document.createElement("p");
-  // cardDescription.classList.add("card-title", "text-primary", "m-0");
-  // cardDescription.textContent = data.description;
-
-  // // Create the card amount element and assign the amount from the data
-  // const cardAmount = document.createElement("p");
-  // cardAmount.classList.add("card-text", "text-danger", "m-0");
-  // cardAmount.innerHTML = "<i class='fas fa-rupee'></i> " + data.amount;
-
-  // const cardCategory = document.createElement("p");
-  // cardCategory.classList.add("card-text", "m-0");
-  // cardCategory.textContent = (data.category as Category).title;
-
-  // // Create the card date element and assign the date from the data
-  // const cardDate = document.createElement("p");
-  // cardDate.classList.add("card-text");
-  // cardDate.textContent = new Date(data.date as Date)
-  //   .toUTCString()
-  //   .substring(5, 16);
-
-  // // Create the delete button container with absolute positioning
-  // const btnDeleteContainer = document.createElement("div");
-  // btnDeleteContainer.style.position = "absolute";
-  // btnDeleteContainer.style.top = "5px";
-  // btnDeleteContainer.style.right = "20px";
-
-  // // Create the delete button element and add a click event listener
-  // const btnDelete = document.createElement("button");
-  // btnDelete.classList.add("btn", "btn-outline-danger", "round");
-  // btnDelete.innerHTML = "<i class='fas fa-trash'></i>";
-  // btnDelete.setAttribute("data-bs-toggle", "tooltip");
-  // btnDelete.setAttribute("data-bs-placement", "top");
-  // btnDelete.setAttribute("data-bs-title", "Delete Expense");
-  // const btnDeletetooltip = new bootstrap.Tooltip(btnDelete);
-  // btnDelete.addEventListener("click", () => {
-  //   deleteExpense(data.id!);
-  //   btnDeletetooltip.dispose();
-  // });
-
-  // // Append the delete button to its container
-  // btnDeleteContainer.appendChild(btnDelete);
-
-  // // Create the edit button container with absolute positioning
-  // const btnEditContainer = document.createElement("div");
-  // btnEditContainer.style.position = "absolute";
-  // btnEditContainer.style.top = "5px";
-  // btnEditContainer.style.right = "70px"; // Adjust the right value as needed
-
-  // // Create the edit button element and add a click event listener
-  // const btnEdit = document.createElement("button");
-  // btnEdit.classList.add("btn", "btn-outline-primary");
-  // btnEdit.innerHTML = "<i class='fas fa-edit'></i>";
-  // btnEdit.addEventListener("click", () => {
-  //   dialogExpenseId = data.id!;
-  //   return showDialog({
-  //     remarks: data.description,
-  //     amount: data.amount!,
-  //     date: data.date as string,
-  //     category: (data.category as Category).id!,
-  //   });
-  // });
-  // btnEdit.setAttribute("data-bs-toggle", "tooltip");
-  // btnEdit.setAttribute("data-bs-placement", "top");
-  // btnEdit.setAttribute("data-bs-title", "Edit Expense");
-  // new bootstrap.Tooltip(btnEdit);
-  // // Append the edit button to its container
-  // btnEditContainer.appendChild(btnEdit);
-  // // Create the view image link element and set the href and target
-  // const viewImage = document.createElement("a");
-  // viewImage.classList.add("btn", "btn-outline-warning");
-  // viewImage.innerHTML = "<i class='fa-solid fa-file-invoice'></i>";
-  // viewImage.href = data.image || "#";
-  // viewImage.target = "_blank";
-  // viewImage.setAttribute("data-bs-toggle", "tooltip");
-  // viewImage.setAttribute("data-bs-placement", "top");
-  // viewImage.setAttribute("data-bs-title", "View Receipt");
-  // new bootstrap.Tooltip(viewImage);
-
-  // // Append the card date, description, amount, delete button container, edit button, and view image link to the card body
-  // cardBody.appendChild(cardAmount);
-  // cardBody.appendChild(cardDescription);
-  // cardBody.appendChild(cardCategory);
-  // cardBody.appendChild(cardDate);
-  // cardBody.appendChild(btnDeleteContainer);
-  // cardBody.appendChild(btnEditContainer);
-  // cardBody.appendChild(viewImage);
-
-  // // Append the card body to the expense card
-  // expenseCard.appendChild(cardBody);
   const deleteFunction = () => {
     deleteExpense(data.id!);
   };
@@ -286,28 +204,38 @@ const createExpenseCard = (data: Expense) => {
       category: (data.category as Category).id!,
     });
   };
-  const viewImageFunc = () => {};
-  const expenseCard = generateExpenseCard(
-    data,
-    editFunction,
-    deleteFunction
-  );
+  const expenseCard = generateExpenseCard(data, editFunction, deleteFunction);
   // Return the created expense card element
   return expenseCard;
 };
-
+/* -------------------------------------------------------------------------- */
+/*                                 API calls                                  */
+/* -------------------------------------------------------------------------- */
 const renderExpenseCards = async (filter: string) => {
-  const userExpenses = await createGetRequest(`/expenses/filter?${filter}`);
-  if (userExpenses.length == 0) {
+  const response = await createGetRequest(`/expenses/filter?${filter}`);
+  const userExpenses = response?.data;
+  const metaData: MetaData = response?.meta;
+  pagination = {
+    totalPages: metaData.totalPages,
+    currentPage: pagination != undefined ? pagination.currentPage : 1,
+  };
+  if (userExpenses!.length == 0) {
     expensesContainer.innerHTML =
-      // eslint-disable-next-line quotes
-      '<h1 class="text-center h-75 p-5 ">Sorry No Data Found!</h1>';
+      "<h1 class='text-center h-75 p-5'>Sorry No Data Found!</h1>";
+    paginationContainer.innerHTML = "";
     return;
   }
   expensesContainer.innerHTML = "";
-  userExpenses.forEach((expense: Expense) => {
+  await userExpenses!.forEach((expense: Expense) => {
     expensesContainer.appendChild(createExpenseCard(expense));
   });
+  const paginationBar = createPagination(
+    pagination.totalPages,
+    pagination.currentPage,
+    handlePageClicked
+  );
+  paginationContainer.innerHTML = "";
+  paginationContainer.appendChild(paginationBar);
 };
 
 const createExpense = async (expense: Expense | FormData) => {
@@ -318,7 +246,7 @@ const createExpense = async (expense: Expense | FormData) => {
     if (response.status == HttpStatusCode.Accepted) {
       closeDialog();
       renderExpenseCards("");
-      showToast("Expense Added Successfully", toastContainer, "success");
+      showToast(response.data.message, toastContainer, "success");
     }
   } catch (error) {
     showErrorToast(error);
@@ -339,12 +267,14 @@ const deleteExpense = async (id: string) => {
   }
 };
 
-const updateExpense = async (expense: Expense) => {
+const updateExpense = async (expense: Expense | FormData) => {
   try {
-    const response = await createPutRequest("/expenses/", expense);
+    const response = await http.put("/expenses/", expense, {
+      headers: { Authorization: `Bearer ${localStorage.getItem("jwt")}` },
+    });
     if (response.status == HttpStatusCode.Accepted) {
-      renderExpenseCards("");
       closeDialog();
+      renderExpenseCards("");
       showToast(response.data.message, toastContainer, "success");
     }
   } catch (error) {
