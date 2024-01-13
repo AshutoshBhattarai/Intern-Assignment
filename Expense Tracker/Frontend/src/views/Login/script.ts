@@ -57,6 +57,7 @@ const sendAuthRequest = async (email: string, password: string) => {
     const response = await createPostRequest("/login", user);
     if (response.status === HttpStatusCode.Accepted) {
       localStorage.setItem("jwt", response.data.tokens.accessToken);
+      localStorage.setItem("refresh", response.data.tokens.refreshToken);
       window.location.href = "/views/Dashboard/";
     }
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
