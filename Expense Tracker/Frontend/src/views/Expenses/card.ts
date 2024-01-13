@@ -44,20 +44,26 @@ const createExpenseCard = (
   const editButton = document.createElement("button");
   editButton.innerHTML = "<i class='fa-solid fa-pen-to-square'></i>";
   editButton.classList.add("btn", "btn-outline-primary", "col");
-  editButton.addEventListener("click", editOnClick);
   editButton.setAttribute("data-bs-toggle", "tooltip");
   editButton.setAttribute("data-bs-placement", "top");
   editButton.setAttribute("data-bs-title", "Edit Expense");
-  new bootstrap.Tooltip(editButton);
+  const editTooltip = new bootstrap.Tooltip(editButton);
+  editButton.addEventListener("click", () => {
+    editTooltip.dispose();
+    editOnClick();
+  });
 
   const deleteButton = document.createElement("button");
   deleteButton.innerHTML = "<i class='fa-solid fa-trash'></i>";
   deleteButton.classList.add("btn", "btn-outline-danger", "mx-2", "col");
-  deleteButton.addEventListener("click", deleteOnClick);
   deleteButton.setAttribute("data-bs-toggle", "tooltip");
   deleteButton.setAttribute("data-bs-placement", "top");
   deleteButton.setAttribute("data-bs-title", "Delete Expense");
-  new bootstrap.Tooltip(deleteButton);
+  const deleteTooltip = new bootstrap.Tooltip(deleteButton);
+  deleteButton.addEventListener("click", () => {
+    deleteTooltip.dispose();
+    deleteOnClick();
+  });
 
   const viewImageButton = document.createElement("a");
   viewImageButton.innerHTML = "<i class='fa-solid fa-receipt'></i>";
@@ -67,7 +73,10 @@ const createExpenseCard = (
   viewImageButton.setAttribute("data-bs-toggle", "tooltip");
   viewImageButton.setAttribute("data-bs-placement", "top");
   viewImageButton.setAttribute("data-bs-title", "View Receipt");
-  new bootstrap.Tooltip(viewImageButton);
+  const viewImageToolTip = new bootstrap.Tooltip(viewImageButton);
+  viewImageButton.addEventListener("click", () => {
+    viewImageToolTip.dispose();
+  });
 
   cardBody.appendChild(amount);
   cardBody.appendChild(remarks);
