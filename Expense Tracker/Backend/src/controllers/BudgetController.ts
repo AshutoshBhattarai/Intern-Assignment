@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import * as budgetService from "../services/BudgetService";
 import HttpStatus from "http-status-codes";
 import Budget from "../models/Budget";
-import { BudgetQuery } from "../types/QueryType";
+import { BudgetQuery } from "../interface/QueryInterface";
 import User from "../models/User";
 
 export const createBudget = async (

@@ -7,7 +7,7 @@ import User from "../models/User";
 import * as budgetRepo from "../repositories/BudgetRepo";
 import * as categoryRepo from "../repositories/CategoryRepo";
 import * as userRepo from "../repositories/UserRepo";
-import { BudgetQuery } from "../types/QueryType";
+import { BudgetQuery } from "../interface/QueryInterface";
 
 export const createBudget = async (user: User, budget: Budget) => {
   if (!(await userRepo.getUserById(user.id))) {

@@ -3,7 +3,7 @@ import Budget from "../models/Budget";
 import database from "../database/config";
 import User from "../models/User";
 import Category from "../models/Category";
-import { BudgetQuery } from "../types/QueryType";
+import { BudgetQuery } from "../interface/QueryInterface";
 
 const repo: Repository<Budget> = database.getRepository("budgets");
 

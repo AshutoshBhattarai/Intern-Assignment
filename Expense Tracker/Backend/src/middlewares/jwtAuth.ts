@@ -4,7 +4,7 @@ import jwt, {
   NotBeforeError,
   TokenExpiredError,
 } from "jsonwebtoken";
-import config from "../configs/Index";
+import config from "../configs";
 import ForbiddenError from "../errors/Forbidden";
 import UnauthorizedError from "../errors/Unauthorized";
 import { getUserById } from "../services/UserService";

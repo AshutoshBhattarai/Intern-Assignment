@@ -7,7 +7,7 @@ import * as budgetRepo from "../repositories/BudgetRepo";
 import { getCategory } from "../repositories/CategoryRepo";
 import * as expenseRepo from "../repositories/ExpenseRepo";
 import { getUserById } from "../repositories/UserRepo";
-import { ExpenseQuery } from "../types/QueryType";
+import { ExpenseQuery } from "../interface/QueryInterface";
 
 //* -------------------- Function that adds a new expense -------------------- */
 
@@ -63,8 +63,7 @@ export const getFilteredExpenses = async (user: User, params: ExpenseQuery) => {
   if (!(await getUserById(user.id))) {
     throw new NotFoundError("User not found");
   }
-  const expensesC = await expenseRepo.getAllExpenseByCategory(user);
-  console.log(expensesC);
+
   const expenses = await expenseRepo.getExpenseWithCategory(user, params);
   return expenses.map((expense) => expenseResponse(expense));
 };

@@ -5,7 +5,7 @@ import * as categoryRepo from "../repositories/CategoryRepo";
 import * as expenseRepo from "../repositories/ExpenseRepo";
 import * as budgetRepo from "../repositories/BudgetRepo";
 import * as incomeRepo from "../repositories/IncomeRepo";
-import { UserSummary } from "../types/UserSummary";
+import { UserSummary } from "../interface/UserSummary";
 
 export const getAllUsers = async (): Promise<User[]> => {
   const users = await userRepo.getAllUsers();
