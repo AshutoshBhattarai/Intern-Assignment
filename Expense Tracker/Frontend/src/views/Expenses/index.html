@@ -23,7 +23,7 @@
             <p class="col-12 m-0 mb-1">Filters</p>
             <small class="col">By Category</small>
             <small class="col-4">By Remarks</small>
-            <small class="col-4">By Date</small>
+            <small class="col-3">By Date</small>
             <small class="col">By Amount</small>
             <section class="row">
               <section class="col dropdown">
@@ -54,18 +54,22 @@
                   <i class="fas fa-search"></i>
                 </button>
               </section>
-              <section class="col-4">
+              <section class="col-3">
                 <input type="date" class="form-control" id="filter-date" />
               </section>
               <section class="col">
                 <input
                   type="range"
                   min="0"
-                  max="10000000"
+                  max="100000"
                   class="form-range row"
                   id="filter-amount"
                 />
-                <span class="row"> </span>
+                <div class="row">
+                  <small class="col">Rs.0</small>
+                  <small id="filter-amount-display" class="col"> Amount</small>
+                  <small class="col">Rs.100000</small>
+                </div>
               </section>
             </section>
           </div>
@@ -73,11 +77,11 @@
       </section>
       <section class="pt-3 row">
         <section class="col-12 row align-items-center">
-          <p class="col-1">Amount</p>
-          <p class="col-6">Remarks</p>
-          <p class="col">Category</p>
-          <p class="col">Date</p>
-          <p class="col">Actions</p>
+          <p class="col-1"><i class="fas fa-rupee-sign"></i> Amount</p>
+          <p class="col-6"><i class="fa-solid fa-tag"></i> Remarks</p>
+          <p class="col"><i class="fas fa-list"></i> Category</p>
+          <p class="col"><i class="fa-solid fa-calendar-days"></i> Date</p>
+          <p class="col"><i class="fa-solid fa-gears"></i> Actions</p>
         </section>
         <section id="expense-container"></section>
       </section>
@@ -156,6 +160,10 @@
           </div>
         </div>
       </section>
+      <section
+        id="pagination-placeholder"
+        class="flex-grow d-flex justify-content-center align-items-center"
+      ></section>
       <!-- End Add Expense Dialog Box -->
       <div id="toast-message"></div>
     </main>
