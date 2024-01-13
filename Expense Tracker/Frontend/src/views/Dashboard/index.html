@@ -15,39 +15,47 @@
     <section class="container">
       <!-- Header Section -->
       <section class="pt-4">
-        <h1 class="heading-section">
+        <h4 class="heading-section text-dark">
           Welcome <span id="display-username"></span>
-        </h1>
+        </h4>
       </section>
       <!-- Overview Section -->
-      <section class="container d-flex gap-4 card-group mt-4">
-        <div class="card bg-danger">
+      <section class="container d-flex gap-4 card-group mt-3">
+        <div class="card bg-danger rounded shadow">
           <div class="card-body">
             <div class="text-white">
               <i class="fa fa-money" aria-hidden="true"></i> Expenses
             </div>
-            <h1 class="card-text text-white" id="summary-expense"></h1>
+            <h4 class="card-text text-white" id="summary-expense"></h4>
           </div>
         </div>
-        <div class="card bg-success">
+        <div class="card bg-success rounded shadow ">
           <div class="card-body">
             <div class="text-white">
               <i class="fa fa-money-check"></i> Income
             </div>
-            <h1 class="card-text text-white" id="summary-income"></h1>
+            <h4 class="card-text text-white" id="summary-income"></h4>
           </div>
         </div>
-        <div class="card bg-primary">
+        <div class="card bg-primary rounded shadow">
           <div class="card-body">
             <div class="text-white">
               <i class="fa-solid fa-piggy-bank"></i> Savings
             </div>
-            <h1 class="card-text text-white" id="summary-budget"></h1>
+            <h4 class="card-text text-white" id="summary-budget"></h4>
           </div>
         </div>
       </section>
       <!-- Chart Section -->
-      <canvas class="container" id="expense-chart"></canvas>
+      <div id="charts" class="row mt-3 border bg-white shadow-lg rounded p-3   ">
+        <p class="col-12">Summary</p>
+        <div class="col" style="position: relative; height: 55vh; width: 20vw">
+          <canvas id="category-chart"></canvas>
+        </div>
+        <div class="col" style="position: relative; height:55vh; width:80vw">
+          <canvas id="expense-chart"></canvas>
+        </div>
+      </div>
       <!-- Expense List Section -->
     </section>
     <script type="module" src="./script.ts"></script>
