@@ -2,6 +2,7 @@ import { HttpStatusCode } from "axios";
 import "../../assets/scss/style.scss";
 import User from "../../interfaces/User";
 import createPostRequest from "../../service/PostRequest";
+import TokenService from "../../service/TokenService";
 
 const loginForm = document.getElementById("form-login") as HTMLFormElement;
 const validationError = document.getElementById("error-message") as HTMLElement;
@@ -56,8 +57,8 @@ const sendAuthRequest = async (email: string, password: string) => {
     const user: User = { email, password };
     const response = await createPostRequest("/login", user);
     if (response.status === HttpStatusCode.Accepted) {
-      localStorage.setItem("jwt", response.data.tokens.accessToken);
-      localStorage.setItem("refresh", response.data.tokens.refreshToken);
+      TokenService.setAccessToken(response.data.tokens.accessToken);
+      TokenService.setRefreshToken(response.data.tokens.refreshToken);
       window.location.href = "/views/Dashboard/";
     }
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
