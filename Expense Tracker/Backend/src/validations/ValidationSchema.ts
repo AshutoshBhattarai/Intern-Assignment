@@ -36,6 +36,7 @@ export const incomeQuerySchema = Joi.object({
     id: Joi.string(),
     source : Joi.string(),
     startDate : Joi.date(),
+    amount : Joi.number(),
     endDate : Joi.date(),
     page : Joi.number().default(1),
 })
