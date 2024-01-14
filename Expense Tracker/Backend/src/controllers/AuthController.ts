@@ -12,7 +12,7 @@ export const login = async (
     const user: User = req.body;
     const response = await authService.login(user);
     res.status(HttpStatus.ACCEPTED).json({
-      message: "User Logged in sccessfully",
+      message: "User logged in successfully",
       tokens: response,
     });
   } catch (error) {
@@ -26,16 +26,45 @@ export const register = async (
   next: NextFunction
 ) => {
   try {
-    const user: any = req.body;
+    const user: User = req.body;
     await authService.register(user);
     res.status(HttpStatus.ACCEPTED).json({
-      message: "User Registered Successfully",
+      message: "User registered successfully",
     });
   } catch (error) {
     next(error);
   }
 };
 
-export const logout = async (req: Request, res: Response) => {};
+export const logout = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const user: User = res.locals.user;
+    await authService.logout(user);
+    res.status(HttpStatus.ACCEPTED).json({
+      message: "User logged out successfully",
+    });
+  } catch (error) {
+    next(error);
+  }
+};
 
-export const refresh = async (req: Request, res: Response) => {};
+export const refresh = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const token: string = req.body.refreshToken;
+    const response = await authService.refresh(token);
+    res.status(HttpStatus.ACCEPTED).json({
+      message: "User tokens updated successfully",
+      tokens: response,
+    })
+  } catch (error) {
+    next(error);
+  }
+};

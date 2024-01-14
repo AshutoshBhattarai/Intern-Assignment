@@ -66,9 +66,13 @@ export const logout = async (user: User) => {
   }
 };
 
-export const refresh = async (id: string, refreshToken: string) => {
+export const refresh = async (refreshToken: string) => {
   try {
-    const user = await userRepo.getUserById(id);
+    const verifyToken = jwt.verify(refreshToken, config.jwt.refreshSecret);
+
+    const userid = (verifyToken as any).userid;
+    
+    const user = await userRepo.getUserById(userid);
     if (!user) throw new NotFoundError("User not found");
     if (user.refreshToken !== refreshToken)
       throw new ForbiddenError("Invalid refresh token");
