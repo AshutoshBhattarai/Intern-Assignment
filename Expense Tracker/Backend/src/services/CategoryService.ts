@@ -34,6 +34,8 @@ export const updateCategory = async (user: User, category: Category) => {
 export const deleteCategory = async (user: User, categoryId: string) => {
   const exists = await categoryRepo.getCategory(categoryId);
   if (!exists) throw new NotFoundError("Category does not exist");
+  const categoriesCount = await categoryRepo.getUserCategoryCount(user.id);
+  if (categoriesCount == 1) throw new ForbiddenError("Sorry! There should be at least one category");
   if (user.id != (exists.user as any))
     throw new ForbiddenError("You are not authorized to delete this category");
   return categoryRepo.deleteCategory(categoryId);
