@@ -36,7 +36,7 @@ export const updateUser = async (user: User) => {
   if (!findUser) throw new NotFoundError("User not found");
   if (user.email) {
     const userExists = await userRepo.getUserByEmail(user.email);
-    if (userExists?.id !== user.id)
+    if (userExists && userExists.id !== user.id)
       throw new BadRequestError(`User with email ${user.email} already exists`);
   }
   if (user.password) {
