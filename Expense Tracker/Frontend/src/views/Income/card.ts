@@ -25,7 +25,7 @@ const createIncomeCard = (
 
   const source = document.createElement("div");
   source.classList.add("col-6");
-  source.innerHTML = `<i class="fa-solid fa-building"></i> ${income.source}`;
+  source.innerHTML = `<i class="fa-solid fa-file-invoice-dollar"></i> ${income.source}`;
 
   const date = document.createElement("div");
   date.classList.add("col");
