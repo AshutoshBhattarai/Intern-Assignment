@@ -1,5 +1,6 @@
 import User from "../models/User";
 import * as userRepo from "../repositories/UserRepo";
+import * as categoryRepo from "../repositories/CategoryRepo";
 import fs from "fs";
 import argon2 from "argon2";
 import jwt from "jsonwebtoken";
@@ -11,6 +12,7 @@ import {
 import NotFoundError from "../errors/NotFound";
 import ForbiddenError from "../errors/Forbidden";
 import BadRequestError from "../errors/BadRequest";
+import Category from "../models/Category";
 
 export const register = async (user: User) => {
   try {
@@ -25,6 +27,12 @@ export const register = async (user: User) => {
     newUser.password = hashedPassword;
     const savedUser = await userRepo.addUser(newUser);
     fs.mkdirSync("./uploads/" + savedUser.id, { recursive: true });
+    const category = new Category();
+    category.user = savedUser;
+    category.title = "Miscellaneous";
+    category.description =
+      "A category for miscellaneous expenses(automatically created)";
+    await categoryRepo.createCategory(category);
   } catch (error) {
     throw error;
   }
@@ -71,7 +79,7 @@ export const refresh = async (refreshToken: string) => {
     const verifyToken = jwt.verify(refreshToken, config.jwt.refreshSecret);
 
     const userid = (verifyToken as any).userid;
-    
+
     const user = await userRepo.getUserById(userid);
     if (!user) throw new NotFoundError("User not found");
     if (user.refreshToken !== refreshToken)
