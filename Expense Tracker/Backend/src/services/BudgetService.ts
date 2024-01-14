@@ -1,13 +1,12 @@
 import ForbiddenError from "../errors/Forbidden";
 import NotFoundError from "../errors/NotFound";
-import UnauthorizedError from "../errors/Unauthorized";
+import { BudgetQuery } from "../interface/QueryInterface";
 import Budget from "../models/Budget";
 import Category from "../models/Category";
 import User from "../models/User";
 import * as budgetRepo from "../repositories/BudgetRepo";
 import * as categoryRepo from "../repositories/CategoryRepo";
 import * as userRepo from "../repositories/UserRepo";
-import { BudgetQuery } from "../interface/QueryInterface";
 import { isSameDate } from "../utils/utils";
 
 export const createBudget = async (user: User, budget: Budget) => {
@@ -53,13 +52,14 @@ export const updateBudget = async (user: User, budget: Budget) => {
   }
   const category = await categoryRepo.getCategory(budget.category as any);
   if (foundBudget.user != (user.id as any)) {
-    throw new UnauthorizedError("Unauthorized to update budget");
+    throw new ForbiddenError("Unauthorized to update budget");
   }
   const budgetsExists: Budget[] = await budgetRepo.getBudgetByCategory(
     user,
     category!
   );
   checkBudgetExists(budgetsExists, budget);
+  budget.remainingAmount = budget.amount - foundBudget.spentAmount;
   await budgetRepo.updateBudget(budget);
 };
 
@@ -92,7 +92,11 @@ const budgetResponse = (budget: Budget) => {
 
 const checkBudgetExists = (existingBudget: Budget[], budget: Budget) => {
   existingBudget.map((b: Budget) => {
-    if (isSameDate(b.startTime, budget.startTime) && isSameDate(b.endTime, budget.endTime)) {
+    if (
+      isSameDate(b.startTime, budget.startTime) &&
+      isSameDate(b.endTime, budget.endTime) &&
+      b.id !== budget.id
+    ) {
       throw new ForbiddenError("Budget already exists");
     }
   });
