@@ -53,6 +53,7 @@ export const updateExpense = async (user: User, expense: Expense) => {
     throw new NotFoundError("Category not found");
   }
   await updateBudget(user, category, expenseExists, "remove");
+  expense.createdAt = expenseExists.createdAt;
   await updateBudget(user, category, expense, "add");
   expense.user = user;
   await expenseRepo.updateExpense(expense);
@@ -114,27 +115,43 @@ const updateBudget = async (
   if (budgets) {
     if (task === "add") {
       await budgets.forEach(async (budget) => {
-        const newSpentAmount =
-          parseFloat(budget.spentAmount.toString()) + parseFloat(expense.amount.toString());
-        budget.spentAmount = newSpentAmount;
-        budget.remainingAmount = budget.amount - newSpentAmount;
-        if (budget.remainingAmount <= 0) {
-          budget.remainingAmount = 0;
+        if (
+          !(expense.createdAt < budget.createdAt || expense.createdAt
+            ? expense.createdAt
+            : new Date() > budget.endTime)
+        ) {
+          const newSpentAmount =
+            parseFloat(budget.spentAmount.toString()) +
+            parseFloat(expense.amount.toString());
+          budget.spentAmount = newSpentAmount;
+          budget.remainingAmount = budget.amount - newSpentAmount;
+          if (budget.remainingAmount <= 0) {
+            budget.remainingAmount = 0;
+          }
+          await budgetRepo.updateBudget(budget);
         }
-        await budgetRepo.updateBudget(budget);
       });
     } else if (task === "remove") {
       await budgets.forEach(async (budget) => {
-        const newSpentAmount = parseFloat(budget.spentAmount.toString()) - parseFloat(expense.amount.toString());
-        budget.spentAmount = newSpentAmount;
-        budget.remainingAmount = budget.amount - newSpentAmount;
-        if (budget.remainingAmount >= budget.amount) {
-          budget.remainingAmount = budget.amount;
+        if (
+          !(
+            expense.createdAt < budget.createdAt ||
+            expense.createdAt > budget.endTime
+          )
+        ) {
+          const newSpentAmount =
+            parseFloat(budget.spentAmount.toString()) -
+            parseFloat(expense.amount.toString());
+          budget.spentAmount = newSpentAmount;
+          budget.remainingAmount = budget.amount - newSpentAmount;
+          if (budget.remainingAmount >= budget.amount) {
+            budget.remainingAmount = budget.amount;
+          }
+          if (budget.spentAmount <= 0) {
+            budget.spentAmount = 0;
+          }
+          await budgetRepo.updateBudget(budget);
         }
-        if (budget.spentAmount <= 0) {
-          budget.spentAmount = 0;
-        }
-        await budgetRepo.updateBudget(budget);
       });
     }
   }
