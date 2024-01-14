@@ -1,11 +1,12 @@
+import BadRequestError from "../errors/BadRequest";
 import NotFoundError from "../errors/NotFound";
-import User from "../models/User";
-import * as userRepo from "../repositories/UserRepo";
-import * as categoryRepo from "../repositories/CategoryRepo";
-import * as expenseRepo from "../repositories/ExpenseRepo";
-import * as budgetRepo from "../repositories/BudgetRepo";
-import * as incomeRepo from "../repositories/IncomeRepo";
 import { UserSummary } from "../interface/UserSummary";
+import User from "../models/User";
+import * as budgetRepo from "../repositories/BudgetRepo";
+import * as expenseRepo from "../repositories/ExpenseRepo";
+import * as incomeRepo from "../repositories/IncomeRepo";
+import * as userRepo from "../repositories/UserRepo";
+import argon2 from "argon2";
 
 export const getAllUsers = async (): Promise<User[]> => {
   const users = await userRepo.getAllUsers();
@@ -13,9 +14,9 @@ export const getAllUsers = async (): Promise<User[]> => {
 };
 
 export const getUserById = async (id: string): Promise<User> => {
-  const user = await userRepo.getUserById(id);
-  if (!user) throw new NotFoundError(`User with id : ${id} not found`);
-  return filterUser(user);
+  const findUser = await userRepo.getUserById(id);
+  if (!findUser) throw new NotFoundError(`User with id : ${id} not found`);
+  return filterUser(findUser);
 };
 
 export const getUserByEmail = async (email: string): Promise<User> => {
@@ -30,9 +31,19 @@ export const deleteUser = async (id: string) => {
   await userRepo.deleteUser(user);
 };
 
-export const updateUser = async (id: string) => {
-  const user = await userRepo.getUserById(id);
-  if (!user) throw new NotFoundError("User not found");
+export const updateUser = async (user: User) => {
+  const findUser = await userRepo.getUserById(user.id);
+  if (!findUser) throw new NotFoundError("User not found");
+  if (user.email) {
+    const userExists = await userRepo.getUserByEmail(user.email);
+    if (userExists?.id !== user.id)
+      throw new BadRequestError(`User with email ${user.email} already exists`);
+  }
+  if (user.password) {
+    const hashedPassword = await argon2.hash(user.password);
+    user.password = hashedPassword;
+  }
+  await userRepo.updateUser(user);
 };
 export const getUserSummary = async (user: User) => {
   const foundUser = await userRepo.getUserById(user.id);

@@ -24,10 +24,11 @@ export const getUserById = async (
   next: NextFunction
 ) => {
   try {
-    const user: User | null = await userService.getUserById(req.params.id);
+    const user: User = res.locals.user;
+    const response = await userService.getUserById(user.id);
     res.status(HttpStatus.ACCEPTED).json({
       message: "User Fetch Success",
-      result: user,
+      result: response,
     });
   } catch (error: any) {
     next(error);
@@ -50,3 +51,18 @@ export const getUserSummary = async (
     next(error);
   }
 };
+
+export const updateUser = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const tokenUser: User = res.locals.user;
+    const user : User = req.body;
+    user.id = tokenUser.id;
+    const response = await userService.updateUser(user);
+    res.status(HttpStatus.ACCEPTED).json({
+      message: "User Update Success",
+      result: response,
+    });
+  } catch (error: any) {
+    next(error);
+  }
+}
