@@ -7,4 +7,13 @@ export interface UserSummary {
   totalCategory?: number;
   totalBudget?: number;
   countExpense?: number;
-};
+  totalExpenseByCategory?: {
+    category: string;
+    total: number;
+    count: number;
+  }[];
+  totalExpenseByDate?: {
+    date: Date;
+    total: number;
+  }[];
+}

@@ -40,8 +40,11 @@ export const getUserSummary = async (user: User) => {
   const totalIncome = await incomeRepo.getUserTotalIncome(foundUser.id);
   const totalExpense = await expenseRepo.getUserTotalExpense(foundUser.id);
   const totalBudget = await budgetRepo.getUserTotalBudget(foundUser.id);
-  // Returns array where first element is array of expense and the second element is count
   const expenseCount = await expenseRepo.getUserExpenseCount(foundUser.id);
+  const expenseByCategory = await expenseRepo.getUserTotalExpenseByCategory(
+    user
+  );
+  const expenseByDate = await expenseRepo.getUserTotalExpenseByDate(user);
 
   const summary: UserSummary = {};
   summary.id = foundUser.id;
@@ -50,9 +53,9 @@ export const getUserSummary = async (user: User) => {
   summary.totalIncome = totalIncome || 0;
   summary.totalExpense = totalExpense || 0;
   summary.totalBudget = totalBudget || 0;
-  
-  // expenseCount[1] is the count
-  summary.countExpense = expenseCount[1]!;
+  summary.totalExpenseByCategory = expenseByCategory || [];
+  summary.totalExpenseByDate = expenseByDate || [];
+  summary.countExpense = expenseCount;
 
   return summary;
 };
