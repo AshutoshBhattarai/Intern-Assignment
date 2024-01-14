@@ -201,7 +201,7 @@ const renderIncomeCards = async (filter: SearchParams) => {
   const metaData: MetaData = response?.meta;
   pagination = {
     totalPages: metaData.totalPages,
-    currentPage: pagination != undefined ? pagination.currentPage : 1,
+    currentPage: pagination ? pagination.currentPage : 1,
   };
   if (userIncomes.length == 0) {
     incomeContainer.innerHTML =

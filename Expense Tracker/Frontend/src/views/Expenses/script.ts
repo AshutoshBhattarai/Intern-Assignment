@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { HttpStatusCode } from "axios";
 import * as bootstrap from "bootstrap";
 import flatpickr from "flatpickr";
@@ -18,6 +16,7 @@ import createCategoryOptions from "../../utils/CategoryOptions";
 import generateExpenseCard from "./card";
 import createPagination from "../../components/Pagination";
 import MetaData from "../../interfaces/MetaData";
+import SearchParams from "../../interfaces/SearchParams";
 /* ------------------------ Getting elements from DOM ----------------------- */
 const navBar = document.getElementById("nav-placeholder") as HTMLElement;
 const searchInput = document.getElementById(
@@ -54,14 +53,18 @@ const toastContainer = document.getElementById("toast-message") as HTMLElement;
 const paginationContainer = document.getElementById(
   "pagination-placeholder"
 ) as HTMLElement;
+const btnClearFilter = document.getElementById(
+  "btn-clear-filter"
+) as HTMLInputElement;
 let expenseModal: bootstrap.Modal;
 let dialogExpenseId: string = "";
-let searchParams = "";
 let pagination: { currentPage: number; totalPages: number };
+const filters: SearchParams = {};
 /* ----------------------------------- -- ----------------------------------- */
 window.onload = async () => {
   renderNavBar(navBar, "nav-expenses");
-  await renderExpenseCards("");
+  filters.page = pagination ? pagination.currentPage : 1;
+  await renderExpenseCards(filters);
   expenseModal = new bootstrap.Modal(addDialogBox);
   createCategoryOptions(categoryInput);
   new bootstrap.Dropdown(
@@ -75,8 +78,8 @@ window.onload = async () => {
   btnAll.classList.add("dropdown-item");
   btnAll.textContent = "All";
   btnAll.addEventListener("click", () => {
-    searchParams = "";
-    renderExpenseCards(searchParams);
+    filters.category = "";
+    renderExpenseCards(filters);
   });
   dropDownMenu.appendChild(btnAll);
   categories!.data.forEach((category: Category) => {
@@ -85,9 +88,8 @@ window.onload = async () => {
     btn.textContent = category.title;
     btn.textContent = category.title;
     btn.addEventListener("click", () => {
-      searchParams += `&category=${category.id?.toString()}`;
-      renderExpenseCards(searchParams);
-      searchParams = "";
+      filters.category = category.id?.toString();
+      renderExpenseCards(filters);
     });
 
     dropDownMenu.appendChild(btn);
@@ -100,7 +102,9 @@ window.onload = async () => {
         const startDate = moment(selectedDates[0]).format("YYYY-MM-DD");
         const endDate = moment(selectedDates[1]).format("YYYY-MM-DD");
         instance.input.value = `${startDate} to ${endDate}`;
-        renderExpenseCards(`&startDate=${startDate}&endDate=${endDate}`);
+        filters.startDate = startDate;
+        filters.endDate = endDate;
+        renderExpenseCards(filters);
       }
     },
   });
@@ -118,25 +122,38 @@ const handlePageClicked = (buttonClicked: string | number) => {
   } else {
     pagination.currentPage = buttonClicked as number;
   }
-  renderExpenseCards("&page=" + pagination.currentPage);
+  filters.page = pagination.currentPage;
+  renderExpenseCards(filters);
 };
 
 searchBtn.addEventListener("click", () => {
   const searchData = searchInput.value;
-  searchData
-    ? renderExpenseCards(`&description=${searchData}`)
-    : renderExpenseCards("");
-  searchInput.value = "";
+  filters.description = searchData ? searchData : "";
+  renderExpenseCards(filters);
 });
 
 expenseAddBtn.addEventListener("click", () => {
   showDialog();
 });
 
+btnClearFilter.addEventListener("click", () => {
+  const filterDate = document.getElementById("filter-date") as HTMLInputElement;
+  searchInput.value = "";
+  filterDate.value = "";
+  filters.description = "";
+  filters.category = "";
+  filters.startDate = "";
+  filters.endDate = "";
+  filters.amount = 0;
+
+  renderExpenseCards(filters);
+});
+
 filterAmountSlider.addEventListener("change", () => {
   filterAmount.textContent = "";
   filterAmount.textContent = `Rs. ${filterAmountSlider.value}`;
-  renderExpenseCards(`&amount=${filterAmountSlider.value}`);
+  filters.amount = parseInt(filterAmountSlider.value);
+  renderExpenseCards(filters);
 });
 
 btnCloseDialog.addEventListener("click", () => {
@@ -229,13 +246,29 @@ const createExpenseCard = (data: Expense) => {
 /* -------------------------------------------------------------------------- */
 /*                                 API calls                                  */
 /* -------------------------------------------------------------------------- */
-const renderExpenseCards = async (filter: string) => {
-  const response = await createGetRequest(`/expenses/filter?${filter}`);
+const renderExpenseCards = async (filter: SearchParams) => {
+  let baseUrl = "/expenses/filter?";
+  if (filter.startDate && filter.endDate) {
+    baseUrl += `startDate=${filter.startDate}&endDate=${filter.endDate}`;
+  }
+  if (filter.amount) {
+    baseUrl += `amount=${filter.amount}`;
+  }
+  if (filter.category) {
+    baseUrl += `&category=${filter.category}`;
+  }
+  if (filter.description) {
+    baseUrl += `&description=${filter.description}`;
+  }
+  if (filter.page) {
+    baseUrl += `&page=${filter.page}`;
+  }
+  const response = await createGetRequest(baseUrl);
   const userExpenses = response?.data;
   const metaData: MetaData = response?.meta;
   pagination = {
     totalPages: metaData.totalPages,
-    currentPage: pagination != undefined ? pagination.currentPage : 1,
+    currentPage: pagination ? pagination.currentPage : 1,
   };
   if (userExpenses!.length == 0) {
     expensesContainer.innerHTML =
@@ -263,7 +296,7 @@ const createExpense = async (expense: Expense | FormData) => {
     });
     if (response.status == HttpStatusCode.Accepted) {
       closeDialog();
-      renderExpenseCards("");
+      renderExpenseCards(filters);
       showToast(response.data.message, toastContainer, "success");
     }
   } catch (error) {
@@ -276,7 +309,7 @@ const deleteExpense = async (id: string) => {
   try {
     const response = await createDeleteRequest(`/expenses/${id}`);
     if (response.status == HttpStatusCode.Accepted) {
-      renderExpenseCards("");
+      renderExpenseCards(filters);
       dialogExpenseId = "";
       showToast(response.data.message, toastContainer, "success");
     }
@@ -292,7 +325,7 @@ const updateExpense = async (expense: Expense | FormData) => {
     });
     if (response.status == HttpStatusCode.Accepted) {
       closeDialog();
-      renderExpenseCards("");
+      renderExpenseCards(filters);
       showToast(response.data.message, toastContainer, "success");
     }
   } catch (error) {
@@ -301,7 +334,7 @@ const updateExpense = async (expense: Expense | FormData) => {
   }
 };
 
-const showErrorToast = (error: any) => {
+const showErrorToast = (error: unknown) => {
   const message = showErrorResponse(error) || error;
   showToast(message, toastContainer, "error");
 };

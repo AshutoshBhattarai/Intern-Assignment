@@ -6,7 +6,7 @@ interface SearchParams {
   startDate?: string;
   endDate?: string;
   source?: string;
-
+  description?: string;
 }
 
 export default SearchParams;
