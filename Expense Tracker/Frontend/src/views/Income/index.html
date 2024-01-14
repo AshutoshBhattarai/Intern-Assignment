@@ -14,26 +14,60 @@
     <nav id="nav-placeholder"></nav>
     <main class="container">
       <section class="row mt-3">
-        <div class="input-group d-flex col-12 justify-content-center">
-          <div class="form-outline w-75" data-mdb-input-init>
-            <input type="search" id="search-bar" class="form-control" />
+        <a type="button" class="btn btn-dark col-2" id="btn-add-income">
+          <i class="fas fa-add"></i>
+          Add Income
+        </a>
+      </section>
+      <section
+        class="container p-2 row rounded-3 mt-3 bg-white justify-content-around"
+      >
+        <small class="col-11">Filters</small>
+        <button class="col btn btn-outline-dark px-3" id="btn-clear-filter">
+          <i class="fa-solid fa-filter-circle-xmark"></i>
+        </button>
+        <div class="row">
+          <small class="col">By Source</small>
+          <small class="col">By Date</small>
+          <small class="col">By Amount</small>
+        </div>
+        <div class="row">
+          <div class="col d-flex">
+            <input
+              type="text"
+              class="form-control rounded-0 rounded-start"
+              id="filter-source"
+            />
+            <button
+              type="button"
+              class="btn btn-dark col rounded-0 rounded-end"
+              id="btn-search"
+            >
+              <i class="fas fa-search"></i>
+            </button>
           </div>
-          <button
-            type="button"
-            class="btn btn-dark"
-            id="btn-search"
-            data-mdb-ripple-init
-          >
-            <i class="fas fa-search"></i>
-          </button>
-          <a type="button" class="btn btn-dark" id="btn-add-income">
-            <i class="fas fa-add"></i>
-            Add
-          </a>
+          <input type="date" class="form-control col" id="filter-date" />
+          <section class="col ms-3">
+            <input
+              type="range"
+              min="0"
+              max="100000"
+              class="form-range row"
+              id="filter-amount"
+            />
+            <div class="row">
+              <small class="col">Rs.0</small>
+              <small id="filter-amount-display" class="col"> Amount</small>
+              <small class="col">Rs.100000</small>
+            </div>
+          </section>
         </div>
       </section>
-      <section class="container p-5 row rounded-3" id="income-container">
-        <h1 class="text-center h-75 p-5">Sorry No Data Found!</h1>
+
+      <section class="container pt-2 row rounded-3">
+        <h4 class="text-dark col-11">Income</h4>
+
+        <section id="income-container"></section>
       </section>
 
       <!-- Add Expense Dialog Box -->
