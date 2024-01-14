@@ -1,20 +1,11 @@
-// import { HttpStatusCode } from "axios";
-// import http from "./HttpClient";
+import TokenService from "./TokenService";
 
-const token = localStorage.getItem("jwt") || "";
+const accessToken = TokenService.getAccessToken();
+const refreshToken = TokenService.getRefreshToken();
 
 const validateToken = async () => {
-  if (token === "") {
+  if (accessToken === "" && refreshToken === "") {
     window.location.href = "/views/Login/";
   }
-  // Todo implement this as well
-  // if (token !== "") {
-  //   const response = await http.post("/validate", {
-  //     token,
-  //   });
-  //   if (response.status !== HttpStatusCode.Ok) {
-  //     window.location.href = "./views/Login/";
-  //   }
-  // }
 };
 validateToken();
