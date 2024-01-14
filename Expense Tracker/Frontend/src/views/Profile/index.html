@@ -13,6 +13,42 @@
   <body>
     <nav id="nav-placeholder"></nav>
     <main class="container">
+      <section
+        class="row justify-content-center py-3 mt-3 w-50 shadow-lg rounded bg-white mx-auto"
+      >
+        <figure class="col-12 w-25 mt-3">
+          <img
+            src="../../assets/images/user-placeholder.svg"
+            alt="profile"
+            class="img-fluid rounded-circle"
+          />
+        </figure>
+        <small class="row justify-content-center mt-0"
+          >Manage Your Profile
+        </small>
+        <section class="row ps-3 mt-2">
+          <div class="col-3">
+            <p><i class="fa-solid fa-user-tie"></i> Username</p>
+            <p><i class="fa-solid fa-envelope"></i> Email</p>
+            <p><i class="fa-solid fa-user-check"></i> Created</p>
+            <p><i class="fa-solid fa-user-pen"></i> Updated</p>
+          </div>
+          <div class="col">
+            <p id="display-username">Username</p>
+            <p id="display-email">Username</p>
+            <p id="display-created-at"></p>
+            <p id="display-updated-at"></p>
+          </div>
+        </section>
+        <div class="d-flex justify-content-center">
+          <button
+            id="btn-edit-profile"
+            class="btn btn-dark mx-auto rounded-pill w-50"
+          >
+            <i class="fa-solid fa-pen-to-square"></i>
+          </button>
+        </div>
+      </section>
       <section class="container row h-50 mt-3">
         <section class="header row">
           <h3 class="col-10 text-dark">Categories</h3>
@@ -21,7 +57,7 @@
             Add Category
           </button>
         </section>
-        <table class="table text-dark">
+        <table class="table text-dark mt-3 shadow-lg">
           <thead>
             <tr>
               <th scope="col">Title</th>
@@ -52,7 +88,7 @@
               </div>
               <div class="modal-body gap-4 d-flex flex-column">
                 <div class="form-group">
-                  <label for="amount">Title</label>
+                  <label for="title">Title</label>
                   <input
                     type="text"
                     class="form-control"
@@ -61,7 +97,7 @@
                   />
                 </div>
                 <div class="form-group">
-                  <label for="remarks">Description</label>
+                  <label for="Description">Description</label>
                   <textarea
                     class="form-control"
                     id="add-category-description"
@@ -91,6 +127,137 @@
         </div>
       </section>
       <!-- End Add Category Dialog Box -->
+      <!-- Update User Dialog Box -->
+      <section>
+        <div
+          class="modal fade"
+          id="update-user-dialog"
+          tabindex="-1"
+          role="dialog"
+          aria-labelledby="customModalLabel"
+          aria-hidden="true"
+        >
+          <div
+            class="modal-dialog modal-lg modal-dialog-centered"
+            role="document"
+          >
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">Update User</h5>
+              </div>
+              <div class="modal-body gap-4 d-flex flex-column">
+                <div class="form-group">
+                  <div id="profile-update-error" class="alert alert-danger m-0 d-none "></div>
+                </div>
+                <div class="form-group">
+                  <label for="username">Username</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="update-profile-username"
+                    placeholder="Enter Username"
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="email">Email</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="update-profile-email"
+                    placeholder="Enter email"
+                  />
+                </div>
+                <div class="form-group">
+                  <button id="btn-change-password" class="btn btn-dark">
+                    <i class="fa-solid fa-key"></i> Change Password
+                  </button>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button
+                  type="button"
+                  id="btn-save-profile"
+                  class="btn btn-dark"
+                >
+                  Save
+                </button>
+
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  id="btn-close-profile-dialog"
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- End Update User Dialog Box -->
+      <!-- Update User password -->
+      <section>
+        <div
+          class="modal fade"
+          id="update-password-dialog"
+          tabindex="-1"
+          role="dialog"
+          aria-labelledby="customModalLabel"
+          aria-hidden="true"
+        >
+          <div
+            class="modal-dialog modal-lg modal-dialog-centered"
+            role="document"
+          >
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">Update Password</h5>
+              </div>
+              <div class="modal-body gap-4 d-flex flex-column">
+                <div class="form-group">
+                  <div id="password-update-error" class="alert alert-danger m-0 d-none "></div>
+                </div>
+                <div class="form-group">
+                  <label for="password">Password</label>
+                  <input
+                    type="password"
+                    class="form-control"
+                    id="update-user-password"
+                    placeholder="Enter Password"
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="repassword">Re-enter Password</label>
+                  <input
+                    type="password"
+                    class="form-control"
+                    id="update-user-repassword"
+                    placeholder="Re-enter password"
+                  />
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button
+                  type="button"
+                  id="btn-save-password"
+                  class="btn btn-dark"
+                >
+                  Save
+                </button>
+
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  id="btn-close-password-dialog"
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- End Update User password -->
       <div id="toast-message"></div>
     </main>
     <script type="module" src="./script.ts"></script>
