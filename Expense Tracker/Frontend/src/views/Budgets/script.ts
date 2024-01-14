@@ -192,7 +192,6 @@ const createBudgetCard = (budget: Budget) => {
     budgetTimeInput.value =
       getTimeType(budget.startTime!, budget.endTime!) || "";
     dialogBudgetId = budget.id!;
-    console.log(getTimeType(budget.startTime!, budget.endTime!));
     addBudgetCategory.value = (budget.category as Category).id!;
     if (dialogBudgetId) {
       btnDeleteBudget.classList.remove("d-none");
@@ -293,7 +292,6 @@ const getTimeType = (startTime: Date, endTime: Date): string | null => {
   const diffInDays = Math.floor(
     (endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)
   );
-  console.log(diffInDays);
   if (diffInDays <= 7) {
     return "weekly";
   }

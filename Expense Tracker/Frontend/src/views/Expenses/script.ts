@@ -126,6 +126,7 @@ searchBtn.addEventListener("click", () => {
   searchData
     ? renderExpenseCards(`&description=${searchData}`)
     : renderExpenseCards("");
+  searchInput.value = "";
 });
 
 expenseAddBtn.addEventListener("click", () => {
