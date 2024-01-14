@@ -77,7 +77,7 @@ export const getUserTotalExpenseByCategory = (user: User) => {
     .groupBy("expense.category_id")
     .addGroupBy("category.title")
     .where({ user: { id: user.id } })
-    .where(
+    .andWhere(
       `EXTRACT(YEAR FROM expense.date) = EXTRACT(YEAR FROM CURRENT_DATE)
     AND EXTRACT(MONTH FROM expense.date) = EXTRACT(MONTH FROM CURRENT_DATE)`
     )
@@ -94,7 +94,7 @@ export const getUserTotalExpenseByDate = async (user: User) => {
     .addSelect("COUNT(expense.id) as count")
     .groupBy("DATE(expense.date)")
     .where({ user: { id: user.id } })
-    .where(
+    .andWhere(
       `EXTRACT(YEAR FROM expense.date) = EXTRACT(YEAR FROM CURRENT_DATE)
     AND EXTRACT(MONTH FROM expense.date) = EXTRACT(MONTH FROM CURRENT_DATE)`
     )

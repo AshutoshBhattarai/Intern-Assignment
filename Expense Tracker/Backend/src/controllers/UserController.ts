@@ -26,7 +26,7 @@ export const getUserById = async (
   try {
     const user: User = res.locals.user;
     const response = await userService.getUserById(user.id);
-    res.status(HttpStatus.ACCEPTED).json({
+    res.status(HttpStatus.OK).json({
       message: "User Fetch Success",
       result: response,
     });
