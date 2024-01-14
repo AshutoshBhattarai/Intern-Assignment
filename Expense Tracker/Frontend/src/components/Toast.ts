@@ -14,6 +14,7 @@ function showToast(
   currentToast = toast;
   toastElement.classList.add(
     "toast",
+
     "align-items-center",
     `text-bg-${type === "error" ? "danger" : type}`,
     "border-0",
@@ -23,6 +24,9 @@ function showToast(
     "m-4",
     "p-2"
   );
+  // Modal's z-index is 1060 and the highest is tooltip with 1080
+  // So to show toast above every other elements the z-index of toast is set to 100000
+  toastElement.style.zIndex = "100000";
   toastElement.setAttribute("role", "alert");
   toastElement.setAttribute("aria-live", "assertive");
   toastElement.setAttribute("aria-atomic", "true");
@@ -45,7 +49,6 @@ function showToast(
 
   toastElement.appendChild(bodyContainer);
   placeHolder.appendChild(toastElement);
-
   toast.show();
 }
 
