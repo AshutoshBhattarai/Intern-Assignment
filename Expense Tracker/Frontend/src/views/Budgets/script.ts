@@ -64,17 +64,17 @@ window.onload = async () => {
 /* -------------------------------------------------------------------------- */
 btnSaveBudget.addEventListener("click", async () => {
   const { startTime, endTime } = getTimeRange(budgetTimeInput.value);
-  const budget = {
+  const budget: Budget = {
     title: budgetTitleInput.value,
-    amount: parseFloat(budgetAmountInput.value),
+    amount: parseFloat(budgetAmountInput.value ? budgetAmountInput.value : "0"),
     category: addBudgetCategory.value,
     startTime: startTime,
     endTime: endTime,
   };
   if (dialogBudgetId === "") {
-    await saveBudget(budget);
+    validateInput(budget) && (await saveBudget(budget));
   } else if (dialogBudgetId !== "") {
-    await updateBudget(budget);
+    validateInput(budget) && (await updateBudget(budget));
     dialogBudgetId = "";
   }
 });
@@ -306,5 +306,24 @@ const getTimeType = (startTime: Date, endTime: Date): string | null => {
 const showErrorToast = (error: any) => {
   const message = showErrorResponse(error) || error.message;
   showToast(message, toastContainer, "error");
-  closeDialog();
+};
+
+const validateInput = (budget: Budget) => {
+  if (budget.title === "") {
+    showToast("Title cannot be empty", toastContainer, "error");
+    return false;
+  }
+  if (budget.amount === 0) {
+    showToast("Amount cannot be zero", toastContainer, "error");
+    return false;
+  }
+  if (budget.startTime?.toString() === "") {
+    showToast("Time cannot be empty", toastContainer, "error");
+    return false;
+  }
+  if (budget.category === "") {
+    showToast("Category cannot be empty", toastContainer, "error");
+    return false;
+  }
+  return true;
 };

@@ -132,6 +132,14 @@ btnSaveCategory.addEventListener("click", async () => {
     title: title,
     description: description,
   };
+  if (category.title === "") {
+    showToast("Title cannot be empty", toastContainer, "error");
+    return;
+  }
+  if (category.description === "") {
+    showToast("Description cannot be empty", toastContainer, "error");
+    return;
+  }
   if (categoryId === "") {
     await saveCategory(category);
   }
@@ -222,7 +230,6 @@ const saveCategory = async (category: Category) => {
     }
   } catch (error) {
     showErrorToast(error);
-    closeCategoryDialog();
   }
 };
 
@@ -248,7 +255,6 @@ const updateCategory = async (category: Category) => {
       closeCategoryDialog();
     }
   } catch (error) {
-    closeCategoryDialog();
     showErrorToast(error);
   }
 };

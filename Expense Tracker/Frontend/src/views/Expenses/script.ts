@@ -47,12 +47,12 @@ const expensesContainer = document.getElementById(
 const filterAmountSlider = document.getElementById(
   "filter-amount"
 ) as HTMLInputElement;
+const filterAmount = document.getElementById(
+  "filter-amount-display"
+) as HTMLElement;
 const toastContainer = document.getElementById("toast-message") as HTMLElement;
 const paginationContainer = document.getElementById(
   "pagination-placeholder"
-) as HTMLElement;
-const filterAmount = document.getElementById(
-  "filter-amount-display"
 ) as HTMLElement;
 let expenseModal: bootstrap.Modal;
 let dialogExpenseId: string = "";
@@ -145,7 +145,6 @@ btnCloseDialog.addEventListener("click", () => {
 
 btnSaveExpense.addEventListener("click", () => {
   saveExpense();
-  closeDialog();
 });
 const closeDialog = () => {
   dialogExpenseId = "";
@@ -170,13 +169,31 @@ const saveExpense = async () => {
   formData.append("date", date.toISOString());
 
   if (dialogExpenseId === "") {
-    createExpense(formData);
-    dialogExpenseId = "";
+    if (
+      validateInput({
+        description: remarks,
+        amount: Number(amount),
+        date: date.toISOString(),
+        category,
+      })
+    ) {
+      createExpense(formData);
+      dialogExpenseId = "";
+    }
   } else if (dialogExpenseId != "") {
     const expenseId = dialogExpenseId!;
-    formData.append("id", expenseId);
-    await updateExpense(formData);
-    dialogExpenseId = "";
+    if (
+      validateInput({
+        description: remarks,
+        amount: Number(amount),
+        date: date.toISOString(),
+        category,
+      })
+    ) {
+      formData.append("id", expenseId);
+      await updateExpense(formData);
+      dialogExpenseId = "";
+    }
   }
 };
 const showDialog = (data?: {
@@ -287,4 +304,24 @@ const updateExpense = async (expense: Expense | FormData) => {
 const showErrorToast = (error: any) => {
   const message = showErrorResponse(error) || error;
   showToast(message, toastContainer, "error");
+};
+
+const validateInput = (expense: Expense) => {
+  if (expense.description === "") {
+    showToast("Description cannot be empty", toastContainer, "error");
+    return false;
+  }
+  if (expense.amount === 0) {
+    showToast("Amount cannot be zero", toastContainer, "error");
+    return false;
+  }
+  if (expense.date === "") {
+    showToast("Date cannot be empty", toastContainer, "error");
+    return false;
+  }
+  if (expense.category === "") {
+    showToast("Category cannot be empty", toastContainer, "error");
+    return false;
+  }
+  return true;
 };
