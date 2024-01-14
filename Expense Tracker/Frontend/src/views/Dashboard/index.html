@@ -29,7 +29,7 @@
             <h4 class="card-text text-white" id="summary-expense"></h4>
           </div>
         </div>
-        <div class="card bg-success rounded shadow ">
+        <div class="card bg-success rounded shadow">
           <div class="card-body">
             <div class="text-white">
               <i class="fa fa-money-check"></i> Income
@@ -47,13 +47,17 @@
         </div>
       </section>
       <!-- Chart Section -->
-      <div id="charts" class="row mt-3 border bg-white shadow-lg rounded p-3   ">
+      <div id="charts" class="row mt-3 border bg-white shadow-lg rounded p-3">
         <p class="col-12">Summary</p>
-        <div class="col" style="position: relative; height: 55vh; width: 20vw">
-          <canvas id="category-chart"></canvas>
+        <small>This month</small>
+        <div class="col" style="position: relative; height: 55vh; width: 80vw">
+          <canvas id="expense-chart"><p>Sorry no data to display</p></canvas>
         </div>
-        <div class="col" style="position: relative; height:55vh; width:80vw">
-          <canvas id="expense-chart"></canvas>
+        <div
+          class="col-10"
+          style="position: relative; height: 55vh; width: 20vw"
+        >
+          <canvas id="category-chart"><p>Sorry no data to display</p></canvas>
         </div>
       </div>
       <!-- Expense List Section -->
