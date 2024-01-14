@@ -4,6 +4,7 @@ import Expense from "../interfaces/Expense";
 import Income from "../interfaces/Income";
 import User from "../interfaces/User";
 import http from "./HttpClient";
+import TokenService from "./TokenService";
 
 const createPostRequest = async (
   url: string,
@@ -15,7 +16,7 @@ const createPostRequest = async (
       url,
       { ...body },
       {
-        headers: { Authorization: `Bearer ${localStorage.getItem("jwt")}` },
+        headers: { Authorization: `Bearer ${TokenService.getAccessToken()}` },
       }
     );
     return request;
