@@ -60,7 +60,7 @@ const getQueryWhereConditions = (
 ): FindOptionsWhere<Income> => {
   const whereConditions: FindOptionsWhere<Income> = { user: { id: user.id } };
   if (params.id) whereConditions.id = params.id;
-  if (params.amount) whereConditions.amount = params.amount;
+  if (params.amount) whereConditions.amount = Between(0, params.amount);
   if (params.startDate && params.endDate)
     whereConditions.date = Between(params.startDate, params.endDate);
   if (params.source) whereConditions.source = ILike(`%${params.source}%`);
