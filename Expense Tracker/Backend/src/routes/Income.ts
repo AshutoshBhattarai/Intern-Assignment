@@ -17,10 +17,10 @@ import {
 
 router
   .route("/")
-  .get(getIncome)
+  // .get(getIncome)
   .post(validateRequestBody(incomeBodySchema), createIncome)
   .put(updateIncome);
 router.delete("/:id", deleteIncome);
-router.get("/filter", validateRequestQuery(incomeQuerySchema));
+router.get("/filter", validateRequestQuery(incomeQuerySchema), getIncome);
 
 export default router;

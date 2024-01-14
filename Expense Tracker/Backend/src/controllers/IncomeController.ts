@@ -1,8 +1,11 @@
 import { NextFunction, Request, Response } from "express";
 import * as incomeService from "../services/IncomeService";
+import { getIncomeCount } from "../repositories/IncomeRepo";
 import Income from "../models/Income";
 import HttpStatus from "http-status-codes";
 import User from "../models/User";
+import { IncomeQuery } from "../interface/QueryInterface";
+import createResponseMeta from "../utils/metadata";
 
 export const createIncome = async (
   req: Request,
@@ -27,11 +30,14 @@ export const getIncome = async (
   next: NextFunction
 ) => {
   try {
-    const user = res.locals.user;
-    const data = await incomeService.getUserIncome(user);
+    const user: User = res.locals.user;
+    const params: IncomeQuery = req.query;
+    const data = await incomeService.getUserIncome(user, params);
+    const meta = createResponseMeta(await getIncomeCount(user, params));
     res.status(HttpStatus.OK).json({
       message: "Income returned successfully",
-      result : data,
+      result: data,
+      meta
     });
   } catch (error) {
     next(error);

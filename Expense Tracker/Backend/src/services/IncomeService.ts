@@ -1,5 +1,6 @@
 import NotFoundError from "../errors/NotFound";
 import ValidationError from "../errors/Validation";
+import { IncomeQuery } from "../interface/QueryInterface";
 import Income from "../models/Income";
 import User from "../models/User";
 import * as incomeRepo from "../repositories/IncomeRepo";
@@ -50,7 +51,7 @@ export const createIncome = async (user: User, income: Income) => {
  * @param {User} user - The user object.
  * @return {Promise<Array<IncomeResponse>>} An array of income responses.
  */
-export const getUserIncome = async (user: User) => {
+export const getUserIncome = async (user: User, params: IncomeQuery) => {
   // Check if the user exists by calling getUserById function
   if (!(await getUserById(user.id))) {
     // Throw an error if the user does not exist
@@ -58,7 +59,7 @@ export const getUserIncome = async (user: User) => {
   }
 
   // Get the income for the user by calling getIncome function from incomeRepo
-  const income = await incomeRepo.getIncome(user);
+  const income = await incomeRepo.getFilteredIncome(user, params);
 
   // Map each income object to its corresponding income response
   return income.map((income) => incomeResponse(income));
