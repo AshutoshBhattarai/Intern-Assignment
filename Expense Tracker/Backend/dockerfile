@@ -1,0 +1,8 @@
+FROM node:20-alpine
+WORKDIR /usr/expense-tracker
+COPY package.json .
+RUN npm install && npm install typescript -g
+COPY . .
+RUN tsc
+EXPOSE 5000
+CMD ["node", "./dist/server.js"]
