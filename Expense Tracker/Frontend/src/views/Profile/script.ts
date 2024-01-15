@@ -184,7 +184,7 @@ const createCategoryCard = (category: Category) => {
   actions.setAttribute("colspan", "2");
   const editButton = document.createElement("button");
   editButton.innerHTML = "<i class='fa-solid fa-pen-to-square'></i>";
-  editButton.classList.add("btn", "btn-primary");
+  editButton.classList.add("btn", "btn-outline-primary", "col");
   editButton.addEventListener("click", () => {
     categoryId = category.id!;
     categoryModal.show();
@@ -193,7 +193,19 @@ const createCategoryCard = (category: Category) => {
   });
   const deleteButton = document.createElement("button");
   deleteButton.innerHTML = "<i class='fa-solid fa-trash'></i>";
-  deleteButton.classList.add("btn", "btn-danger", "mx-2");
+  deleteButton.classList.add(
+    "btn",
+    "btn-outline-danger",
+    "col",
+    "mt-3",
+    "mt-lg-0",
+    "mt-md-0",
+    "mt-sm-0",
+    "ms-0",
+    "ms-lg-3",
+    "ms-md-5",
+    "ms-sm-5"
+  );
   deleteButton.addEventListener("click", () => {
     deleteCategory(category.id!);
   });
