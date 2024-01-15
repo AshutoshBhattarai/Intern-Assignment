@@ -189,7 +189,7 @@ const saveExpense = async () => {
     if (
       validateInput({
         description: remarks,
-        amount: Number(amount),
+        amount: parseFloat(amount),
         date: date.toISOString(),
         category,
       })
@@ -202,7 +202,7 @@ const saveExpense = async () => {
     if (
       validateInput({
         description: remarks,
-        amount: Number(amount),
+        amount: parseFloat(amount),
         date: date.toISOString(),
         category,
       })
@@ -342,6 +342,10 @@ const showErrorToast = (error: unknown) => {
 const validateInput = (expense: Expense) => {
   if (expense.description === "") {
     showToast("Description cannot be empty", toastContainer, "error");
+    return false;
+  }
+  if (isNaN(expense.amount!)) {
+    showToast("Amount must be a number", toastContainer, "error");
     return false;
   }
   if (expense.amount === 0) {

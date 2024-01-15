@@ -271,6 +271,10 @@ const validateInput = (income: Income) => {
     showToast("Source cannot be empty", toastContainer, "error");
     return false;
   }
+  if (isNaN(income.amount!)) {
+    showToast("Amount must be a number", toastContainer, "error");
+    return false;
+  }
   if (income.amount === 0) {
     showToast("Amount cannot be empty", toastContainer, "error");
     return false;
