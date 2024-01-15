@@ -30,3 +30,15 @@ body {
   box-shadow: 0 0 2px rgb(0, 0, 0) !important;
   border: 1px solid #000;
 }
+.chart-container {
+  position: relative;
+  height: 45vh;
+  @media (max-width: 768px) {
+    height: auto;
+    margin: 20px 0px;
+  }
+  @media (max-width: 1200px) {
+    margin: 20px 0px;
+    height: auto;
+  }
+}

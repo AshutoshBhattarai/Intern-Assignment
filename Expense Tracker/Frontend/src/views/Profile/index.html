@@ -14,7 +14,7 @@
     <nav id="nav-placeholder"></nav>
     <main class="container">
       <section
-        class="row justify-content-center py-3 mt-3 w-50 shadow-lg rounded bg-white mx-auto"
+        class="row justify-content-center py-3 mt-3 col-lg-6 shadow-lg rounded bg-white mx-lg-auto mx-3"
       >
         <figure class="col-12 w-25 mt-3">
           <img
@@ -27,17 +27,25 @@
           >Manage Your Profile
         </small>
         <section class="row ps-3 mt-2">
-          <div class="col-3">
-            <p><i class="fa-solid fa-user-tie"></i> Username</p>
-            <p><i class="fa-solid fa-envelope"></i> Email</p>
-            <p><i class="fa-solid fa-user-check"></i> Created</p>
-            <p><i class="fa-solid fa-user-pen"></i> Updated</p>
+          <div class="row">
+            <p class="col-lg-3 col-md-3 col-sm-3">
+              <i class="fa-solid fa-user-tie"></i> Username
+            </p>
+            <p class="col-lg-3 col-md-3 col-sm-3" id="display-username">Username</p>
           </div>
-          <div class="col">
-            <p id="display-username">Username</p>
-            <p id="display-email">Username</p>
-            <p id="display-created-at"></p>
-            <p id="display-updated-at"></p>
+          <div class="row">
+            <p class="col-lg-3 col-md-3 col-sm-3"><i class="fa-solid fa-envelope"></i> Email</p>
+            <p class="col-lg-3 col-md-3 col-sm-3" id="display-email">Email</p>
+          </div>
+          <div class="row">
+            <p class="col-lg-3 col-md-3 col-sm-3">
+              <i class="fa-solid fa-user-check"></i> Created
+            </p>
+            <p class="col-lg-3 col-md-3 col-sm-3" id="display-created-at"></p>
+          </div>
+          <div class="row">
+            <p class="col-lg-3 col-md-3 col-sm-3"><i class="fa-solid fa-user-pen"></i> Updated</p>
+            <p class="col-lg-3 col-md-3 col-sm-3" id="display-updated-at"></p>
           </div>
         </section>
         <div class="d-flex justify-content-center">
@@ -147,7 +155,10 @@
               </div>
               <div class="modal-body gap-4 d-flex flex-column">
                 <div class="form-group">
-                  <div id="profile-update-error" class="alert alert-danger m-0 d-none "></div>
+                  <div
+                    id="profile-update-error"
+                    class="alert alert-danger m-0 d-none"
+                  ></div>
                 </div>
                 <div class="form-group">
                   <label for="username">Username</label>
@@ -215,7 +226,10 @@
               </div>
               <div class="modal-body gap-4 d-flex flex-column">
                 <div class="form-group">
-                  <div id="password-update-error" class="alert alert-danger m-0 d-none "></div>
+                  <div
+                    id="password-update-error"
+                    class="alert alert-danger m-0 d-none"
+                  ></div>
                 </div>
                 <div class="form-group">
                   <label for="password">Password</label>

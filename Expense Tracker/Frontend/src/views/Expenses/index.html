@@ -13,26 +13,29 @@
   <body>
     <nav id="nav-placeholder"></nav>
     <main class="container position-relative">
-      <section class="row mt-3">
-        <button type="button" class="btn btn-dark col-2" id="btn-add-expense">
+      <section class="row m-lg-0 m-md-0 ms-sm-0 m-3 mt-lg-3 mt-md-3 mt-sm-3">
+        <button
+          type="button"
+          class="btn btn-dark col-lg-2 col-md-4 col-6"
+          id="btn-add-expense"
+        >
           <i class="fas fa-add"></i>
           Add New Expense
         </button>
-        <div class="input-group col-6 bg-white rounded-4 mt-3">
+        <div class="input-group col-lg-6 bg-white rounded-4 mt-3">
           <div
             class="form-outline m-0 row p-0 pb-2 pt-2 ps-2"
             data-mdb-input-init
           >
-            <p class="col-11 m-0 mb-1">Filters</p>
-            <p class="col-1 m-0 mb-1" id="btn-clear-filter" role="button">
+            <p class="col-lg-11 m-0 mb-1">Filters</p>
+            <p class="col-lg-1 m-0 mb-1" id="btn-clear-filter" role="button">
               <i class="fa-solid fa-filter-circle-xmark"></i>
             </p>
-            <small class="col">By Category</small>
-            <small class="col-4">By Remarks</small>
-            <small class="col-3">By Date</small>
-            <small class="col">By Amount</small>
             <section class="row">
-              <section class="col dropdown">
+              <section class="col-lg dropdown mt-lg-0 mt-2">
+                <label for="#filter-category-dropdown" class="text-muted fs-6"
+                  >By Category</label
+                >
                 <button
                   type="button"
                   class="btn btn-dark dropdown-toggle"
@@ -44,37 +47,44 @@
                 </button>
                 <ul class="dropdown-menu" id="filter-category-menu"></ul>
               </section>
-              <section class="col-4 d-flex">
-                <input
-                  type="search"
-                  id="filter-search"
-                  class="form-control rounded-end-0"
-                  placeholder="Search"
-                />
-                <button
-                  type="button"
-                  class="btn btn-dark rounded-start-0"
-                  id="btn-search"
-                  data-mdb-ripple-init
-                >
-                  <i class="fas fa-search"></i>
-                </button>
+              <section class="col-lg-4 mt-lg-0 mt-2">
+                <label for="#filter-search" class="text-muted fs-6">By Remarks</label>
+                <div class="d-flex">
+                  <input
+                    type="search"
+                    id="filter-search"
+                    class="form-control rounded-end-0"
+                    placeholder="Search"
+                  />
+                  <button
+                    type="button"
+                    class="btn btn-dark rounded-start-0"
+                    id="btn-search"
+                    data-mdb-ripple-init
+                  >
+                    <i class="fas fa-search"></i>
+                  </button>
+                </div>
               </section>
-              <section class="col-3">
+              <section class="col-lg-3 mt-lg-0 mt-2">
+                <label for="#filter-date" class="text-muted fs-6">By Date</label>
                 <input type="date" class="form-control" id="filter-date" />
               </section>
-              <section class="col">
+              <section class="col-lg mt-lg-0 mt-2">
+                <label for="#filter-amount" class="text-muted fs-6">By Amount</label>
                 <input
                   type="range"
                   min="0"
                   max="100000"
-                  class="form-range row"
+                  class="form-range row ms-3 me-3"
                   id="filter-amount"
                 />
-                <div class="row">
-                  <small class="col">Rs.0</small>
-                  <small id="filter-amount-display" class="col"> Amount</small>
-                  <small class="col">Rs.100000</small>
+                <div class="row ms-3 me-3">
+                  <small class="col-3 p-0">Rs.0</small>
+                  <small id="filter-amount-display" class=" p-0 col-6">
+                    Amount</small
+                  >
+                  <small class="col-3">Rs.100000</small>
                 </div>
               </section>
             </section>
@@ -82,7 +92,7 @@
         </div>
       </section>
       <section class="pt-3 row">
-        <section class="col-12 row align-items-center">
+        <section class="row align-items-center d-none d-lg-flex pe-0 ps-3 ">
           <p class="col-1"><i class="fas fa-rupee-sign"></i> Amount</p>
           <p class="col-6"><i class="fa-solid fa-tag"></i> Remarks</p>
           <p class="col"><i class="fas fa-list"></i> Category</p>

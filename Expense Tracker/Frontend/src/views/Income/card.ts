@@ -20,21 +20,21 @@ const createIncomeCard = (
   cardBody.classList.add("row", "m-0", "align-items-center", "col-12");
 
   const amount = document.createElement("div");
-  amount.classList.add("col", "text-success", "m-0", "align-middle");
+  amount.classList.add("col-lg","col-6", "text-success", "m-0", "align-middle");
   amount.innerHTML = `+Rs. ${income.amount}`;
 
   const source = document.createElement("div");
-  source.classList.add("col-6");
+  source.classList.add("col-lg-6");
   source.innerHTML = `<i class="fa-solid fa-file-invoice-dollar"></i> ${income.source}`;
 
   const date = document.createElement("div");
-  date.classList.add("col");
+  date.classList.add("col-lg");
   date.innerHTML = `<i class="fa-solid fa-calendar-days"></i> ${new Date(income.date as Date)
     .toUTCString()
     .substring(5, 16)}`;
 
   const actions = document.createElement("div");
-  actions.classList.add("col");
+  actions.classList.add("col-lg","mt-lg-0","mt-3");
 
   const editButton = document.createElement("button");
   editButton.innerHTML = "<i class='fa-solid fa-pen-to-square'></i>";

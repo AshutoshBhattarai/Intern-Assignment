@@ -12,7 +12,7 @@ const renderNavBar = (placeholder: HTMLElement, active: string) => {
       );
       logout?.addEventListener("click", async () => {
         await UserService.logout();
-        
+
         window.location.href = "/views/login/";
       });
       for (const navLink of navLinks) {

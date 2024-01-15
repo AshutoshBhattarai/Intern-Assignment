@@ -14,32 +14,33 @@ const createExpenseCard = (
     "rounded-3",
     "py-2",
     "mb-2",
-    "card"
+    "card",
+    "mx-2",
   );
 
   const cardBody = document.createElement("div");
-  cardBody.classList.add("row", "m-0", "align-items-center", "col-12");
+  cardBody.classList.add("row", "m-0", "align-items-center", "col-lg-12");
 
   const amount = document.createElement("div");
-  amount.classList.add("col-1", "text-danger", "m-0", "align-middle");
+  amount.classList.add("col-lg-1","col-md-6", "text-danger", "m-0", "align-middle");
   amount.innerHTML = `-Rs. ${expense.amount}`;
 
   const remarks = document.createElement("div");
-  remarks.classList.add("col-6");
+  remarks.classList.add("col-lg-6","col-sm-12");
   remarks.textContent = expense.description;
 
   const category = document.createElement("div");
-  category.classList.add("col");
+  category.classList.add("col-lg","col-sm-12");
   category.textContent = (expense.category as Category).title;
 
   const date = document.createElement("div");
-  date.classList.add("col");
+  date.classList.add("col-lg","col-sm-12");
   date.textContent = new Date(expense.date as Date)
     .toUTCString()
     .substring(5, 16);
 
   const actions = document.createElement("div");
-  actions.classList.add("col");
+  actions.classList.add("col","mt-3","mt-lg-0");
 
   const editButton = document.createElement("button");
   editButton.innerHTML = "<i class='fa-solid fa-pen-to-square'></i>";

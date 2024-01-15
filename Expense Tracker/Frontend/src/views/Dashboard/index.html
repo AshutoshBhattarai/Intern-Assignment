@@ -20,8 +20,8 @@
         </h4>
       </section>
       <!-- Overview Section -->
-      <section class="container d-flex gap-4 card-group mt-3">
-        <div class="card bg-danger rounded shadow">
+      <section class="container row card-group mt-3">
+        <div class="card bg-danger rounded shadow col-lg ms-3 me-3">
           <div class="card-body">
             <div class="text-white">
               <i class="fa fa-money" aria-hidden="true"></i> Expenses
@@ -29,7 +29,7 @@
             <h4 class="card-text text-white" id="summary-expense"></h4>
           </div>
         </div>
-        <div class="card bg-success rounded shadow">
+        <div class="card bg-success rounded shadow col-lg ms-3 me-3">
           <div class="card-body">
             <div class="text-white">
               <i class="fa fa-money-check"></i> Income
@@ -37,7 +37,7 @@
             <h4 class="card-text text-white" id="summary-income"></h4>
           </div>
         </div>
-        <div class="card bg-primary rounded shadow">
+        <div class="card bg-primary rounded shadow col-lg ms-3 me-3">
           <div class="card-body">
             <div class="text-white">
               <i class="fa-solid fa-piggy-bank"></i> Savings
@@ -50,14 +50,23 @@
       <div id="charts" class="row mt-3 border bg-white shadow-lg rounded p-3">
         <p class="col-12">Summary</p>
         <small>This month</small>
-        <div class="col" style="position: relative; height: 55vh; width: 80vw">
-          <canvas id="expense-chart"><p>Sorry no data to display</p></canvas>
-        </div>
-        <div
-          class="col-10"
-          style="position: relative; height: 55vh; width: 20vw"
-        >
-          <canvas id="category-chart"><p>Sorry no data to display</p></canvas>
+        <div class="container">
+          <div class="row">
+            <div class="col-lg-8 col-md-12">
+              <div class="chart-container">
+                <canvas id="expense-chart"
+                  ><p>Sorry, no data to display</p></canvas
+                >
+              </div>
+            </div>
+            <div class="col-lg-4 col-md-12">
+              <div class="chart-container">
+                <canvas id="category-chart"
+                  ><p>Sorry, no data to display</p></canvas
+                >
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       <!-- Expense List Section -->
