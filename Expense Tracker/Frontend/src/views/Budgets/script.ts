@@ -104,7 +104,7 @@ const renderUserBudgets = (budgets: Budget[]) => {
   budgetContainer.innerHTML = "";
   if (!budgets.length) {
     budgetContainer.innerHTML =
-      "<h5 class='text-center text-primary'>No Budgets found</h5>";
+      "<h5 class='text-center text-dark'>No Budgets found</h5>";
     return;
   }
   budgets.forEach((budget: Budget) => {
@@ -121,7 +121,7 @@ const createBudgetCard = (budget: Budget) => {
   const startDate = new Date(budget.startTime!).toUTCString().substring(5, 16);
   const endDate = new Date(budget.endTime!).toUTCString().substring(5, 16);
   const card = document.createElement("div");
-  card.classList.add("card", "mb-2", "mx-3", "col-3");
+  card.classList.add("card", "mb-2", "mx-3", "col-lg-3", "col-8");
   const cardTitle = document.createElement("h5");
   cardTitle.classList.add(
     "card-title",
@@ -164,6 +164,11 @@ const createBudgetCard = (budget: Budget) => {
   const progressPercentIndicator = document.createElement("small");
   progressPercentIndicator.classList.add("text-muted", "m-0");
   progressPercentIndicator.textContent = spentPercent.toFixed(0) + "% is used";
+  const overBudgetIndicator = document.createElement("small");
+  overBudgetIndicator.classList.add("text-danger", "m-0");
+  overBudgetIndicator.innerHTML = `<i class="fa-solid fa-circle-exclamation"></i> Rs.${
+    budget.spentAmount! - budget.amount
+  } over budget`;
 
   const dateContainer = document.createElement("div");
   dateContainer.classList.add("d-flex", "justify-content-between");
@@ -179,6 +184,7 @@ const createBudgetCard = (budget: Budget) => {
 
   cardBody.appendChild(cardRemaining);
   cardBody.appendChild(cardAmount);
+  spentPercent > 100 && cardBody.appendChild(overBudgetIndicator);
   cardBody.appendChild(cardProgress);
   cardBody.appendChild(progressPercentIndicator);
   cardBody.appendChild(dateContainer);
@@ -304,7 +310,7 @@ const getTimeType = (startTime: Date, endTime: Date): string | null => {
 };
 
 const showErrorToast = (error: any) => {
-  const message = showErrorResponse(error) || error.message;
+  const message = showErrorResponse(error) || error.response.data.message;
   showToast(message, toastContainer, "error");
 };
 
@@ -315,6 +321,10 @@ const validateInput = (budget: Budget) => {
   }
   if (budget.amount === 0) {
     showToast("Amount cannot be zero", toastContainer, "error");
+    return false;
+  }
+  if (isNaN(budget.amount)) {
+    showToast("Amount must be a number", toastContainer, "error");
     return false;
   }
   if (budget.startTime?.toString() === "") {
