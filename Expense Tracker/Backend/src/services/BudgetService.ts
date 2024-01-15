@@ -59,7 +59,10 @@ export const updateBudget = async (user: User, budget: Budget) => {
     category!
   );
   checkBudgetExists(budgetsExists, budget);
-  budget.remainingAmount = budget.amount - foundBudget.spentAmount;
+  budget.remainingAmount =
+    foundBudget.spentAmount > budget.amount
+      ? 0
+      : budget.amount - foundBudget.spentAmount;
   await budgetRepo.updateBudget(budget);
 };
 
