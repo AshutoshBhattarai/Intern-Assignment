@@ -74,6 +74,7 @@ export const getFilteredBudget = async (user: User, params: BudgetQuery) => {
       "budget.remainingAmount",
     ])
     .where(whereConditions)
+    .orderBy("budget.createdAt", "DESC")
     .leftJoinAndSelect("budget.category", "category")
     .getMany();
 };
