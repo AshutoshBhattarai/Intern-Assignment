@@ -7,37 +7,51 @@ import createGetRequest from "../../service/GetRequest";
 /* -------------------------------------------------------------------------- */
 /*                          Getting elements from DOM                         */
 /* -------------------------------------------------------------------------- */
+// Navbar placeholder
 const navBar = document.getElementById("navbar-placeholder") as HTMLElement;
+// Username Display
 const displayName = document.getElementById("display-username") as HTMLElement;
+// User's income display
 const displayIncome = document.getElementById("summary-income") as HTMLElement;
+// User's expense display
 const displayExpense = document.getElementById(
   "summary-expense"
 ) as HTMLElement;
-const displayBudget = document.getElementById("summary-budget") as HTMLElement;
+// User's savings display
+const displaySavings = document.getElementById("summary-savings") as HTMLElement;
+// User's expense chart container
 const expenseChart = document.getElementById(
   "expense-chart"
 ) as HTMLCanvasElement;
+// User's expense chart container context 
 const expenseContext = expenseChart.getContext(
   "2d"
 ) as CanvasRenderingContext2D;
+// User's category chart container
 const categoryChart = document.getElementById(
   "category-chart"
 ) as HTMLCanvasElement;
+// User's category chart container context
 const categoryContext = categoryChart.getContext(
   "2d"
 ) as CanvasRenderingContext2D;
 
 window.onload = async () => {
+  // Render navbar
   renderNavBar(navBar, "nav-dashboard");
+  // Get user summary
   const userSummaryResponse = await createGetRequest("/users/summary");
+  // Get user summary from response
   const userSummary: UserSummary = userSummaryResponse?.data;
   if (userSummary) {
+    // Render summary in dashboard
     renderSummary(userSummary);
     createExpenseChart(expenseContext, userSummary.totalExpenseByDate!);
     createPieChart(categoryContext, userSummary.totalExpenseByCategory!);
   }
 };
 
+// Render summary
 const renderSummary = (userSummary: UserSummary) => {
   displayName.innerHTML = userSummary.username ? userSummary.username : "User";
   displayIncome.innerHTML = `Rs.${userSummary.totalIncome?.toLocaleString()}`;
@@ -50,7 +64,7 @@ const renderSummary = (userSummary: UserSummary) => {
   displayExpense.addEventListener("click", () => {
     window.location.href = "/views/expenses/";
   });
-  displayBudget.innerHTML = `Rs.${(
+  displaySavings.innerHTML = `Rs.${(
     userSummary.totalIncome! - userSummary.totalExpense!
   ).toLocaleString()}`;
 };

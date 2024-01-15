@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 /* --------------------------------- Imports -------------------------------- */
 import { HttpStatusCode } from "axios";
 import * as bootstrap from "bootstrap";
@@ -17,33 +16,45 @@ import showErrorResponse from "../../service/ErrorResponse";
 /* -------------------------------------------------------------------------- */
 /*                          Getting elements from DOM                         */
 /* -------------------------------------------------------------------------- */
+// Navbar placeholder
 const navBar = document.getElementById("nav-placeholder") as HTMLElement;
+// Save budget button
 const btnSaveBudget = document.getElementById("btn-save-budget") as HTMLElement;
+// Add budget button to open dialog
 const addBudgetBtn = document.getElementById("btn-add-budget") as HTMLElement;
+// Budget container to render all budgets
 const budgetContainer = document.getElementById(
   "budget-container"
 ) as HTMLElement;
+// Add budget category in dialog box
 const addBudgetCategory = document.getElementById(
   "add-budget-category"
 ) as HTMLInputElement;
+// Close dialog button
 const btnCloseBudgetDialog = document.getElementById(
   "btn-close-budget-dialog"
 ) as HTMLElement;
+// Add budget dialog box
 const budgetDialogBox = document.getElementById(
   "add-budget-dialog"
 ) as HTMLElement;
+// Add budget title
 const budgetTitleInput = document.getElementById(
   "add-budget-title"
 ) as HTMLInputElement;
+// Add budget amount
 const budgetAmountInput = document.getElementById(
   "add-budget-amount"
 ) as HTMLInputElement;
+// Add budget time(weekly/monthly/yearly)
 const budgetTimeInput = document.getElementById(
   "add-budget-time"
 ) as HTMLInputElement;
+// Delete budget button
 const btnDeleteBudget = document.getElementById(
   "btn-delete-budget"
 ) as HTMLElement;
+// Budget toast
 const toastContainer = document.getElementById("toast-message") as HTMLElement;
 /* ------------------------- Initializing Variables ------------------------- */
 let budgetModal: bootstrap.Modal;
@@ -52,17 +63,23 @@ let dialogBudgetId: string = "";
 /*                       Initial tasks when page loads                        */
 /* -------------------------------------------------------------------------- */
 window.onload = async () => {
+  // Render navbar
   renderNavBar(navBar, "nav-budget");
+  // Get user budgets and render
   const userBudgets = await getUserBudgets("");
-  createCategoryOptions(addBudgetCategory);
-  budgetModal = new bootstrap.Modal(budgetDialogBox);
   renderUserBudgets(userBudgets);
+  // Create category options for the dialog box
+  createCategoryOptions(addBudgetCategory);
+  // Configure dialog box
+  budgetModal = new bootstrap.Modal(budgetDialogBox);
 };
 
 /* -------------------------------------------------------------------------- */
 /*                           Button Event Listeners                           */
 /* -------------------------------------------------------------------------- */
+// Save budget
 btnSaveBudget.addEventListener("click", async () => {
+  // Validate input
   const { startTime, endTime } = getTimeRange(budgetTimeInput.value);
   const budget: Budget = {
     title: budgetTitleInput.value,
@@ -71,6 +88,7 @@ btnSaveBudget.addEventListener("click", async () => {
     startTime: startTime,
     endTime: endTime,
   };
+  // Save or update budget based on id's state
   if (dialogBudgetId === "") {
     validateInput(budget) && (await saveBudget(budget));
   } else if (dialogBudgetId !== "") {
@@ -78,17 +96,22 @@ btnSaveBudget.addEventListener("click", async () => {
     dialogBudgetId = "";
   }
 });
+
+// Add budget dialog
 addBudgetBtn.addEventListener("click", () => {
   showDialog();
 });
-
+// Close dialog
 btnCloseBudgetDialog.addEventListener("click", () => {
   closeDialog();
 });
 
+// Show the budget dialog
 const showDialog = () => {
   budgetModal.show();
 };
+// Close the budget dialog box and clear all inputs
+// Also remove the delete budget button if it exists
 const closeDialog = () => {
   budgetModal.hide();
   dialogBudgetId = "";
@@ -100,13 +123,17 @@ const closeDialog = () => {
     btnDeleteBudget.classList.add("d-none");
   }
 };
+
+// Render user budgets
 const renderUserBudgets = (budgets: Budget[]) => {
   budgetContainer.innerHTML = "";
+  // If there are no budgets
   if (!budgets.length) {
     budgetContainer.innerHTML =
       "<h5 class='text-center text-dark'>No Budgets found</h5>";
     return;
   }
+  // If there are budgets
   budgets.forEach((budget: Budget) => {
     budgetContainer.appendChild(createBudgetCard(budget));
   });
@@ -199,6 +226,8 @@ const createBudgetCard = (budget: Budget) => {
       getTimeType(budget.startTime!, budget.endTime!) || "";
     dialogBudgetId = budget.id!;
     addBudgetCategory.value = (budget.category as Category).id!;
+    // If there is a budget id(update mode), show delete button
+    // Else, don't show delete button
     if (dialogBudgetId) {
       btnDeleteBudget.classList.remove("d-none");
     }
@@ -208,7 +237,7 @@ const createBudgetCard = (budget: Budget) => {
     });
     showDialog();
   });
-
+  // Add hover effect
   card.addEventListener("mouseover", () => {
     card.style.backgroundColor = "#f8f9fa";
     card.style.cursor = "pointer";
@@ -238,6 +267,7 @@ const saveBudget = async (budget: Budget) => {
 
 const getUserBudgets = async (filter: string) => {
   try {
+    // Filter is optional and not used currently
     const budgets = await createGetRequest(`/budgets/filter?${filter}`);
     return budgets!.data;
   } catch (error) {
@@ -274,6 +304,7 @@ const deleteBudget = async (id: string) => {
 /* -------------------------------------------------------------------------- */
 /*                                   Helpers                                  */
 /* -------------------------------------------------------------------------- */
+// Get time range from time type(weekly/monthly/yearly)
 const getTimeRange = (time: string) => {
   let startTime = new Date();
   let endTime = new Date();
@@ -292,6 +323,10 @@ const getTimeRange = (time: string) => {
     endTime,
   };
 };
+
+// Get time type from time range (weekly/monthly/yearly)
+// Opposite of getTimeRange function 
+// Used in update dialog box to get time type of the budget's current time range
 const getTimeType = (startTime: Date, endTime: Date): string | null => {
   const startDate = new Date(startTime);
   const endDate = new Date(endTime);
@@ -309,11 +344,13 @@ const getTimeType = (startTime: Date, endTime: Date): string | null => {
   return null;
 };
 
+// Show error toast
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const showErrorToast = (error: any) => {
   const message = showErrorResponse(error) || error.response.data.message;
   showToast(message, toastContainer, "error");
 };
-
+// Validate input
 const validateInput = (budget: Budget) => {
   if (budget.title === "") {
     showToast("Title cannot be empty", toastContainer, "error");
