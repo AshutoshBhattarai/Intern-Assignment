@@ -72,9 +72,7 @@ const createExpenseChart = (
         {
           label: "Total Expenses",
           data: amounts,
-          backgroundColor: "rgba(75, 192, 192, 0.2)",
-          borderColor: "rgba(75, 192, 192, 1)",
-          borderWidth: 1,
+          backgroundColor: "#4bc0c0",
           yAxisID: "y-axis-1",
         },
       ],
@@ -85,10 +83,6 @@ const createExpenseChart = (
           type: "time",
           time: {
             unit: "day",
-          },
-          title: {
-            display: true,
-            text: "Date",
           },
         },
       },
