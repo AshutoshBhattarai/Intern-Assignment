@@ -12,22 +12,21 @@ import { ExpenseQuery } from "../interface/QueryInterface";
 //* -------------------- Function that adds a new expense -------------------- */
 
 export const createExpense = async (user: User, expense: Expense) => {
-  // Check if the user exists
+  
   if (!(await getUserById(user.id))) {
     throw new NotFoundError("User not found");
   }
 
-  // Get the category for the expense
   const category = await getCategory(expense.category as any);
   if (!category) {
     throw new NotFoundError("Category not found");
   }
   // Update the budget with the new expense
   await updateBudget(user, category, expense, "add");
-  // Set the user for the expense
+  
+
   expense.user = user;
 
-  // Create the expense
   await expenseRepo.createExpense(expense);
 };
 //* ----------------------------------- -- ----------------------------------- */
@@ -55,8 +54,8 @@ export const updateExpense = async (user: User, expense: Expense) => {
   }
   // Update the budget first delete the old expense and add the new one
   await updateBudget(user, category, expenseExists, "remove");
-  expense.createdAt = expenseExists.createdAt;
   await updateBudget(user, category, expense, "add");
+  expense.createdAt = expenseExists.createdAt;
   expense.user = user;
   await expenseRepo.updateExpense(expense);
 };
@@ -87,7 +86,6 @@ export const deleteExpense = async (user: User, id: string) => {
   await expenseRepo.deleteExpense(expense.id);
 };
 /* --------------------------------- Extras --------------------------------- */
-// This function takes the expense object and returns a new expense object suitable for response.
 const expenseResponse = (expense: Expense) => {
   const resExpense = new Expense();
   resExpense.id = expense.id;
@@ -104,7 +102,7 @@ const expenseResponse = (expense: Expense) => {
   return resExpense;
 };
 
-// This function updates the budget by adding or removing the expense.
+// Updates the budget by adding or removing the expense.
 const updateBudget = async (
   user: User,
   category: Category,
@@ -138,7 +136,6 @@ const updateBudget = async (
       });
     } else if (task === "remove") {
       await budgets.forEach(async (budget) => {
-        // check if the expense is within the budget time frame
         if (
           !(
             expense.createdAt < budget.createdAt ||

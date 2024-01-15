@@ -36,19 +36,16 @@ export const deleteUser = async (id: string) => {
 
 // Update user's details
 export const updateUser = async (user: User) => {
-  // Check if user exists
   const findUser = await userRepo.getUserById(user.id);
   if (!findUser) throw new NotFoundError("User not found");
-  // Check if email already exists
+
   if (user.email) {
     const userExists = await userRepo.getUserByEmail(user.email);
-    // If the email is same as the existing email do nothing
-    // Else send error that the email is already taken
+
     if (userExists && userExists.id !== user.id)
       throw new BadRequestError(`User with email ${user.email} already exists`);
   }
-  // If password is provided in the request
-  // Change the old password with the new password(after hashing)
+
   if (user.password) {
     const hashedPassword = await argon2.hash(user.password);
     user.password = hashedPassword;
@@ -86,7 +83,6 @@ export const getUserSummary = async (user: User) => {
   return summary;
 };
 
-// Filter user details to send only the necessary fields
 const filterUser = (user: User) => {
   const userInfo = new User();
   userInfo.id = user.id;
