@@ -1,6 +1,7 @@
 import dotenv from "dotenv";
 dotenv.config();
-
+// Extracting all the environment variables and assigning them to the config object
+// So we don't have to process.env in every file
 const config = {
   serverPort: process.env.PORT || 5005,
   database: {

@@ -22,8 +22,9 @@ export const createExpense = async (user: User, expense: Expense) => {
   if (!category) {
     throw new NotFoundError("Category not found");
   }
+  // Update the budget with the new expense
   await updateBudget(user, category, expense, "add");
-
+  // Set the user for the expense
   expense.user = user;
 
   // Create the expense
@@ -39,7 +40,7 @@ export const getAllExpenses = async (user: User) => {
   return expenses.map((expense) => expenseResponse(expense));
 };
 //* ----------------------------------- -- ----------------------------------- */
-/* --------------------- Service that updates an expense -------------------- */
+//* --------------------- Service that updates an expense -------------------- */
 export const updateExpense = async (user: User, expense: Expense) => {
   if (!(await getUserById(user.id))) {
     throw new NotFoundError("User not found");
@@ -52,6 +53,7 @@ export const updateExpense = async (user: User, expense: Expense) => {
   if (!category) {
     throw new NotFoundError("Category not found");
   }
+  // Update the budget first delete the old expense and add the new one
   await updateBudget(user, category, expenseExists, "remove");
   expense.createdAt = expenseExists.createdAt;
   await updateBudget(user, category, expense, "add");
@@ -64,11 +66,11 @@ export const getFilteredExpenses = async (user: User, params: ExpenseQuery) => {
   if (!(await getUserById(user.id))) {
     throw new NotFoundError("User not found");
   }
-
   const expenses = await expenseRepo.getExpenseWithCategory(user, params);
   return expenses.map((expense) => expenseResponse(expense));
 };
 /* ----------------------------------- -- ----------------------------------- */
+//* ------------------ Service that deletes an expense ---------------------- */
 export const deleteExpense = async (user: User, id: string) => {
   if (!(await getUserById(user.id))) {
     throw new NotFoundError("User not found");
@@ -102,6 +104,7 @@ const expenseResponse = (expense: Expense) => {
   return resExpense;
 };
 
+// This function updates the budget by adding or removing the expense.
 const updateBudget = async (
   user: User,
   category: Category,
@@ -115,11 +118,13 @@ const updateBudget = async (
   if (budgets) {
     if (task === "add") {
       await budgets.forEach(async (budget) => {
+        // check if the expense is within the budget time frame
         if (
           !(expense.createdAt < budget.createdAt || expense.createdAt
             ? expense.createdAt
             : new Date() > budget.endTime)
         ) {
+          // update the budget's spent amount
           const newSpentAmount =
             parseFloat(budget.spentAmount.toString()) +
             parseFloat(expense.amount.toString());
@@ -133,6 +138,7 @@ const updateBudget = async (
       });
     } else if (task === "remove") {
       await budgets.forEach(async (budget) => {
+        // check if the expense is within the budget time frame
         if (
           !(
             expense.createdAt < budget.createdAt ||

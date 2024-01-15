@@ -1,9 +1,12 @@
+//
+
 import { Between, FindOptionsWhere, ILike, Repository } from "typeorm";
 import { DEFAULT_PAGE_SIZE } from "../constants";
 import database from "../database/config";
 import { ExpenseQuery } from "../interface/QueryInterface";
 import Expense from "../models/Expense";
 import User from "../models/User";
+
 
 const repo: Repository<Expense> = database.getRepository("expenses");
 
@@ -43,6 +46,7 @@ export const getFilteredExpenses = (user: User, params: ExpenseQuery) => {
   return repo.find({ where: whereConditions });
 };
 
+// Gets the data with query parameters as conditions
 export const getExpenseWithCategory = async (
   user: User,
   params: ExpenseQuery
@@ -69,6 +73,7 @@ export const getExpenseWithCategory = async (
     .getMany();
 };
 
+// Gets the data with query parameters as conditions
 export const getUserTotalExpenseByCategory = (user: User) => {
   return repo
     .createQueryBuilder("expense")
@@ -86,7 +91,6 @@ export const getUserTotalExpenseByCategory = (user: User) => {
 };
 
 export const getUserTotalExpenseByDate = async (user: User) => {
-  const currentDate = new Date();
   return await repo
     .createQueryBuilder("expense")
     .select("sum(expense.amount) as total")

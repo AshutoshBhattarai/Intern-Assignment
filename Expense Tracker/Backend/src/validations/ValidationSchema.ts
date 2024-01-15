@@ -1,5 +1,7 @@
 import Joi from "joi";
 
+// Validation schemas for all the end points query and body fields
+
 export const categoryBodySchema = Joi.object({
     title : Joi.string().required(),
     description : Joi.string().default(""),

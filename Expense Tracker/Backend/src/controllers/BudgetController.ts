@@ -1,10 +1,22 @@
+/* -------------------------------------------------------------------------- */
+/*                              Budget Controller                             */
+/* -------------------------------------------------------------------------- */
+
 import { NextFunction, Request, Response } from "express";
 import * as budgetService from "../services/BudgetService";
 import HttpStatus from "http-status-codes";
 import Budget from "../models/Budget";
 import { BudgetQuery } from "../interface/QueryInterface";
 import User from "../models/User";
+/* Note :
+->res.locals is an object that contains response local variables scoped to the request
+->This is useful for passing data between middleware and controllers
+ ->In this case, res.locals.user is a User object that contains the authenticated user's information
+ ->Which is then used in every route that requires authentication
+ ->The user object is generated in the authMiddleware by verifying the JWT token 
+*/
 
+// Create Budget
 export const createBudget = async (
   req: Request,
   res: Response,
@@ -23,6 +35,7 @@ export const createBudget = async (
   }
 };
 
+// Get All Budgets
 export const getAllBudgets = async (
   req: Request,
   res: Response,
@@ -90,7 +103,7 @@ export const deleteBudget = async (
   }
 };
 
-export const getAllFilteredBudgets = async(
+export const getAllFilteredBudgets = async (
   req: Request,
   res: Response,
   next: NextFunction

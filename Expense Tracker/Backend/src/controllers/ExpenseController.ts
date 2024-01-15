@@ -7,6 +7,7 @@ import * as expenseService from "../services/ExpenseService";
 import { getUserTotalExpenseCount } from "../repositories/ExpenseRepo";
 import createMetaData from "../utils/metadata";
 
+// GET ALL EXPENSES OF A USER (NOT IN USE)
 export const getAllExpenses = async (
   req: Request,
   res: Response,
@@ -46,6 +47,9 @@ export const createExpense = async (
   }
 };
 
+// GET ALL EXPENSES OF A USER with filter by query parameters
+// If query parameters are not provided, all expenses will be returned
+// Same as getAllExpenses
 export const getFilteredExpenses = async (
   req: Request,
   res: Response,

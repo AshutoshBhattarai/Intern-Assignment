@@ -24,6 +24,7 @@ export const getUserById = async (
   next: NextFunction
 ) => {
   try {
+    // For res.locals.user view note on budget controller
     const user: User = res.locals.user;
     const response = await userService.getUserById(user.id);
     res.status(HttpStatus.OK).json({

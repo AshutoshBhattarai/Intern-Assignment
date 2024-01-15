@@ -1,14 +1,21 @@
+/* -------------------------------------------------------------------------- */
+/*                      Controllers for Authentication                        */
+/* -------------------------------------------------------------------------- */
+
 import { NextFunction, Request, Response } from "express";
 import * as authService from "../services/AuthService";
 import HttpStatus from "http-status-codes";
 import User from "../models/User";
 
+
+// Login Controller
 export const login = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
+    // Extract user data from request body
     const user: User = req.body;
     const response = await authService.login(user);
     res.status(HttpStatus.ACCEPTED).json({
@@ -26,7 +33,9 @@ export const register = async (
   next: NextFunction
 ) => {
   try {
+    // Extract user data from request body
     const user: User = req.body;
+    // Register user
     await authService.register(user);
     res.status(HttpStatus.ACCEPTED).json({
       message: "User registered successfully",
@@ -36,6 +45,7 @@ export const register = async (
   }
 };
 
+// Logout Controller
 export const logout = async (
   req: Request,
   res: Response,
@@ -52,6 +62,7 @@ export const logout = async (
   }
 };
 
+// Refresh Controller
 export const refresh = async (
   req: Request,
   res: Response,

@@ -1,3 +1,6 @@
+/* -------------------------------------------------------------------------- */
+/*                           Repository for Categories                        */
+/* -------------------------------------------------------------------------- */
 import { ILike, Repository } from "typeorm";
 import Category from "../models/Category";
 import database from "../database/config";

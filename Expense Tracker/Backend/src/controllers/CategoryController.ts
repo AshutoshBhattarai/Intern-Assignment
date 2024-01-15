@@ -9,6 +9,7 @@ export const createCategory = async (
 ) => {
   try {
     const category: Category = req.body;
+    // For res.locals.user view note on budget controller
     category.user = res.locals.user;
     const response = await categoryService.createCategory(category);
     res.status(HttpStatus.ACCEPTED).json({

@@ -1,3 +1,7 @@
+/* -------------------------------------------------------------------------- */
+/*                            Income Repository                               */
+/* -------------------------------------------------------------------------- */
+
 import { Between, FindOptionsWhere, ILike, Repository } from "typeorm";
 import Income from "../models/Income";
 import database from "../database/config";

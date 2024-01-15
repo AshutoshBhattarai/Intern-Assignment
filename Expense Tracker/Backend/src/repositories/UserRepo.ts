@@ -1,3 +1,7 @@
+/* -------------------------------------------------------------------------- */
+/*                              User Repository                               */
+/* -------------------------------------------------------------------------- */
+
 import { Repository } from "typeorm";
 import database from "../database/config";
 import User from "../models/User";

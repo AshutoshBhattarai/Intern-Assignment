@@ -1,9 +1,14 @@
+/* -------------------------------------------------------------------------- */
+/*                            Repository for Budget                           */
+/* -------------------------------------------------------------------------- */
+// Handling CRUD operations for Budget
 import { FindOptionsWhere, ILike, LessThan, MoreThan, Repository } from "typeorm";
 import Budget from "../models/Budget";
 import database from "../database/config";
 import User from "../models/User";
 import Category from "../models/Category";
 import { BudgetQuery } from "../interface/QueryInterface";
+
 
 const repo: Repository<Budget> = database.getRepository("budgets");
 
@@ -37,6 +42,7 @@ export const getTotalBudget = async (user: User) => {
   });
 };
 
+// get total budget for a category
 export const getCategoryTotalBudget = async (
   user: User,
   category: Category
@@ -47,12 +53,14 @@ export const getCategoryTotalBudget = async (
   });
 };
 
+// get budget for a category
 export const getBudgetByCategory = async (user: User, category: Category) => {
   return await repo.find({
     where: { user: { id: user.id }, category: { id: category.id } },
   });
 };
 
+// Gets the data with query parameters as conditions
 export const getFilteredBudget = async (user: User, params: BudgetQuery) => {
   const whereConditions: FindOptionsWhere<Budget> = { user: { id: user.id } };
   if (params.id) whereConditions.id = params.id;

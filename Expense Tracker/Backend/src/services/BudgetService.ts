@@ -1,3 +1,6 @@
+/* -------------------------------------------------------------------------- */
+/*                                   Imports                                  */
+/* -------------------------------------------------------------------------- */
 import ForbiddenError from "../errors/Forbidden";
 import NotFoundError from "../errors/NotFound";
 import { BudgetQuery } from "../interface/QueryInterface";
@@ -9,31 +12,41 @@ import * as categoryRepo from "../repositories/CategoryRepo";
 import * as userRepo from "../repositories/UserRepo";
 import { isSameDate } from "../utils/utils";
 
+// ------------------------ Function that adds a new budget ------------------------ //
 export const createBudget = async (user: User, budget: Budget) => {
+  // check if user exists
   if (!(await userRepo.getUserById(user.id))) {
     throw new NotFoundError("User not found");
   }
+  // check if category exists
   const category = await categoryRepo.getCategory(budget.category as any);
   if (!category) {
     throw new NotFoundError("Category not found");
   }
+  // Get all the budgets for the same category
   const budgetsExists: Budget[] = await budgetRepo.getBudgetByCategory(
     user,
     category
   );
+  // check if budget with same date scope already exists
   checkBudgetExists(budgetsExists, budget);
 
+  // Update the category, user and remaining amount of the budget
   budget.category = category;
   budget.user = user;
   budget.remainingAmount = budget.amount;
+  // Create the budget
   const newBudget = await budgetRepo.createBudget(budget);
   return newBudget;
 };
 
+// ------------------------ Function that gets all budgets ------------------------ //
 export const getAllBudgets = async (user: User) => {
   const budgets = await budgetRepo.getBudget(user);
   return budgets.map((budget) => budgetResponse(budget));
 };
+
+// ------------------------ Function that gets a specific budget ------------------------ //
 export const getBudgetById = async (user: User, id: string) => {
   const budget = await budgetRepo.getBudgetById(user, id);
   if (!budget) {
@@ -42,23 +55,31 @@ export const getBudgetById = async (user: User, id: string) => {
   return budgetResponse(budget);
 };
 
+// ------------------------ Function that updates a budget ------------------------ //
 export const updateBudget = async (user: User, budget: Budget) => {
+  // check if user exists
   if (!(await userRepo.getUserById(user.id))) {
     throw new NotFoundError("User not found");
   }
+  // check if budget exists
   const foundBudget = await budgetRepo.getBudgetById(user, budget.id);
   if (!foundBudget) {
     throw new NotFoundError("Budget not found");
   }
+  // check if category exists
   const category = await categoryRepo.getCategory(budget.category as any);
   if (foundBudget.user != (user.id as any)) {
     throw new ForbiddenError("Unauthorized to update budget");
   }
+  // Get all the budgets for the same category
   const budgetsExists: Budget[] = await budgetRepo.getBudgetByCategory(
     user,
     category!
   );
+  // check if budget with same date scope already exists
   checkBudgetExists(budgetsExists, budget);
+  // Update the budget's remaining amount
+  // Remaining amount is set to 0 if the spent amount is greater than the budget amount
   budget.remainingAmount =
     foundBudget.spentAmount > budget.amount
       ? 0
@@ -66,16 +87,20 @@ export const updateBudget = async (user: User, budget: Budget) => {
   await budgetRepo.updateBudget(budget);
 };
 
+// ------------------------ Function that deletes a budget ------------------------ //
 export const deleteBudget = async (user: User, id: string) => {
   if (!(await userRepo.getUserById(user.id)))
     throw new NotFoundError("User not found");
   await budgetRepo.deleteBudget(id);
 };
 
+/* ------------ Function that gets budgets with query parameters ------------ */
 export const getFilteredBudget = (user: User, params: BudgetQuery) => {
   return budgetRepo.getFilteredBudget(user, params);
 };
 
+
+// Creating a new budget with necessary properties for response
 const budgetResponse = (budget: Budget) => {
   const responseBudget = new Budget();
   responseBudget.id = budget.id;
@@ -93,6 +118,7 @@ const budgetResponse = (budget: Budget) => {
   return responseBudget;
 };
 
+// check if budget with same date scope already exists
 const checkBudgetExists = (existingBudget: Budget[], budget: Budget) => {
   existingBudget.map((b: Budget) => {
     if (

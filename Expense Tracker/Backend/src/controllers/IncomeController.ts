@@ -14,6 +14,7 @@ export const createIncome = async (
 ) => {
   try {
     const incomeDetails: Income = req.body;
+    // For res.locals.user view note on budget controller
     const user: User = res.locals.user;
     await incomeService.createIncome(user, incomeDetails);
     res.status(HttpStatus.ACCEPTED).send({
