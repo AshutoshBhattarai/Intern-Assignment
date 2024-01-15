@@ -84,54 +84,45 @@ const paginationContainer = document.getElementById(
 ) as HTMLElement;
 
 /* -----------------Initializing variables------------------------------------ */
-// Expense modal/dialog box
+
 let expenseModal: bootstrap.Modal;
-// Variable to store expense id(used to edit expense)
 let dialogExpenseId: string = "";
-// Variable to store pagination details
 let pagination: { currentPage: number; totalPages: number };
-// Variable to store search parameters
 const filters: SearchParams = {};
 /* ----------------------------------- -- ----------------------------------- */
-// Function to run as soon as the page loads
 window.onload = async () => {
-  // Render navbar
+  
   renderNavBar(navBar, "nav-expenses");
-  // Set pagination details or current page
+ 
   filters.page = pagination ? pagination.currentPage : 1;
-  // Render expense cards
+
   await renderExpenseCards(filters);
-  // Configure dialog box
+  
   expenseModal = new bootstrap.Modal(addDialogBox);
-  // Create category dropdown options with all categories of the user
-  // Categories are fetched from the server
-  // Used in dialog box
+ 
   createCategoryOptions(categoryInput);
-  // Configure category dropdown for filtering/searching
+  
   new bootstrap.Dropdown(
     document.getElementById("filter-category-dropdown") as HTMLElement
   );
-  // Get all categories of the user from the server
-  // Used in search parameters
+
   const categories = await createGetRequest("/categories/");
-  // Add all categories to dropdown menu for filtering
+ 
   const dropDownMenu = document.getElementById(
     "filter-category-menu"
   ) as HTMLElement;
   // Add "All" option to select all categories
-  // Done by removing the existing value of filters.category
   const btnAll = document.createElement("button");
   btnAll.classList.add("dropdown-item");
   btnAll.textContent = "All";
   btnAll.addEventListener("click", () => {
     filters.category = "";
-    // Remove category filters if "All" is selected
-    // Render expense cards with all categories
+
     renderExpenseCards(filters);
   });
-  // Add "All" option to dropdown
+ 
   dropDownMenu.appendChild(btnAll);
-  // Add all categories to dropdown
+
   categories!.data.forEach((category: Category) => {
     const btn = document.createElement("button");
     btn.classList.add("dropdown-item");
@@ -151,11 +142,9 @@ window.onload = async () => {
     // For multiple date
     mode: "range",
     dateFormat: "YYYY-MM-DD",
-    // When date range is selected and user clicks of the date picker
-    // Fires the function
+   
     onClose: function (selectedDates, _dateStr, instance) {
       if (selectedDates.length === 2) {
-        // Get start and end dates
         const startDate = moment(selectedDates[0]).format("YYYY-MM-DD");
         const endDate = moment(selectedDates[1]).format("YYYY-MM-DD");
         // Display start and end dates in the date picker
@@ -163,7 +152,7 @@ window.onload = async () => {
         // Set start and end dates in filters
         filters.startDate = startDate;
         filters.endDate = endDate;
-        // Render expense cards with selected date
+        
         renderExpenseCards(filters);
       }
     },
@@ -173,44 +162,35 @@ window.onload = async () => {
 // Handle pagination
 const handlePageClicked = (buttonClicked: string | number) => {
   // Detects clicks from the pagination component and updates the current page
-  // If previous button is clicked
   if (buttonClicked === "previous") {
     if (pagination.currentPage > 1) {
       pagination.currentPage -= 1;
     }
   }
-  // If next button is clicked
   else if (buttonClicked === "next") {
     if (pagination.currentPage < pagination.totalPages) {
       pagination.currentPage += 1;
     }
   }
-  // If page number is clicked
   else {
     pagination.currentPage = buttonClicked as number;
   }
-  // Set current page in filters
   filters.page = pagination.currentPage;
-  // Render expense cards
+
   renderExpenseCards(filters);
 };
 
-// Handle search click event
 searchBtn.addEventListener("click", () => {
-  // Get search input value
   const searchData = searchInput.value;
-  // Set search input value in filters
-  // If search input is empty then set it to empty string to render all expenses
+
   filters.description = searchData ? searchData : "";
   renderExpenseCards(filters);
 });
 
-// Show dialog box when add button is clicked
 expenseAddBtn.addEventListener("click", () => {
   showDialog();
 });
 
-// Handle clear filter button and render expense cards
 btnClearFilter.addEventListener("click", () => {
   const filterDate = document.getElementById("filter-date") as HTMLInputElement;
   searchInput.value = "";
@@ -224,8 +204,7 @@ btnClearFilter.addEventListener("click", () => {
   renderExpenseCards(filters);
 });
 
-// Handle filter amount slider and display selected amount
-// Render expense cards
+
 filterAmountSlider.addEventListener("change", () => {
   filterAmount.textContent = "";
   filterAmount.textContent = `Rs. ${filterAmountSlider.value}`;
@@ -233,16 +212,15 @@ filterAmountSlider.addEventListener("change", () => {
   renderExpenseCards(filters);
 });
 
-// Close dialog box when close button is clicked
+
 btnCloseDialog.addEventListener("click", () => {
   closeDialog();
 });
-// Save expense when save button is clicked
+
 btnSaveExpense.addEventListener("click", () => {
   saveExpense();
 });
 
-// Close dialog box when close button is clicked by clearing all inputs
 const closeDialog = () => {
   dialogExpenseId = "";
   expenseModal.hide();
@@ -253,7 +231,6 @@ const closeDialog = () => {
   dateInput.value = "";
 };
 
-// Save expense when save button is clicked by validating inputs
 const saveExpense = async () => {
   const remarks = remarksInput.value;
   const amount = amountInput.value;
@@ -267,10 +244,9 @@ const saveExpense = async () => {
   receipt && formData.append("image", receipt);
   formData.append("date", date.toISOString());
 
-  // if dialogExpenseId is empty then create expense
   if (dialogExpenseId === "") {
     if (
-      // Validate inputs
+      
       validateInput({
         description: remarks,
         amount: parseFloat(amount),
@@ -286,7 +262,7 @@ const saveExpense = async () => {
   else if (dialogExpenseId != "") {
     const expenseId = dialogExpenseId!;
     if (
-      // Validate inputs
+      
       validateInput({
         description: remarks,
         amount: parseFloat(amount),
@@ -300,7 +276,7 @@ const saveExpense = async () => {
     }
   }
 };
-// Show dialog box when edit or add button is clicked
+
 const showDialog = (data?: {
   remarks: string;
   amount: number;
@@ -334,7 +310,6 @@ const createExpenseCard = (data: Expense) => {
   };
   // Create expense card element
   const expenseCard = generateExpenseCard(data, editFunction, deleteFunction);
-  // Return the created expense card element
   return expenseCard;
 };
 /* -------------------------------------------------------------------------- */
@@ -342,7 +317,6 @@ const createExpenseCard = (data: Expense) => {
 /* -------------------------------------------------------------------------- */
 // Render expense cards with filters by calling API
 const renderExpenseCards = async (filter: SearchParams) => {
-  // Create base url
   let baseUrl = "/expenses/filter?";
   /* --------------------- Add filters to base url if any --------------------- */
   if (filter.startDate && filter.endDate) {
@@ -361,11 +335,11 @@ const renderExpenseCards = async (filter: SearchParams) => {
     baseUrl += `&page=${filter.page}`;
   }
 
-  // Send API request
+ 
   const response = await createGetRequest(baseUrl);
-  // Extract data from response
+ 
   const userExpenses = response?.data;
-  // Extract meta data from response
+ 
   const metaData: MetaData = response?.meta;
   pagination = {
     totalPages: metaData.totalPages,
@@ -378,8 +352,7 @@ const renderExpenseCards = async (filter: SearchParams) => {
     paginationContainer.innerHTML = "";
     return;
   }
-  // If there are expenses then create expense cards
-  // and append them to expenses container after clearing it
+
   expensesContainer.innerHTML = "";
   await userExpenses!.forEach((expense: Expense) => {
     expensesContainer.appendChild(createExpenseCard(expense));
@@ -390,7 +363,7 @@ const renderExpenseCards = async (filter: SearchParams) => {
     pagination.currentPage,
     handlePageClicked
   );
-  // Append pagination bar to pagination container after clearing it
+  // Append pagination bar to pagination container
   paginationContainer.innerHTML = "";
   paginationContainer.appendChild(paginationBar);
 };

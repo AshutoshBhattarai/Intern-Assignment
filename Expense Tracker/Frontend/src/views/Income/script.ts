@@ -73,23 +73,23 @@ const btnClearFilter = document.getElementById(
 
 /* ------------------------- Initializing variables ------------------------- */
 let incomeModal: bootstrap.Modal;
-// Variable to store income id(used to edit income)
+
 let dialogIncomeId: string = "";
-// Variable to store pagination
+
 let pagination: {
   currentPage: number;
   totalPages: number;
 };
-// Variable to store search parameters
 const filters: SearchParams = {};
+
+/* ---------------------------- Handle page load ---------------------------- */
 window.onload = () => {
-  // Render navbar
   renderNavBar(navBar, "nav-income");
-  // Initialize income modal
+
   incomeModal = new bootstrap.Modal(addDialogBox);
-  // Setup pagination for filter
+
   filters.page = pagination ? pagination.currentPage : 1;
-  // Render income cards
+
   renderIncomeCards(filters);
   // Initialize date picker
   flatpickr("#filter-date", {
@@ -113,25 +113,20 @@ window.onload = () => {
 // Handle pagination click
 const handlePageClicked = (buttonClicked: string | number) => {
   // Detects clicks from the pagination component and updates the current page
-  // If previous button is clicked
   if (buttonClicked === "previous") {
     if (pagination.currentPage > 1) {
       pagination.currentPage -= 1;
     }
-  } 
-  // If next button is clicked
-  else if (buttonClicked === "next") {
+  } else if (buttonClicked === "next") {
     if (pagination.currentPage < pagination.totalPages) {
       pagination.currentPage += 1;
     }
-  } 
-  // If page number is clicked
-  else {
+  } else {
     pagination.currentPage = buttonClicked as number;
   }
-  // Set current page in filters
+
   filters.page = pagination.currentPage;
-  // Render income cards
+
   renderIncomeCards(filters);
 };
 
@@ -139,19 +134,18 @@ const handlePageClicked = (buttonClicked: string | number) => {
 filterAmountSlider.addEventListener("change", () => {
   // Display selected amount
   filterAmount.innerHTML = `Rs.${filterAmountSlider.value}`;
-  // Set amount in filters
+
   filters.amount = parseInt(filterAmountSlider.value);
-  // Render income cards
+
   renderIncomeCards(filters);
 });
 
 // Handle search click
 searchBtn.addEventListener("click", () => {
-  // Get search input value
   const searchData = searchInput.value;
-  // Set search input value in filters
+
   filters.source = searchData;
-  // Render income cards
+
   renderIncomeCards(filters);
 });
 
@@ -164,19 +158,17 @@ btnClearFilter.addEventListener("click", () => {
   filters.amount = 0;
   filters.startDate = "";
   filters.endDate = "";
-  // Render income cards with default parameters
   renderIncomeCards(filters);
 });
-// Handle add button click show dialog box
+
 incomeAddBtn.addEventListener("click", () => {
   showDialog();
 });
-// Handle close button click hide dialog box
+
 btnCloseDialog.addEventListener("click", () => {
   closeDialog();
 });
 
-// Handle save button click to save income
 btnSaveIncome.addEventListener("click", () => {
   saveIncome();
 });
@@ -186,17 +178,17 @@ const saveIncome = () => {
   const source = sourceInput.value;
   const amount = amountInput.value;
   const date = dateInput.value || new Date();
-  // Create income object with source, amount and date
+
   const income: Income = {
     source,
     amount: parseFloat(amount),
     date,
   };
-  // Validate input and dialogIncomeId is empty then create income
+
   if (dialogIncomeId === "") {
     validateInput(income) && createIncome(income);
-  } 
-  // Validate input and dialogIncomeId has value then update income
+  }
+  // If dialogIncomeId has value then update income
   else if (dialogIncomeId != "") {
     {
       income.id = dialogIncomeId;
@@ -205,7 +197,6 @@ const saveIncome = () => {
   }
 };
 
-// Close dialog box when close button is clicked by clearing all inputs
 const closeDialog = () => {
   incomeModal.hide();
   dialogIncomeId = "";
@@ -215,7 +206,6 @@ const closeDialog = () => {
 };
 
 // Show dialog box when edit or add button is clicked
-// Use existing data if passed
 const showDialog = (data?: {
   source: string;
   amount: number;
@@ -253,7 +243,6 @@ const createIncomeCard = (data: Income) => {
 /* -------------------------------------------------------------------------- */
 // Render income cards with filters by calling API
 const renderIncomeCards = async (filter: SearchParams) => {
-  // Create base url
   let baseUrl = "/incomes/filter?";
   // Add filters to base url if any
   if (filter.startDate && filter.endDate) {
@@ -265,11 +254,9 @@ const renderIncomeCards = async (filter: SearchParams) => {
   if (filter.amount) {
     baseUrl += `&amount=${filter.amount}`;
   }
-  // Send API request with search parameters
+
   const response = await createGetRequest(baseUrl);
-  // Extract data from response
   const userIncomes = response?.data;
-  // Extract meta data from response
   const metaData: MetaData = response?.meta;
   pagination = {
     totalPages: metaData.totalPages,
@@ -281,18 +268,18 @@ const renderIncomeCards = async (filter: SearchParams) => {
       "<h1 class='text-center h-75 p-5 '>Sorry No Data Found!</h1>";
     return;
   }
-  // Render income cards with data from response after cleaning previous data
+  
   incomeContainer.innerHTML = "";
   userIncomes.forEach((income: Income) => {
     incomeContainer.appendChild(createIncomeCard(income));
   });
-  // Render pagination with meta data
+  
   const paginationBar = createPagination(
     pagination.totalPages,
     pagination.currentPage,
     handlePageClicked
   );
-  // Append pagination bar to pagination container after clearing it
+  // Append pagination bar to pagination container
   paginationContainer.innerHTML = "";
   paginationContainer.appendChild(paginationBar);
 };

@@ -31,17 +31,15 @@ loginForm.addEventListener("submit", async (e) => {
   }
   const email = emailInput.value;
   const password = passwordInput.value;
-  // Validate input
   if (!validateInput(email.trim(), password.trim())) {
     validationError.classList.remove("d-none");
   }
-  // Submit form
+  
   else {
     await sendAuthRequest(email, password);
   }
 });
 
-// Validate input
 const validateInput = (email: string, password: string): boolean => {
   if (email === "") {
     validationError.innerHTML = "Please enter your email";
@@ -74,8 +72,7 @@ const sendAuthRequest = async (email: string, password: string) => {
     }
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
-    // if response is not ok then show error
-    // validation error, email not found, invalid credentials etc.
+  
     if (
       error.response.status == HttpStatusCode.BadRequest ||
       error.response.status == HttpStatusCode.NotFound ||

@@ -44,16 +44,16 @@ registerForm.addEventListener("submit", async (e) => {
   emailInput.classList.remove("is-invalid");
   passwordInput.classList.remove("is-invalid");
   repasswordInput.classList.remove("is-invalid");
-  // Remove previous error message
+  
   if (!validationError.classList.contains("d-none")) {
     validationError.classList.add("d-none");
   }
-  // Get data from form inputs
+  
   const username = usernameInput.value;
   const email = emailInput.value;
   const password = passwordInput.value;
   const repassword = repasswordInput.value;
-  // Validate input
+  
   if (
     !validateInput(
       username.trim(),
@@ -62,17 +62,17 @@ registerForm.addEventListener("submit", async (e) => {
       repassword.trim()
     )
   ) {
-    // Show error message
+    
     validationError.classList.remove("d-none");
   }
-  // Submit form
+  
   else {
     const user: User = { username, email, password };
     await sendPostRequest(user);
   }
 });
 
-// Validate input
+
 const validateInput = (
   username: string,
   email: string,
@@ -118,8 +118,6 @@ const sendPostRequest = async (user: User) => {
     }
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
-    // if response is not ok then show error message
-    // validation error, email already exists etc.
     if (error.response.status == HttpStatusCode.BadRequest) {
       validationError.classList.remove("d-none");
       validationError.innerHTML = error.response.data.message;

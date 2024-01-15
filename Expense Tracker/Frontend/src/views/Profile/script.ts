@@ -99,38 +99,36 @@ const btnClosePasswordDialog = document.getElementById(
 // Toast container
 const toastContainer = document.getElementById("toast-message") as HTMLElement;
 // --------------------- Initializing Modals -----------------------
-// Category dialog box initialization
+
 let categoryModal: bootstrap.Modal;
-// Id of category to be deleted/updated
+
 let categoryId: string = "";
-// Update profile dialog box
+
 let updateProfileModal: bootstrap.Modal;
-// Update password dialog box
+
 let updatePasswordModal: bootstrap.Modal;
 /* -------------------------------------------------------------------------- */
 /*                            Initital onload tasks                           */
 /* -------------------------------------------------------------------------- */
 window.onload = async () => {
-  // Render navbar
   renderNavBar(navBar, "nav-profile");
-  // Create category dialog box
+
   categoryModal = new bootstrap.Modal(
     document.getElementById("add-category-dialog") as HTMLElement
   );
-  // Create update profile dialog box
+
   updateProfileModal = new bootstrap.Modal(
     document.getElementById("update-user-dialog") as HTMLElement
   );
-  // Create update password dialog box
+
   updatePasswordModal = new bootstrap.Modal(
     document.getElementById("update-password-dialog") as HTMLElement
   );
 
-  // Get user categories
   const userCategories = await getUserCategories();
-  // Render user categories
+
   renderUserCategories(userCategories);
-  // Render user details
+
   await renderUserDetails();
 };
 
@@ -139,44 +137,42 @@ window.onload = async () => {
 /* -------------------------------------------------------------------------- */
 // Edit profile button
 btnEditProfile.addEventListener("click", () => {
-  // Update input values
-  // Set username
+  
   updateUsernameInput.value = displayUsername.textContent!;
-  // Set email
+  
   updateEmailInput.value = displayEmail.textContent!;
-  // Open update profile dialog
+  
   updateProfileModal.show();
 });
 
-// Add category button to open dialog
+
 addCategoryBtn.addEventListener("click", () => {
   categoryModal.show();
 });
 
-// Close dialog button to close category dialog
+
 btnCloseCategoryDialog.addEventListener("click", () => {
   closeCategoryDialog();
 });
 
-// Close dialog button to close profile dialog
 btnCloseProfileDialog.addEventListener("click", () => {
   closeUpdateProfileDialog();
 });
-// Close dialog button to close password dialog
+
 btnClosePasswordDialog.addEventListener("click", () => {
   closeUpdatePasswordDialog();
 });
 
-// Save category button to save category
+
 btnSaveCategory.addEventListener("click", async () => {
   const title = categoryTitleInput.value;
   const description = categoryDescriptionInput.value;
-  // Create category object with title and description
+
   const category: Category = {
     title: title,
     description: description,
   };
-  // Validate input
+
   if (category.title === "") {
     showToast("Title cannot be empty", toastContainer, "error");
     return;
@@ -185,7 +181,7 @@ btnSaveCategory.addEventListener("click", async () => {
     showToast("Description cannot be empty", toastContainer, "error");
     return;
   }
-  // Save category if id is empty
+  
   if (categoryId === "") {
     await saveCategory(category);
   }
@@ -193,16 +189,16 @@ btnSaveCategory.addEventListener("click", async () => {
   if (categoryId !== "") {
     category.id = categoryId;
     await updateCategory(category);
-    // Reset category id
+  
     categoryId = "";
   }
-  // Get user categories
+  
   renderUserCategories(await getUserCategories());
-  // Close dialog
+  
   closeCategoryDialog();
 });
 
-// Close dialog button to close category dialog and clear input
+
 const closeCategoryDialog = () => {
   categoryTitleInput.value = "";
   categoryDescriptionInput.value = "";
@@ -219,7 +215,7 @@ const renderUserCategories = (categories: Category[]) => {
       "<h5 class='text-center text-primary'>No Categories found</h5>";
     return;
   }
-  // If there are categories display them
+  
   categories.forEach((category: Category) => {
     categoryContainer.appendChild(createCategoryCard(category));
   });
@@ -333,83 +329,81 @@ const showErrorToast = (error: any) => {
   showToast(message, toastContainer, "error");
 };
 
-// Render user details in profile after getting it from API
 const renderUserDetails = async () => {
   const userDetails = await createGetRequest("/users/");
-  // Render user details if found
+  
   if (userDetails) {
     const { username, email, updatedAt, createdAt } = userDetails.data;
-    // Display user details
-    // Username
+  
     displayUsername.textContent = username;
-    // Email
+  
     displayEmail.textContent = email;
-    // Updated Date
+  
     displayUpdatedAt.textContent = new Date(updatedAt)
       .toUTCString()
       .substring(0, 16);
-    // Created Date
+  
     displayCreatedAt.textContent = new Date(createdAt)
       .toUTCString()
       .substring(0, 16);
   }
 };
 
-// Close update profile dialog box and clear input
+
 const closeUpdateProfileDialog = () => {
   updateProfileModal.hide();
   updateUsernameInput.value = "";
   updateEmailInput.value = "";
 };
-// Close update password dialog box and clear input
+
 const closeUpdatePasswordDialog = () => {
   updatePasswordModal.hide();
   updatePasswordInput.value = "";
   updateConfirmPasswordInput.value = "";
 };
 
-// Update profile button to open dialog box to update profile
+
 btnSaveProfile.addEventListener("click", async () => {
   const newUsername = updateUsernameInput.value;
   const newEmail = updateEmailInput.value;
-  // Create user object with new username and email
+
   const user: User = {};
   user.email = newEmail;
   user.username = newUsername;
-  // Update profile
+
   await updateProfile(user);
 });
-// Update password button to open dialog box to update password
+
 btnUpdatePassword.addEventListener("click", () => {
-  //Close update profile dialog
+
   closeUpdateProfileDialog();
-  //Open update password dialog
+
   updatePasswordModal.show();
 });
 
-// Save new password
+
 btnSaveNewPassword.addEventListener("click", () => {
-  // Get new password and confirm password
+ 
   const newPassword = updatePasswordInput.value;
   const newConfirmPassword = updateConfirmPasswordInput.value;
-  // Check if new password and confirm password match
+ 
   if (newPassword !== newConfirmPassword) {
     showToast("Passwords do not match", toastContainer, "error");
     return;
   }
-  // Check if new password is empty
+  
   if (newPassword === "") {
     showToast("Password cannot be empty", toastContainer, "error");
     return;
   }
-  // Create user object with new password
+  
   const user: User = {};
   user.password = newPassword;
-  // Update password
+  
   updatePassword(user);
 });
 
-// Validate and update profile
+
 const updateProfile = async (user: User) => {
   try {
     if (user.username === "") {
