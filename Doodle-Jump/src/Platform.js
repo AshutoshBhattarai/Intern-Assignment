@@ -1,6 +1,3 @@
-/* -------------------------------------------------------------------------- */
-/*                               Platform Class                               */
-/* -------------------------------------------------------------------------- */
 
 class Platform {
     constructor(xAxis, yAxis, width, height) {
@@ -10,7 +7,6 @@ class Platform {
         this.height = height;
     }
 
-    //Draws platform of width and height on given x and y axis
     draw(ctx) {
         let platform = new Image();
         platform.src = './assets/images/platform.png';
