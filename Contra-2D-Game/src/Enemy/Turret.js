@@ -54,7 +54,6 @@ class Turret {
         let currentTime = new Date();
         const canShoot = currentTime - this.lastBulletTime > BULLET_COOLDOWN;
         if (canShoot) {
-            // Create a new bullet object with the specified properties
             const bullet = {
                 xAxis: this.bulletInitialX,
                 yAxis: this.bulletInitialY,
@@ -63,35 +62,34 @@ class Turret {
                 width: BULLET_RADIUS * 2,
                 angle: this.angle
             }
-            // Check if the burst limit has not been reached yet
+
             if (this.bulletBurst < this.burstLimit) {
                 playAudio(gameAudios.turretShooting);
-                // Increment the burst count and add the bullet to the bullets array
                 this.bulletBurst++;
                 this.bullets.push(bullet);
             }
-            // Update the last bullet time to the current time
+
             this.lastBulletTime = currentTime;
         }
     }
 
     updateBullets() {
-        // Filter out bullets that are out of bounds
+
         this.bullets = this.bullets.filter(bullet =>
             bullet.xAxis >= 0 && bullet.xAxis <= canvas.width &&
             bullet.yAxis >= 0 && bullet.yAxis <= canvas.height - 60
         );
-        // Update the position of each bullet
+
         this.bullets.forEach(bullet => {
             bullet.xAxis += Math.cos(bullet.angle) * bullet.speed;
             bullet.yAxis += Math.sin(bullet.angle) * bullet.speed;
         });
-        // Reset the bullet burst counter if burst limit is reached and all bullets are gone
+
         if (this.bulletBurst === this.burstLimit && this.bullets.length === 0) {
             this.bulletBurst = 0;
         }
     }
-    //Adjust turret shooting position based on the angle of the player
+
     #findDirection(radian) {
         const angle = (radian * 180 / Math.PI + 360) % 360;
         // Right

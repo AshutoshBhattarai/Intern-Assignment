@@ -38,7 +38,6 @@ class Bullet {
         }
     }
     basicBulletMovement() {
-        // Shooting bullet in specified direction
         switch (this.direction) {
             case DIRECTION_RIGHT:
                 this.xAxis += this.bulletSpeed;

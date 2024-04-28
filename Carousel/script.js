@@ -32,24 +32,18 @@ startAnim();
 /* -------- Restarting animation when user presses one of the buttons ------- */
 function restartAnim() {
     clearInterval(imgAnimation);
-    // setTimeout(() => {
-    //     startAnim()
-    // }, 4500);
+
 }
 
-//function to calculate position based on index value
 function getPos(index) {
     return index * (-imageWidth);
 }
-// Initializing initial width of the container based on the array size
+
 imageContainer.style.width = (images.length) * imageWidth + 'px';
 
-//Creating HTML elements for every image object in the array
 images.forEach((el, i) => {
-    //creating a index button to jump to certain image
     const indexBtn = document.createElement('button');
     indexBtn.className = 'index-btn';
-    //Adding event listener to the index button
     indexBtn.addEventListener('click', () => {
 
         btnRemoveSelected();
@@ -72,24 +66,20 @@ images.forEach((el, i) => {
         }
 
     })
-    //Creating div to store the image 
     const imgDiv = document.createElement('div');
     imgDiv.className = 'image';
 
-    //creating image tag to display the image
     const displayImg = document.createElement('img');
     displayImg.src = el.url;
     displayImg.style.width = '100%';
-    displayImg.style.height = '100%';
-    // adding elements to the parent container
+    displayImg.style.height = '100%'
+        ;
     imgDiv.appendChild(displayImg);
     imageContainer.appendChild(imgDiv);
-    //Adding button to the main container
+
     container.appendChild(indexBtn);
 })
 
-//Animation when user clicks the right button
-//Moves image from right to left into the viewport
 rightScroll.addEventListener('click', () => {
     restartAnim();
     btnRemoveSelected();
@@ -108,7 +98,6 @@ rightScroll.addEventListener('click', () => {
     }
 })
 
-// Same as above
 leftScroll.addEventListener('click', () => {
     restartAnim();
     btnRemoveSelected();
@@ -127,9 +116,7 @@ leftScroll.addEventListener('click', () => {
 })
 
 
-// Animating to the left
 function animateLeft(currentPos, nextPos) {
-    //Takes current and next positions and calculates the movement
     let animationInterval = 1000 / 60;
     function move() {
         let movement = Math.abs((nextPos - currentPos) / animationInterval);
@@ -146,8 +133,6 @@ function animateLeft(currentPos, nextPos) {
     requestAnimationFrame(move);
 }
 
-// Same as above
-// but decreases the movement to go to the left
 function animateRight(currentPos, nextPos) {
     let animationInterval = 1000 / 60;
     function move() {
@@ -162,10 +147,7 @@ function animateRight(currentPos, nextPos) {
     requestAnimationFrame(move);
 }
 
-// Function to auto animate the images
-//Image goes to the start when it reaches the end
 function autoAnimate() {
-    // btnAddSelected();
     let currentPos = getPos(currentIndex);
     currentIndex++;
     let nextPos = getPos(currentIndex);
@@ -187,7 +169,6 @@ function btnRemoveSelected() {
 function btnAddSelected() {
     btnRemoveSelected();
     let buttons = document.querySelectorAll('.index-btn');
-    //buttons[0].classList.add('selected');
     buttons.forEach((btn, i) => {
         buttons[currentIndex + 1].classList.add('selected');
     })

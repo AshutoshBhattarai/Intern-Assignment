@@ -30,45 +30,35 @@ function init() {
     // gameAudio = new Audio(gameAudios.gameMusic);
     // gameAudio.play();
 
-    // Set the difficulty level based on the value stored in local storage, or use the default value if not found
     difficulty = localStorage.getItem('difficulty') || DIFFICULTY_EASY;
 
-    // Initialize arrays to store player bullets, powerups, and explosions
     playerBullets = [];
     powerupArray = [];
     explosionArray = [];
 
-    // Set the player's last bullet time to 0(not shot yet!!)
     playerLastBullet = 0;
 
-    // Set the initial score to 0 and calculate the score multiplier based on the difficulty level
     score = 0;
     scoreMultiplier = difficulty === DIFFICULTY_MEDIUM ? SCORE_MULTIPLIER_MEDIUM : SCORE_MULTIPLIER_HARD;
 
-    // Create a new GameMap
     gameMap = new GameMap(0, 0, ctx, mapIndex);
 
-    // Generate the collision blocks array of the game map
     gameMap.createBlocksArray();
 
-    // Set the enemies array, turrets array, and powerup block based on the game map
     enemiesArray = gameMap.enemies;
     turretsArray = gameMap.turrets;
     tanksArray = gameMap.tanks;
     powerupBlock = gameMap.powerupBlock;
 
-    // Create the Player object with the specified parameters
     player = new Player(PLAYER_INITIAL_SPAWN_X, PLAYER_INITIAL_SPAWN_Y, ctx, gameMap.collisionBlocks);
 }
 
-// Game is rendered Here 
 function render() {
     gameMap.draw();
     // Check if player is out of bounds
     if (player.xAxis > gameMap.width) {
         // Check if there are no turrets and enemies
         if (checkMapClear()) {
-            // Check if mapIndex is the last index
             if (mapIndex >= MAP_SECTION_ARRAY.length - 1) {
                 mapIndex = Math.round(generateRandomNumber(3, 6));
             }
@@ -76,12 +66,10 @@ function render() {
             increaseScoreOnDistance();
             updateGameMap();
         } else {
-            // Set player's x-axis position to the right edge of the canvas
             player.xAxis = CANVAS_WIDTH - player.width;
         }
     }
 
-    // Draw and update powerups
     powerupArray.forEach((power) => {
         if (power !== "") {
             power.draw(ctx);
@@ -89,7 +77,6 @@ function render() {
         }
     });
 
-    // Draw and update explosions, remove if necessary
     explosionArray.forEach((explosion) => {
         explosion.draw(ctx);
         explosion.update();
@@ -98,41 +85,34 @@ function render() {
         }
     });
 
-    // Update enemies
     updateEnemies();
 
-    // Draw powerup block, player, and update bullets
     drawPowerUpBlock();
     playerRender();
     updateBullets(playerBullets);
 
-    // Detect player movement and check collisions
     detectMovement();
     if (!player.isSpawning) {
         checkPlayerCollisions();
     }
 
-    // Show special move if player has special bullets
     if (player.hasSpecialBullet) {
         showSpecialMove();
     }
 
-    // Check enemy bullet and turret bullet collisions
     checkEnemyBulletCollision();
     turretBulletCollision();
     tankBulletCollision();
 
-    // Check powerup collision, display player health state and score
     checkPowerUpCollision(player);
     displayPlayerHealthState(player.lives);
     displayPlayerScore();
 
-    // Upgrade difficulty 
     upgradeDifficulty();
+
+
     const gameAnimation = requestAnimationFrame(render);
-    //check if game is over
     if (isGameOver()) {
-        // gameAudio.pause();
         cancelAnimationFrame(gameAnimation);
         displayGameOverScreen();
     }
@@ -143,7 +123,7 @@ function updateGameMap() {
     playerBullets = [];
     powerupArray = [];
     gameMap.enemies = [];
-    // Creating new map section object
+
     gameMap = new GameMap(0, 0, ctx, mapIndex);
     gameMap.createBlocksArray();
     powerupBlock = gameMap.powerupBlock == undefined ? undefined : gameMap.powerupBlock;
@@ -152,13 +132,12 @@ function updateGameMap() {
     tanksArray = gameMap.tanks;
     player.xAxis = 0;
     player.yAxis = getPlayerLastPosY();
-    // updating player collision blocks for the new map
+
     player.collisionBlocks = gameMap.collisionBlocks;
 }
 
 
 function updateEnemies() {
-    // Draw and update enemies 
     enemiesArray.forEach(enemy => {
         enemy.draw(ctx);
         enemy.update(player);
@@ -167,7 +146,7 @@ function updateEnemies() {
             if (checkPlayerInProximity(enemy)) enemy.shoot(player);
         }
     });
-    // Draw and update turrets
+
     turretsArray.forEach(turret => {
         turret.draw(ctx);
         turret.calculateAngleToPlayer(player);
@@ -177,7 +156,7 @@ function updateEnemies() {
             turret.shoot();
         }
     });
-    // Draw and update tanks
+
     tanksArray.forEach((tank) => {
         tank.draw(ctx);
         tank.update();
@@ -189,7 +168,6 @@ function updateEnemies() {
     })
 }
 
-// Checking player collison with enemy or their bullets
 function checkPlayerCollisions() {
     checkEnemyPlayerCollision();
     checkPlayerBulletCollision();
@@ -199,7 +177,6 @@ function getPlayerLastPosY() {
     return player.yAxis;
 }
 
-// Updating player object on each render frame
 function playerRender() {
     player.draw();
     player.update();
@@ -269,7 +246,6 @@ function updateBullets(bulletsArray) {
 /* ----------------------------------- -- ----------------------------------- */
 
 /* --------------------- Checking if map is clear or not -------------------- */
-// To progress to next section;
 function checkMapClear() {
     return (enemiesArray.length == 0 && turretsArray.length == 0 && tanksArray.length == 0)
 }
@@ -277,10 +253,7 @@ function checkMapClear() {
 /* -------------------------------------------------------------------------- */
 /*                              Collision Checks                              */
 /* -------------------------------------------------------------------------- */
-// Function works as a collision checker for player and enemies(they work as their names)
 
-/* ----------- Checking if player collides with the running enemy ----------- */
-// Not applicable for other types.
 function checkEnemyPlayerCollision() {
     enemiesArray.forEach((enemy, enemyIndex) => {
         if (detectRectCollision(player, enemy)) {
@@ -390,16 +363,11 @@ function checkPlayerInProximity(enemy) {
 
 /* ------------------------- Display available lives ------------------------ */
 function displayPlayerHealthState(healthLeft) {
-    // Function to display the player's health state on the screen
-    // Create a new Image object
     let image = new Image();
-    // Destructure the properties x, y, height, and width from the healthDisplaySprite object
     let { x, y, height, width } = healthDisplaySprite;
-    // Set the source of the image to the specified URL
     image.src = './assets/images/Contra-Extras.gif';
-    // Loop from 1 to the player's current health state
+
     for (let i = 1; i <= healthLeft; i++) {
-        // Draw the image onto the canvas
         ctx.drawImage(image, x, y, width, height, i * 20, 50, 50, 50);
     }
 }
@@ -407,10 +375,9 @@ function displayPlayerHealthState(healthLeft) {
 /* ------------------- Display if you have special bullet ------------------- */
 function showSpecialMove() {
     let image = new Image();
-    // Destructure the properties x, y, height, and width from the healthDisplaySprite object
     let { x, y, height, width } = powerupSprite.specialMove;
-    // Set the source of the image to the specified URL
     image.src = './assets/images/Contra-Extras.gif';
+
     let gap = 50;
     for (let i = 1; i <= player.specialBulletCount; i++) {
         ctx.drawImage(image, x, y, width, height, CANVAS_WIDTH - gap, 50, 50, 50);
@@ -432,20 +399,20 @@ function checkPowerUpCollision(player) {
     powerupArray.forEach((power, index) => {
         if (detectRectCollision(player, power)) {
             playAudio(gameAudios.collectPowerup);
-            //Increase life state by one if collect life powerup
+
             if (power.type == POWERUP_HEALTH) {
                 player.lives += 1;
             }
-            // Score multiplier if collect multiplier powerup(based on difficulty)
+
             if (power.type == POWERUP_MULTIPLIER) {
                 score *= Math.ceil(difficulty == DIFFICULTY_EASY ? 1.25 : scoreMultiplier);
             }
-            // Grant special bullet with increased damage
+
             if (power.type == POWERUP_SPECIAL) {
                 player.hasSpecialBullet = true;
                 player.specialBulletCount++;
             }
-            // Remove powerup after player collects
+
             powerupArray.splice(index, 1);
         }
     })
@@ -459,14 +426,15 @@ function respawnPlayerAfterHit() {
     player.playerHit();
     player.playerReSpawn(x, y);
 }
-// Is player dead or not ???
+
 function isGameOver() {
     return player.isDead();
 }
+
+
 /* -------------------------------------------------------------------------- */
 /*                             Score Manipulation                             */
 /* -------------------------------------------------------------------------- */
-/* ------------ Logic to manipulate Score on different Conditions ----------- */
 function increaseScoreOnDistance() {
     score += SCORE_DISTANCE_TRAVELLED * (difficulty == DIFFICULTY_EASY ? 1 : scoreMultiplier);
 }
@@ -486,7 +454,8 @@ function increaseScoreOnTankDestroyed() {
 function decreaseScoreOnHit() {
     score -= SCORE_HIT * (difficulty == DIFFICULTY_EASY ? 1 : scoreMultiplier);
 }
-/* ----------------------------------- -- ----------------------------------- */
+
+
 /* -------------------------- Sound effects section ------------------------- */
 function playerHitSoundEffect() {
     playAudio(gameAudios.playerHit);
@@ -509,12 +478,10 @@ function drawPowerUpBlock() {
     }
 }
 function checkBulletPowerUpBlockCollision() {
-    // Generate a random number between 1 and 5
     const randomPowerUp = Math.round(generateRandomNumber(1, 5));
-    // Generate a random number between 1 and 2 and check if it's even
     const shouldGeneratePowerUp = Math.round(generateRandomNumber(1, 2)) % 2 === 0;
     let powerUp;
-    // Determine the type of power-up based on the random number generated
+
     if (randomPowerUp <= 3) {
         powerUp = POWERUP_SPECIAL;
     } else if (randomPowerUp == 4) {
@@ -522,21 +489,19 @@ function checkBulletPowerUpBlockCollision() {
     } else {
         powerUp = POWERUP_HEALTH;
     }
+
+
     playerBullets.forEach((bullet, index) => {
-        // Check if the power-up block is open and there is a collision between the bullet and the block
         if (powerupBlock.isOpen && detectRectCollision(bullet, powerupBlock)) {
             metalHitSoundEffect();
             playerBullets.splice(index, 1);
-            // Decrease the hit count of the power-up block
+
             powerupBlock.hit--;
-            // Check if the power-up block has been hit enough times to generate a power-up
+
             if (powerupBlock.hit === 0) {
-                // Check if the difficulty is hard or medium, if so a power-up should not be generated
                 if ((difficulty === DIFFICULTY_HARD) && !shouldGeneratePowerUp) {
-                    // Add an empty string to the powerupArray
                     powerupArray.push("");
                 } else {
-                    // Create a new power-up object and add it to the powerupArray
                     powerupArray.push(new Powerups(powerupBlock.xAxis + TILE_SIZE, powerupBlock.yAxis, powerUp));
                 }
             }

@@ -24,54 +24,51 @@ class Player {
         this.playerImage.src = './assets/images/ContraSheet1.gif'
     }
 
-    // This function is responsible for drawing the player on the canvas.
     draw() {
-        //? ------------------------ Done for testing purposes ----------------------- */
-        // Set the color of the stroke to red.⏬
-        // this.ctx.strokeStyle = 'red';
-        // this.ctx.strokeRect(this.xAxis, this.yAxis, this.width, this.height);
-        // Draw a rectangle around the player.☝️
-        //? ----------------------------------- -- ----------------------------------- */
+
         if (this.isSpawning) {
-            // Toggle between drawing and not drawing the player to create a flickering effect
             if (this.respawnFlicker % 3 === 0) {
                 this.ctx.globalAlpha = 0; // Set alpha to 0 to make the player invisible
             } else {
                 this.ctx.globalAlpha = 1; // Set alpha to 1 to make the player visible
             }
-            // Increment the respawn flicker timer
+
             this.respawnFlicker++;
         }
-        // Draw the player image on the canvas.
         this.ctx.drawImage(
-            this.playerImage,   // The image to draw.
-            this.actions.x,     // The x coordinate of the image in the sprite sheet.
-            this.actions.y,     // The y coordinate of the image in the sprite sheet.
-            this.actions.width, // The width of the image in the sprite sheet.
-            this.actions.height,// The height of the image in the sprite sheet.
-            this.xAxis,         // The x coordinate of the image on the canvas.
-            this.yAxis,         // The y coordinate of the image on the canvas.
-            this.width,         // The width of the image on the canvas.
-            this.height         // The height of the image on the canvas.
+            this.playerImage,
+            this.actions.x,
+            this.actions.y,
+            this.actions.width,
+            this.actions.height,
+            this.xAxis,
+            this.yAxis,
+            this.width,
+            this.height
         );
+
+
         //Reset the global alpha to make player visible
         this.ctx.globalAlpha = 1;
     }
 
     /* ---- Function to reset player's action based on current direction and state(in water or ground) ------ */
     resetActions() {
+        if (inWater) {
+            this.actions = this.isFacing === DIRECTION_LEFT ? swimming[0] : swimming[4];
+        }
+        else {
 
-        this.actions = this.inWater ? (this.isFacing === DIRECTION_LEFT ? swimming[0] : swimming[4]) : (this.isFacing === DIRECTION_LEFT ? runningLeft[0] : runningRight[0]);
+            this.actions = this.isFacing === DIRECTION_LEFT ? runningLeft[0] : runningRight[0];
+        }
     }
-    // Reset the player size to the default values
+
+
     resetPlayerSize() {
-        // Set the height of the player to the constant PLAYER_HEIGHT
         this.height = PLAYER_HEIGHT;
-        // Set the width of the player to the constant PLAYER_WIDTH
         this.width = PLAYER_WIDTH;
     }
     update() {
-        // Apply gravity and reset player size if not in ground or water
         if (!this.inGround && !this.inWater) {
             this.applyGravity();
         }
@@ -79,72 +76,61 @@ class Player {
             this.resetPlayerSize();
         }
 
-        // Check for vertical collisions
         this.checkVerticalCollisions();
         this.checkHorizontalCollisions();
 
-        // Update player position
         this.xAxis += this.velX;
         this.yAxis += this.velY;
 
-        // Handles left movement
         if (inputs.left && !(inputs.down || inputs.up)) {
             this.moveLeft();
         }
-        // Handles right movement
+
         if (inputs.right && !(inputs.down || inputs.up)) {
             this.moveRight();
         }
 
-        // Handles jumping if in ground and not moving up or down
         if (inputs.jump && this.inGround && !(inputs.down || inputs.up)) {
             this.jump();
         }
 
-        // Handles jumping down
         if (inputs.jump && inputs.down) {
             this.jumpDown();
         }
-        //Dont let the player shoot in any other direction than left or right when in water
+
+
         if (!this.inWater) {
-            // Handles aiming up
             if (inputs.up) {
                 this.stopMoving();
                 this.aimUp();
             }
 
-            // Handles aiming down to the right
             if (inputs.down && inputs.right) {
                 this.stopMoving();
                 this.aimDown(DIRECTION_RIGHT);
             }
 
-            // Handles aiming down to the left
             if (inputs.down && inputs.left) {
                 this.stopMoving();
                 this.aimDown(DIRECTION_LEFT);
             }
 
-            // Handles aiming up to the right
             if (inputs.up && inputs.right) {
                 this.stopMoving();
                 this.aimUp(DIRECTION_RIGHT);
             }
 
-            // Handles aiming up to the left
             if (inputs.up && inputs.left) {
                 this.stopMoving();
                 this.aimUp(DIRECTION_LEFT);
             }
         }
 
-        // Handles going prone
         if (!this.isJumping && inputs.down && !(inputs.left || inputs.right)) {
             this.stopMoving();
             this.goProne();
         }
 
-        // Reset actions and button press count if no inputs
         if (Object.values(inputs).every(value => value === false)) {
             this.animationTimer = 0;
             this.buttonPressCount = 0;
@@ -152,7 +138,6 @@ class Player {
             if (!this.isJumping) this.resetActions();
         }
 
-        // Set inGround to false if not in collision block
         if (!this.checkInCollisionBlock()) {
             this.inGround = false;
         }
@@ -161,11 +146,11 @@ class Player {
         }
     }
 
-    // Stoping the movement of the player
     stopMoving() {
-        // Setting the horizontal velocity to 0
         this.velX = 0;
     }
+
+
     aimUp(direction) {
         if (direction === undefined) {
             this.actions = this.isFacing == DIRECTION_RIGHT ? playerTargetUp.right[0] : playerTargetUp.left[0]
@@ -179,17 +164,13 @@ class Player {
         this.actions = direction == DIRECTION_LEFT ? left : right;
     }
     playerRunning(direction) {
-        // Determining the running direction based on the input direction
         const runningDirection = direction === DIRECTION_RIGHT ? runningRight : runningLeft;
-        // Getting the index of the last frame in the running direction animation
         const lastIndex = runningDirection.length - 1;
 
-        // Checking if the animation timer has reached the last frame
         if (this.animationTimer >= lastIndex) {
-            // If so, resetting the animation timer to the second frame
             this.animationTimer = 1;
         }
-        // Setting the player's actions to the frame specified by the animation timer
+
         this.actions = runningDirection[this.animationTimer];
     }
 
@@ -200,66 +181,52 @@ class Player {
         }
     }
     moveLeft() {
-        // Decrease the horizontal velocity of the player
         this.velX -= SPEED;
-        // Animate the movement of the player
 
         this.animateMovement();
-        // Limit the horizontal velocity to a minimum value of -4
         this.velX = this.velX < -4 ? -4 : this.velX;
 
-        // Change the facing direction of the player to left
         this.isFacing = DIRECTION_LEFT;
-        // Check if the player is in water
+
         if (this.inWater) {
-            // Set the player's actions to the swimming animation for left movement
             this.actions = swimming[1];
         } else {
             if (!inputs.jump && !this.isJumping) {
                 this.playerRunning(DIRECTION_LEFT);
             }
-            // Call the playerRunning function to set the player's actions for left movement
         }
     }
     moveRight() {
-        // Increase the horizontal velocity of the player
         this.velX += SPEED;
         if (!inputs.jump && !this.isJumping) {
-            // Trigger the animation for movement
             this.animateMovement();
         }
 
         // Limit the maximum horizontal velocity to 4
         this.velX = Math.min(this.velX, 4);
 
-        // Set the player's facing direction to right
         this.isFacing = DIRECTION_RIGHT;
 
-        // Check if the player is in water
         if (this.inWater) {
-            // Set the player's action to swimming
             this.actions = swimming[3];
-        } else {
-            if (!inputs.jump && !this.isJumping) {
-                // Run the player's running animation for the right direction
-                this.playerRunning(DIRECTION_RIGHT);
-            }
+        } else if (!inputs.jump && !this.isJumping) {
+            this.playerRunning(DIRECTION_RIGHT);
         }
     }
     applyGravity() {
-        // Increasing the vertical velocity of the object by the value of GRAVITY
         this.velY += GRAVITY;
     }
+
     jump() {
         this.isJumping = true;
-        // Set the inGround variable to false to indicate that the object is no longer on the ground
         this.inGround = false;
         if (this.isJumping) {
             this.height = TILE_SIZE;
             this.width = TILE_SIZE;
             this.animateJump();
         }
-        // Set the vertical velocity (velY) to predefined JUMP_HEIGHT to make the player jump
+
+
         this.velY = JUMP_HEIGHT;
     }
     animateJump() {
@@ -280,26 +247,18 @@ class Player {
         }, 50);
     }
     jumpDown() {
-        // this.inGround = false;
-        // const dropinterval = setInterval(() => {
-        //     this.yAxis += 40;
-        // }, 200)
-        // setTimeout(() => {
-        //     clearInterval(dropinterval)
-        // }, 200)
+        // Todo
     }
-    // Goes to the prone position
+
     goProne() {
         let { left, right } = playerPronePosition;
-        // 40 is used so the player doesn't float in the air in prone position
         this.yAxis += 40;
-        //Changing player height width
         this.height = PLAYER_WIDTH;
         this.width = PLAYER_HEIGHT;
-        // Turn where the player is facing
+
         this.actions = this.isFacing == DIRECTION_LEFT ? left : right;
     }
-    //Called when the player is hit by a bullet or enemy
+
     playerHit() {
         this.lives--;
         this.isSpawning = true;
@@ -307,7 +266,7 @@ class Player {
             this.isSpawning = false;
         }, 3000)
     }
-    // Respawns the player in cretain (x,y) coordinates
+
     playerReSpawn(x, y) {
         this.resetPlayerSize();
         this.resetActions();
@@ -315,55 +274,44 @@ class Player {
         this.xAxis = x;
         this.yAxis = y;
     }
-    // Checks whether the player has lives left or not
+
     isDead() {
         return this.lives <= 0;
     }
-    // Doesn't let the player move beyond the left and bottom of the screen
+
     checkBoundary() {
         this.xAxis = Math.max(0, this.xAxis);
         this.yAxis = Math.min(CANVAS_HEIGHT - PLAYER_HEIGHT, this.yAxis);
     }
+
     checkVerticalCollisions() {
-        // Loop through each collision block
         for (const block of this.collisionBlocks) {
-            // Check if there is a collision between the player and the block
             if (detectBlockCollision(this, block)) {
-                // if (inputs.down && inputs.jump) {
-                //     block.isColliding = false;
-                // }
-                // Check if the player is moving downwards
                 if (this.velY > 0) {
-                    // Check if the block is a platform and the player is not already on the ground
                     if (!this.inGround && block.type === COLLISION_PLATFORM) {
-                        // Stop the player's vertical velocity
                         this.velY = 0;
-                        // Reset the player's size
+
                         this.resetPlayerSize();
-                        // Position the player just above the platform
+
                         this.yAxis = block.yAxis - this.height - 1;
-                        // Set the player to be on the ground, not in water and not jumping
+
                         this.inGround = true;
                         this.inWater = false;
                         this.isJumping = false;
                     }
-                    // Check if the block is water
+
                     else if (block.type === COLLISION_WATER) {
-                        // Stop the player's vertical velocity
                         this.velY = 0;
-                        // Position the player just above the water
                         this.yAxis = block.yAxis - 1;
-                        // Set the player to be in water and not on the ground
+
                         this.isJumping = false;
-                        //this.inGround = false;
                         this.inWater = true;
-                        // Adjust the player's height to be half of the normal height
                         this.height = PLAYER_HEIGHT / 2;
-                        // Start swimming animation
+
                         let firstSwimmingAnim = setInterval(() => {
                             this.actions = swimming[2];
                         }, 100);
-                        // Stop swimming animation after a delay and switch to idle animation
+
                         setTimeout(() => {
                             clearInterval(firstSwimmingAnim);
                             this.actions = swimming[4];
@@ -379,20 +327,13 @@ class Player {
         }
     }
     checkHorizontalCollisions() {
-        // Iterate over each collision block
         for (const block of this.collisionBlocks) {
-            // Check if there is a collision between this object and the current block
             if (detectBlockCollision(this, block)) {
-                // Check if the object is moving to the right and the block is a collision platform
                 if (block.type === COLLISION_PLATFORM) {
-                    // Check if the object is currently in water and not on the ground
                     if (!this.inGround && this.inWater) {
-                        // Adjust the object's position to be aligned with the top of the block
                         this.yAxis = block.yAxis - TILE_SIZE;
                         if (this.velX > 0)
-                            // Move the object slightly to the right to prevent it from getting stuck in the block
                             this.xAxis = block.xAxis + 1;
-                        // Set the object's state to be on the ground and not in water
                         this.inWater = false;
                         this.inGround = true;
                     }
@@ -404,15 +345,11 @@ class Player {
 
     // Check if the player is colliding with any of the collision blocks
     checkInCollisionBlock() {
-        // Iterate over each collision block
-        for (let i = 0; i < this.collisionBlocks.length; i++) {
-            // Check if a collision has been detected between the current object and the current collision block
-            if (detectBlockCollision(this, this.collisionBlocks[i])) {
-                // Return true if a collision has been detected
+        for (const element of this.collisionBlocks) {
+            if (detectBlockCollision(this, element)) {
                 return true;
             }
         }
-        // Return false if no collision has been detected
         return false;
     }
 }

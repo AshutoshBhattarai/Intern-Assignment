@@ -4,18 +4,13 @@
 const gameScreen = document.getElementById('game-screen');
 const titleScreen = document.getElementById('title-screen');
 const gameOverScreen = document.getElementById('game-over-screen');
-/* ----------------------------------- -- ----------------------------------- */
-/* -------------------------- Title Menu Subscreens ------------------------- */
+
 const titleMenu = document.getElementById('title-menu');
 const titleDifficulty = document.getElementById('title-difficulty');
-/* ----------------------------------- -- ----------------------------------- */
-/* -------------------------- Game Over Sub Screens ------------------------- */
+
 const displayCurrentScore = document.getElementById('game-over-score');
 const displayHighScore = document.getElementById('game-over-high-score');
-/* ----------------------------------- -- ----------------------------------- */
-/* -------------------------------------------------------------------------- */
-/*                                   Buttons                                  */
-/* -------------------------------------------------------------------------- */
+
 const btnStartGame = document.getElementById('btn-start-game');
 const btnDifficultlySelection = document.getElementById('btn-difficulty-selection');
 const btnEasy = document.getElementById('btn-difficulty-easy');
@@ -24,30 +19,25 @@ const btnHard = document.getElementById('btn-difficulty-hard');
 const btnDifficultyBack = document.getElementById('btn-difficulty-back');
 const btnRestartGame = document.getElementById('game-over-restart');
 const btnEndGame = document.getElementById('game-over-end');
-/* ----------------------------------- -- ----------------------------------- */
-/* ------------------------- Variables Initilization ------------------------ */
+
+
+
 let initialDifficulty = DIFFICULTY_EASY;
 localStorage.setItem('difficulty', initialDifficulty);
 let highScore = localStorage.getItem('highScore') == null ? 0 : localStorage.getItem('highScore');
 const titleMusic = new Audio(gameAudios.title);
 const gameOverMusic = new Audio(gameAudios.gameOverMusic);
-/* ----------------------------------- -- ----------------------------------- */
 
-/* -------------------------------------------------------------------------- */
-/*                                 Start Game                                 */
-/* -------------------------------------------------------------------------- */
-/* ------ Initializes the game variables and starts the animation frame ----- */
 function startGame() {
     init();
     render();
 }
-/* ----------------------------------- -- ----------------------------------- */
-/* ------------------ Display Initial Screen and functions ------------------ */
+
+
 displayTitleScreen();
 displayDifficulty();
 buttonSoundEffects();
 
-/* --------------------- Function to display game Screen -------------------- */
 function displayGameScreen() {
     titleScreen.style.display = 'none';
     gameOverScreen.style.display = 'none';
@@ -58,7 +48,6 @@ function displayGameScreen() {
 
 }
 
-/* --------------------- Function to display title Screen -------------------- */
 function displayTitleScreen() {
     titleScreen.style.display = 'flex';
     gameOverScreen.style.display = 'none';
@@ -69,7 +58,6 @@ function displayTitleScreen() {
     gameOverMusic.pause();
 }
 
-/* ------------------ Function to display Game Over Screen ------------------ */
 function displayGameOverScreen() {
     titleScreen.style.display = 'none';
     gameOverScreen.style.display = 'flex';
@@ -83,11 +71,7 @@ function displayGameOverScreen() {
     displayHighScore.innerHTML = `High Score: ${highScore}`;
 }
 
-/* -------------------------------------------------------------------------- */
-/*                          Button On Click Listeners                         */
-/* -------------------------------------------------------------------------- */
-/* ------------------------------- Button to : ------------------------------ */
-// Start game
+/* --------------------- Button On Click Listeners -------------------------- */
 btnStartGame.addEventListener('click', () => {
     displayGameScreen();
 });
@@ -114,27 +98,32 @@ btnHard.addEventListener('click', () => {
     initialDifficulty = localStorage.getItem('difficulty');
     displayDifficulty();
 });
-// Restart game
+
+
 btnRestartGame.addEventListener('click', () => {
     displayGameScreen();
 });
+
 // Go back to the title screen
 btnEndGame.addEventListener('click', () => {
     displayTitleScreen();
 });
-// Hides difficulty selection menu
+
+
 btnDifficultyBack.addEventListener('click', () => {
     titleDifficulty.style.display = 'none';
     titleMenu.style.display = 'block';
 });
-/* ----------------------------------- -- ----------------------------------- */
+
+
 /* --------------------- Show Selected difficulty -------------------------- */
 function displayDifficulty() {
     btnEasy.style.color = (initialDifficulty == DIFFICULTY_EASY) ? 'red' : 'white';
     btnMedium.style.color = (initialDifficulty == DIFFICULTY_MEDIUM) ? 'red' : 'white';
     btnHard.style.color = (initialDifficulty == DIFFICULTY_HARD) ? 'red' : 'white';
 }
-/* -------------------------------------------------------------------------- */
+
+
 /* --------------------- Apply sound effects to buttons --------------------- */
 function buttonSoundEffects() {
     const buttons = document.querySelectorAll('.btn-audio');
@@ -147,4 +136,3 @@ function buttonSoundEffects() {
         });
     });
 }
-/* ----------------------------------- -- ----------------------------------- */

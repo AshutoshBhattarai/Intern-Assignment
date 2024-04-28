@@ -14,34 +14,23 @@ class SoldierEnemy extends Enemy {
     }
 
     draw(ctx) {
-        /* ------------------------ Used for testing purposes ----------------------- */
-        // ctx.strokeStyle = "green"
-        // ctx.strokeRect(this.xAxis, this.yAxis, this.width, this.height);
-        /* ----------------------------------- -- ----------------------------------- */
         const { x, y, width, height } = this.actions;
         ctx.drawImage(this.enemyImage, x, y, width, height, this.xAxis, this.yAxis, this.width, this.height);
     }
     update() {
-        // Update the y-axis position by adding the vertical velocity
         this.yAxis += this.velY;
-        // Check for any vertical collisions
         this.checkVerticalCollisions();
-        // If the enemy is not in the ground, apply gravity
         if (!this.inGround) {
             this.useGravity();
         }
     }
     shoot(player) {
         const direction = this.getEnemyShootingDirection(player);
-        // Get the current time
         const currentTime = Date.now();
-        // Check if enough time has passed since the enemy last shot a bullet
         const canShoot = currentTime - this.lastBullet > BULLET_COOLDOWN;
-        // Set the origin of the bullet to the enemy soldier
         const from = ENEMY_SOLDIER;
-        // If enough time has passed, determine the position and direction of the bullet based on the given direction
+
         if (canShoot) {
-            // Adjusted position for bullet to come out of the enemy's gun
             let bulletX, bulletY, bulletDirection;
             if (direction === DIRECTION_LEFT) {
                 bulletX = this.xAxis;
@@ -78,24 +67,17 @@ class SoldierEnemy extends Enemy {
             }
         }
     }
-    // This function is responsible for shooting a bullet from the player's position in a given direction.
 
     shootBullet(x, y, direction) {
-        // Check if there are no bullets currently on the screen and the bulletCount is equal to the bulletLimit.
         if (this.bullets.length === 0 && this.bulletCount === this.bulletLimit) {
-            // If so, reset the bulletCount to 0.
             this.bulletCount = 0;
         }
 
-        // Create a new Bullet object with the provided position, direction, and bullet type.
         const bullet = new Bullet(x, y, direction, ENEMY_SOLDIER, false, this.bullets);
 
-        // Check if the bulletCount is less than the bulletLimit.
         if (this.bulletCount < this.bulletLimit) {
             playAudio(gameAudios.enemyShooting);
-            // If so, increment the bulletCount by 1.
             this.bulletCount++;
-            // Push the bullet object into the bullets array.
             this.bullets.push(bullet);
         }
     }
@@ -103,21 +85,17 @@ class SoldierEnemy extends Enemy {
 
 
     getEnemyShootingDirection(player) {
-        // Extract the x and y coordinates of the player
         const { xAxis, yAxis } = player;
-        // Extract the x and y coordinates of the enemy and assign it to enemyXAxis and enemyYAxis
         const { xAxis: enemyXAxis, yAxis: enemyYAxis } = this;
-        // Calculate if the player is to the left or right of the enemy by a certain distance
+
         const isPlayerToLeft = xAxis < enemyXAxis - (PLAYER_WIDTH + 20);
         const isPlayerToRight = xAxis > enemyXAxis + (PLAYER_WIDTH + 20);
-        // Calculate if the player is above or below the enemy
+
         const isPlayerAbove = yAxis < enemyYAxis - PLAYER_HEIGHT;
         const isPlayerBelow = yAxis > enemyYAxis + PLAYER_HEIGHT;
-        // Determine the shooting direction based on the positions of the player and enemy
+
         if (isPlayerToLeft && isPlayerAbove) {
-            // Set the enemy's actions to shoot up and to the left
             this.actions = gunEnemy.upLeft;
-            // Return the direction  for up-left
             return DIRECTION_UP_LEFT;
         } else if (isPlayerToRight && isPlayerAbove) {
             this.actions = gunEnemy.upRight;
