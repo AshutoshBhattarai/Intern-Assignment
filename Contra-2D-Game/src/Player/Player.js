@@ -54,7 +54,7 @@ class Player {
 
     /* ---- Function to reset player's action based on current direction and state(in water or ground) ------ */
     resetActions() {
-        if (inWater) {
+        if (this.inWater) {
             this.actions = this.isFacing === DIRECTION_LEFT ? swimming[0] : swimming[4];
         }
         else {
